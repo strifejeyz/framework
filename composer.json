@@ -1,0 +1,34 @@
+{
+  "name": "knyteblayde/strife",
+  "description": "A Fast and Lightweight PHP MVC Framework.",
+  "keywords": [
+    "framework",
+    "strife",
+    "mvc",
+    "rad"
+  ],
+  "license": "MIT",
+  "version": "3.0.1",
+  "type": "project",
+  "require": {
+  },
+  "autoload": {
+    "classmap": [
+      "kernel",
+      "kernel/database",
+      "kernel/security",
+      "app/models",
+      "app/seeders",
+      "app/requests",
+      "app/processes",
+      "app/migrations"
+    ],
+    "files": [
+      "kernel/helpers.php",
+      "app/routes.php",
+      "config/database.php",
+      "config/application.php"
+    ]
+  }
+}
+

@@ -1,0 +1,26 @@
+Release Notes:
+
+11/10/2015 - V1.0
+- base version released
+
+
+12/20/2015 - V1.2
+- smart routing added
+- query builder added
+- form builder added
+
+
+10/23/2016 - V2.88
+- fixes on database ORM
+- added templating engine
+- added request & file handler
+
+
+02/12/2017 - V2.91
+- major updates & fixes to modules
+
+
+04/18/2017 - V3.0
+- added ip blacklisting
+- major fixes on query builder & connections
+
