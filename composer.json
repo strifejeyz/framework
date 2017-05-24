@@ -1,5 +1,11 @@
 {
   "name": "strifejeyz/framework",
+  "authors": [
+    {
+      "name": "Jeyz Strife",
+      "email": "strifejeyz@gmail.com"
+    }
+  ],
   "description": "A Fast and Lightweight PHP MVC Framework.",
   "keywords": [
     "framework",
@@ -13,6 +19,7 @@
   "require": {
     "php": ">=5.6.14"
   },
+  "minimum-stability": "dev",
   "autoload": {
     "classmap": [
       "kernel",
