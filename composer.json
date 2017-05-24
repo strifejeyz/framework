@@ -20,7 +20,6 @@
       "app/models",
       "app/seeders",
       "app/requests",
-      "app/processes",
       "app/migrations"
     ],
     "files": [

@@ -7,9 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Migrations\\UsersTableMigration' => $baseDir . '/app/migrations/UsersTableMigration.php',
-    'App\\Models\\City' => $baseDir . '/app/models/City.php',
-    'App\\Models\\Country' => $baseDir . '/app/models/Country.php',
-    'App\\Models\\Language' => $baseDir . '/app/models/Language.php',
     'App\\Models\\User' => $baseDir . '/app/models/User.php',
     'App\\Requests\\LoginRequest' => $baseDir . '/app/requests/LoginRequest.php',
     'App\\Seeders\\UsersTableSeeder' => $baseDir . '/app/seeders/UsersTableSeeder.php',
@@ -35,7 +32,6 @@ return array(
     'Kernel\\Security\\Hash' => $baseDir . '/kernel/security/Hash.php',
     'Kernel\\Security\\Token' => $baseDir . '/kernel/security/Token.php',
     'Kernel\\YamatoCLI' => $baseDir . '/kernel/YamatoCLI.php',
-    'LoginProcess' => $baseDir . '/app/processes/LoginProcess.php',
     'Route' => $baseDir . '/kernel/Route.php',
     'Session' => $baseDir . '/kernel/security/Session.php',
     'View' => $baseDir . '/kernel/View.php',

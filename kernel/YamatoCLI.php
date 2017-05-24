@@ -56,7 +56,6 @@ final class YamatoCLI
   create:model          [name] [table=null]     create a model class
   create:controller     [name] [empty=null]     create a controller class
   create:migration      [name] [table=null]     create a migration class
-  create:process        [name]                  create a process class
   create:request        [name]                  create a request class
   create:seeder         [name] [model=null]     create a database seeder class
   create:key                                    create an application key
@@ -161,14 +160,6 @@ EOF;
                     $this->createRequest($cmd[2]);
                 } else {
                     die("create:request expects 1 parameter [name]");
-                }
-                break;
-
-            case 'create:process':
-                if (isset($cmd[2])) {
-                    $this->createProcess($cmd[2]);
-                } else {
-                    die("create:process expects parameter [name]");
                 }
                 break;
 
@@ -641,58 +632,7 @@ EOF;
         return die("'{$name}' class created.");
     }
 
-
-    /**
-     * Create a process class
-     * @param $name
-     * @var $container
-     * @var $name
-     * @var $append
-     * @var $methods
-     * @var $data
-     * @var $file
-     */
-    private function createProcess($name)
-    {
-        $container = app_dir() . 'processes';
-        $name = preg_replace('/process/i', 'Process', ucfirst($name));
-        $data = <<<EOF
-<?php
-
-/**
- * TODO: Execute a process to separate the logic from it's controller.
- * Class {$name}
- */
-class {$name}
-{
-    /**
-     * Execute the Process
-     *
-     * @todo execute
-     * @param \$callback
-     * @return mixed
-     */
-    public function execute(\$callback = "")
-    {
-        //logic here
-
-        //return callback on fail
-        return \$callback();
-    }
-}
-EOF;
-
-        if (file_exists("{$container}/{$name}.php")) {
-            return die("process '{$name}' already exists");
-        }
-
-        $file = fopen("{$container}/{$name}.php", 'x');
-        fwrite($file, $data);
-        exec('composer dump-autoload');
-
-        return die("'{$name}' class created.");
-    }
-
+    
 
     /**
      * Install/Uninstall all migrations

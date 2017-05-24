@@ -18,7 +18,7 @@ Connection::parameters('conn1',[
     'hostname' => 'localhost',
     'database' => 'strife',
     'username' => 'root',
-    'password' => '',
+    'password' => 'strife',
     'charset'  => 'utf8',
     'port'     => 3306
 ]);
@@ -27,4 +27,4 @@ Connection::parameters('conn1',[
 /**
  * Begin Transaction with database
  */
-//Connection::initialize('conn1');
+Connection::initialize('conn1');
