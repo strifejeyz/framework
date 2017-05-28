@@ -2,8 +2,7 @@
 
 <style type="text/css">
     body {
-        font-family: "Segoe UI Light", "Segoe UI";
-        background: #ffffff;
+        background: #f9f9f9;
         text-align: center;
     }
 
@@ -13,15 +12,15 @@
 
     .title {
         text-align: center;
-        color: #ff2469;
-        font-size: 28px;
+        color: rgba(48, 48, 48, 0.84);
+        font-size: 24px;
         margin: 0
     }
 
     .sub {
         margin: 0;
-        font-size: 15px;
-        color: #333333;
+        font-size: 13px;
+        color: #787878;
         font-style: italic;
     }
 
