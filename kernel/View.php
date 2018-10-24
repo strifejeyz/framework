@@ -7,7 +7,7 @@ abstract class View
 {
     /**
      * Holds the layout's container folder to be used
-     * by end() method for including footer file.
+     * by stop() method for including footer file.
      */
     private static $layout = null;
 
@@ -68,7 +68,7 @@ abstract class View
         $___ = preg_replace('/\{endif\}/', '<?php endif ?>', $___);
         $___ = preg_replace('/\{for (.*)\}/', '<?php for ($1) : ?>', $___);
         $___ = preg_replace('/\{endfor\}/', '<?php endfor ?>', $___);
-        $___ = preg_replace('/\{do\}/', '<?php do { ?>', $___);
+        $___ = preg_replace('/\{do\}/', '<?php do { ?>', $___); // needs some fix
         $___ = preg_replace('/\{until (.*)\}/', '<?php } while($1) ?>', $___);
         $___ = preg_replace('/\{while (.*)\}/', '<?php while ($1) : ?>', $___);
         $___ = preg_replace('/\{endwhile\}/', '<?php endwhile ?>', $___);

@@ -93,7 +93,7 @@ if (!function_exists('download_file')) {
 
     function download_file($filename, $mime_type, $preferredFilename = '')
     {
-        $returnedName = (strlen($preferredFilename) > 0) ? $preferredFilename : pathinfo($filename, PATHINFO_FILENAME);
+        $returnedName = (strlen($preferredFilename) > 0) ? $preferredFilename : pathinfo($filename, PATHINFO_FILENAME) . '.' . pathinfo($filename, PATHINFO_EXTENSION);
 
         header("Content-type: $mime_type");
         header("Content-disposition:attachment;filename=$returnedName");
@@ -192,6 +192,19 @@ if (!function_exists('intended')) {
         } else {
             return (null);
         }
+    }
+}
+
+if (!function_exists('html')) {
+    /**
+     * Returns escaped tags.
+     *
+     * @return string
+     **/
+
+    function html($string)
+    {
+        return htmlspecialchars($string);
     }
 }
 
@@ -508,7 +521,6 @@ if (!function_exists('remote_port')) {
         return $_SERVER['REMOTE_PORT'];
     }
 }
-
 
 
 if (!function_exists('page_error')) {

@@ -20,6 +20,7 @@ class UsersTableSeeder
             'lastname' => 'Doe',
             'username' => 'username',
             'password' => Hash::encode('password'),
+            'active' => 'yes',
             'created' => time(),
             'updated' => time(),
         ]);

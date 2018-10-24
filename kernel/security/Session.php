@@ -12,7 +12,7 @@ class Session
      */
     public static function user()
     {
-        return $_SESSION['user'];
+        return isset($_SESSION['user']) ? $_SESSION['user'] : (null);
     }
 
 

@@ -32,6 +32,7 @@ class UsersTableMigration extends Migration
             'length' => 128,
             'unique' => true,
         ]);
+        $this->varchar('active');
         $this->varchar('remember_token', [
             'null' => true
         ]);

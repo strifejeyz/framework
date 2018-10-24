@@ -51,7 +51,7 @@ abstract class Migration extends Connection
             'length' => 255,
             'unique' => '',
             'point' => '',
-            'null' => 'NOT NULL',
+            'nullable' => 'NOT NULL',
             'primary' => '',
             'default' => '',
         ];
@@ -69,9 +69,11 @@ abstract class Migration extends Connection
         if (array_key_exists('length', $attributes)) {
             $attr['length'] = $attributes['length'];
         }
-        if (array_key_exists('null', $attributes)) {
-            if ($attributes['null'] == true || $attributes['null'] == 'null') {
+        if (array_key_exists('nullable', $attributes)) {
+            if ($attributes['nullable'] == true) {
                 $attr['null'] = "NULL";
+            } else {
+                $attr['null'] = "NOT NULL";
             }
         }
         if (array_key_exists('unique', $attributes)) {
@@ -83,7 +85,7 @@ abstract class Migration extends Connection
             $attr['point'] = ",{$attributes['point']}";
         }
         if (array_key_exists('primary', $attributes)) {
-            if ($attributes['primary'] == true) {
+            if ($attributes['primary'] == true || $attributes['primary'] == "PRIMARY KEY") {
                 $attr['primary'] = ",PRIMARY KEY ($name)";
             }
         }

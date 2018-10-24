@@ -390,7 +390,11 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function append($name, $value)
     {
-        return (self::$result->$name = $value);
+        if (self::$result->$name = $value) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -619,6 +623,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      * @method delete($id = null)
      * @param null $id
      * @return mixed
+     * @throws ErrorHandler
      */
     public static function delete($id = null)
     {
@@ -627,13 +632,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
             $stmt = null;
 
             if (is_null($id) && empty(self::$result)) {
-                self::$query['select'] = 'DELETE ';
-                $stmt = self::instance()->prepare(self::parseQuery());
-                $stmt = $stmt->execute(self::$values);
-                self::$values = [];
-                self::$query = [];
-
-                return ($stmt);
+                throw new ErrorHandler("delete() requires an existing object or pass in a primary key if none.");
             } else {
                 if (!empty(self::$query)) {
                     self::$query['select'] = 'DELETE';
@@ -1369,7 +1368,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
                 }
 
                 $stmt = self::instance()->exec("UPDATE " . self::$table . " SET {$field}={$value} WHERE id=" . self::$result->id);
-                return ($stmt);
+                return ($stmt) ? true : false;
             } else {
                 return false;
             }
