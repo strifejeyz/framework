@@ -13,9 +13,11 @@
   
   > Database
     - Has better way of dealing with databases.
+    - Has database seeder and backup manager
   
   > Form Builder
     - Powerful class for Automated forms.
+    - Handles form validations automatically
   
   > HTTP Request Handlers
     - Handles form validations and file uploads.
@@ -24,13 +26,17 @@
     - Build your database using Migration Manager
   
   > Encryption/Hashing
+    - Handles one-way data encryption per app.
   
   > Command Line Interface
     - A Powerful CLI Application built for Strife Framework
+    
+  > Template Engine
+    - A Custom template engine for easy data handling
   
   > Helper Functions
     - With a bunch of helper functions.
     
     
 ### <a href="http://strife.x10.mx">Visit Official Website</a>
-<a href="http://strife.x10.mx/docs">Documentation</a>
+<a href="http://strife.x10.mx/framework">Documentation</a>
