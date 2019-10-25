@@ -6,8 +6,9 @@
 abstract class View
 {
     /**
-     * Holds the layout's container folder to be used
+     * Holds the layout's container to be used
      * by stop() method for including footer file.
+     * e.g. @stop()
      */
     private static $layout = null;
 
