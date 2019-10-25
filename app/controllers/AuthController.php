@@ -31,7 +31,6 @@ class AuthController
      * Login a user
      *
      * @return mixed
-     * @throws ErrorHandler
      */
     public function attempt()
     {
@@ -53,7 +52,6 @@ class AuthController
                 $checkToken = new Kernel\Database\Database;
                 $checkToken = $checkToken->query("SELECT * FROM tokens WHERE user_id = {$user->id} AND failed_login > 4 LIMIT 1");
 
-
                 if (!empty($checkToken)) {
                     setFlash('flash', '<div class="alert alert-danger">Your account has been disabled.</div>');
                     return redirect('/login');
@@ -64,7 +62,6 @@ class AuthController
                     $user->save();
                     $_SESSION['user'] = $user();
                     Tokens::where('user_id', $user->id)->delete();
-
 
                     # if supposed to visit a link, it takes you there after login
                     if (intended()) {
@@ -133,7 +130,6 @@ class AuthController
      * Password reset attempt
      *
      * @return Route
-     * @throws ErrorHandler
      */
     public function sendEmail()
     {
@@ -248,7 +244,6 @@ class AuthController
      * Update the password
      *
      * @return void
-     * @throws ErrorHandler
      */
     public function updatePassword()
     {
