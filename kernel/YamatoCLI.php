@@ -559,13 +559,6 @@ class {$name} extends HTTPRequest
 {
 
     /**
-     * This is the route that will be used
-     * to redirect when errors are present
-     */
-    protected \$route = '/';
-
-
-    /**
      * Rules to be followed by request
      */
     protected \$rules = [];

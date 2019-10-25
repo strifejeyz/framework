@@ -15,7 +15,9 @@ define('APP_NAME', 'Strife App');
 
 /**
  * You can use any kind of file type
- * for template files
+ * for template files so instead of
+ * render('/auth/login.php')
+ * you can render('/auth/login')
  */
 define('TEMPLATE_TYPE', '.php');
 
@@ -26,7 +28,7 @@ define('TEMPLATE_TYPE', '.php');
  * password stored on database.
  * generate a new one at least before production
  */
-define('APPLICATION_KEY', 'ds9o1xikuloa72olrqggqldj11ka9e9hxusnunow996rpndlyl');
+define('APPLICATION_KEY', 'ttatjqoo1osroi5cc5s00xgypmurnvewcr381ypmqe7bi2kmkc');
 
 
 
@@ -38,7 +40,7 @@ define('MAINTENANCE_MODE', FALSE);
 
 
 /**
- * Allow blocking for IPs.
+ * Allow blocking for selected IPs.
  */
 define('IP_BLACKLISTING', FALSE);
 

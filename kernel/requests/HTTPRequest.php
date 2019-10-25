@@ -70,7 +70,7 @@ class HTTPRequest implements HTTPRequestInterface
             }
         }
 
-        return (true);
+        return true;
     }
 
 
@@ -93,6 +93,19 @@ class HTTPRequest implements HTTPRequestInterface
         } else {
             return (null);
         }
+    }
+
+    /**
+     * Returns a field that is present in
+     * $request property encrypted thru hash.
+     *
+     * @param $field
+     * @param $sanitized bool
+     * @return string
+     */
+    public function hash($field)
+    {
+        $this->request[$field] = Hash::encode($this->request[$field]);
     }
 
 
@@ -165,10 +178,9 @@ class HTTPRequest implements HTTPRequestInterface
      * Actual validation of request with rules implied
      * from its child classes.
      *
-     * @param null $route
      * @return bool|void
      */
-    public function validate($route = null)
+    public function validate()
     {
         for ($i = 0; $i < count($this->request); $i++) {
             $field = array_keys($this->request);
@@ -237,14 +249,6 @@ class HTTPRequest implements HTTPRequestInterface
                             break;
                         }
                     }
-                    if (preg_match('/match/i', $rule[$z])) {
-                        $compare = explode(':', $rule[$z])[1];
-                        if ($this->request[$field[$i]] !== $this->request[$compare]) {
-                            $this->errors[$field[$i]] = $prefix . " Field did not match to {$compare}.";
-                            $this->errors[$compare] = " Field did not match to {$prefix}.";
-                            break;
-                        }
-                    }
                     if (preg_match('/min/i', $rule[$z])) {
                         $min = explode(':', $rule[$z])[1];
                         if (strlen($this->request[$field[$i]]) < $min) {
@@ -259,6 +263,14 @@ class HTTPRequest implements HTTPRequestInterface
                             break;
                         }
                     }
+                    if (preg_match('/match/i', $rule[$z])) {
+                        $compare = explode(':', $rule[$z])[1];
+                        if ($this->request[$field[$i]] !== $this->request[$compare]) {
+                            $this->errors[$field[$i]] = $prefix . " Field did not match to " . str_replace('_', ' ', $compare) . ".";
+                            $this->errors[$compare] = " Field did not match to " . str_replace('_', ' ', $prefix) . ".";
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -270,13 +282,12 @@ class HTTPRequest implements HTTPRequestInterface
                 }
             }
         }
-        $redirectRoute = (!is_null($route)) ? $route : $this->route;
-        if (is_null($this->errors)) {
-            return (true);
+        if (empty($this->errors)) {
+            return true;
         } else {
             $_SESSION['__ERRORS__'] = $this->errors;
             $_SESSION['__FIELDS__'] = $this->request;
-            header("location: {$redirectRoute}");
+            return false;
         }
     }
 }

@@ -1,20 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Login &mdash; {{ APP_NAME }} </title>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-</head>
-<body>
+@extend('layouts/frontend', ['title' => 'Sign In'])
 
 <div class="container">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-        <br>
-        <br>
+    <div class="col-md-4 col-md-push-4">
         <div class="well">
             {!Form::open(route('auth.attempt'))!}
             <h3 class="help-block text-center"><b>LOGIN</b></h3>
@@ -28,14 +15,16 @@
                 <i class="text-danger">{{errors('password')}}</i>
             </div>
             <i class="has-error">{!Session::getFlash('flash')!}</i>
-            <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-log-in"></i> Login</button>
+            {if flash_exists('message')}
+                {!getflash('message')!}
+            {else}
+                <a href="/forgot-password">Having trouble logging in?</a><br><br>
+            {endif}
+            <button type="submit" class="btn btn-success" style="width:100%"><i class="glyphicon glyphicon-log-in"></i> Login</button>
             {!Form::close()!}
         </div>
-        <br>
-        <p class="text-center underline"><a href="/">&larr; home</a></p>
+        <p class="text-center underline"><a href="/">&larr; Home</a></p>
     </div>
-    <div class="col-md-4"></div>
 </div>
 
-</body>
-</html>
+@stop()

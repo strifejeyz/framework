@@ -94,7 +94,7 @@ abstract class Migration extends Connection
             $attr['default'] = " DEFAULT '{$default}'";
         }
 
-        $command = "{$name} {$type}({$attr['length']}{$attr['point']}) {$attr['null']}{$attr['unique']}{$attr['primary']}{$attr['default']}";
+        $command = "{$name} {$type}({$attr['length']}{$attr['point']}) {$attr['nullable']}{$attr['unique']}{$attr['primary']}{$attr['default']}";
 
         return ($this->fields[$name] = $command);
     }

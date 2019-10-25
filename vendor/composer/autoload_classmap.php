@@ -6,9 +6,12 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Migrations\\TokensTableMigration' => $baseDir . '/app/migrations/TokensTableMigration.php',
     'App\\Migrations\\UsersTableMigration' => $baseDir . '/app/migrations/UsersTableMigration.php',
+    'App\\Models\\Tokens' => $baseDir . '/app/models/Tokens.php',
     'App\\Models\\User' => $baseDir . '/app/models/User.php',
     'App\\Requests\\LoginRequest' => $baseDir . '/app/requests/LoginRequest.php',
+    'App\\Requests\\ResetPasswordRequest' => $baseDir . '/app/requests/ResetPasswordRequest.php',
     'App\\Seeders\\UsersTableSeeder' => $baseDir . '/app/seeders/UsersTableSeeder.php',
     'Auth' => $baseDir . '/kernel/security/Auth.php',
     'Cookie' => $baseDir . '/kernel/security/Cookie.php',

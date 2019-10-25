@@ -8,8 +8,8 @@ class WelcomeController extends Auth
      **/
     public function index()
     {
-        $name = Session::user()->firstname;
+        $user = Session::user();
 
-        return render('backend/welcome', compact('name'));
+        return render('backend/welcome', compact('user'));
     }
 }

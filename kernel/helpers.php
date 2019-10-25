@@ -47,6 +47,7 @@ if (!function_exists('random_string')) {
 }
 
 
+
 if (!function_exists('csv_encode')) {
     /**
      * encode an array to csv values
@@ -632,6 +633,20 @@ if (!function_exists('getflash')) {
     function getflash($name)
     {
         return Session::getFlash($name);
+    }
+}
+
+if (!function_exists('flash_exists')) {
+
+    /**
+     * Get and destroy a flash message
+     *
+     * @param string $name
+     * @return mixed
+     */
+    function flash_exists($name)
+    {
+        return Session::flashExists($name);
     }
 }
 

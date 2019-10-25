@@ -24,6 +24,10 @@ class UsersTableMigration extends Migration
         $this->varchar('lastname', [
             'null' => true,
         ]);
+        $this->char('email', [
+            'length' => 128,
+            'unique' => true,
+        ]);
         $this->char('username', [
             'length' => 128,
             'unique' => true,
@@ -36,8 +40,8 @@ class UsersTableMigration extends Migration
         $this->varchar('remember_token', [
             'null' => true
         ]);
-        $this->varchar('created');
-        $this->varchar('updated');
+        $this->int('created');
+        $this->int('updated');
     }
 
 
@@ -45,7 +49,9 @@ class UsersTableMigration extends Migration
      * Install the migration
      *
      * @return void
-     **/
+     *
+     * @throws \Exception
+     */
     public function up()
     {
         return $this->install();

@@ -68,8 +68,8 @@ abstract class View
         $___ = preg_replace('/\{endif\}/', '<?php endif ?>', $___);
         $___ = preg_replace('/\{for (.*)\}/', '<?php for ($1) : ?>', $___);
         $___ = preg_replace('/\{endfor\}/', '<?php endfor ?>', $___);
-        $___ = preg_replace('/\{do\}/', '<?php do { ?>', $___); // needs some fix
-        $___ = preg_replace('/\{until (.*)\}/', '<?php } while($1) ?>', $___);
+        $___ = preg_replace('/\{do\}/', '<?php do { ?>', $___);
+        $___ = preg_replace('/\{enddo (.*)\}/', '<?php } while($1) ?>', $___);
         $___ = preg_replace('/\{while (.*)\}/', '<?php while ($1) : ?>', $___);
         $___ = preg_replace('/\{endwhile\}/', '<?php endwhile ?>', $___);
         $___ = preg_replace('/\{foreach (.*)\}/', '<?php foreach ($1) : ?>', $___);

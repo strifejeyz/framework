@@ -37,6 +37,6 @@
 <p class="title">Strife Framework</p>
 <p class="sub">A Fast and Lightweight PHP MVC Framework.</p>
 
-<center>&copy; 2017 Strife Framework. All rights reserved.</center>
+<center>&copy; 2019 Strife Framework. All rights reserved.</center>
 
 @stop()

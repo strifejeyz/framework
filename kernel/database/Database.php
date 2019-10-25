@@ -7,6 +7,7 @@ use PDOException;
  * Database raw query builder.
  *
  * Class Database
+ *
  * @package Kernel\Database
  */
 class Database extends QueryBuilder
@@ -35,7 +36,7 @@ class Database extends QueryBuilder
      * full query string
      *
      * @param $table
-     * @return boolean
+     * @return Database
      */
     public static function table($table)
     {

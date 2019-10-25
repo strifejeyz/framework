@@ -118,6 +118,21 @@ class Session
         }
     }
 
+    /**
+     * Check if flash exists
+     *
+     * @param $name
+     * @return bool
+     */
+    public static function flashExists($name)
+    {
+        if (isset($_SESSION['__FLASH__'][$name])) {
+            return (true);
+        } else {
+            return (false);
+        }
+    }
+
 
     /**
      * Flush all sessions except session_id

@@ -7,16 +7,19 @@ namespace Composer\Autoload;
 class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
 {
     public static $files = array (
-        '6755616f714c31195872c2fa0a71781c' => __DIR__ . '/../..' . '/kernel/helpers.php',
-        '2a2cfef56b1c1960e799301d7a28cddf' => __DIR__ . '/../..' . '/app/routes.php',
-        'c98ed9fdd7d7effbba53e0d310ce8174' => __DIR__ . '/../..' . '/config/database.php',
-        '8106eed47376e4585e2de908346ea5da' => __DIR__ . '/../..' . '/config/application.php',
+        '3eac8a9ce007dee7165fbccb8e4c63f7' => __DIR__ . '/../..' . '/kernel/helpers.php',
+        '555082641dfed149832ebe1b57ef25e3' => __DIR__ . '/../..' . '/app/routes.php',
+        '63fa2066443e0bea4c25c52cd29fb025' => __DIR__ . '/../..' . '/config/database.php',
+        '7ed5f8beb43243ac61b542c40bd39cda' => __DIR__ . '/../..' . '/config/application.php',
     );
 
     public static $classMap = array (
+        'App\\Migrations\\TokensTableMigration' => __DIR__ . '/../..' . '/app/migrations/TokensTableMigration.php',
         'App\\Migrations\\UsersTableMigration' => __DIR__ . '/../..' . '/app/migrations/UsersTableMigration.php',
+        'App\\Models\\Tokens' => __DIR__ . '/../..' . '/app/models/Tokens.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/models/User.php',
         'App\\Requests\\LoginRequest' => __DIR__ . '/../..' . '/app/requests/LoginRequest.php',
+        'App\\Requests\\ResetPasswordRequest' => __DIR__ . '/../..' . '/app/requests/ResetPasswordRequest.php',
         'App\\Seeders\\UsersTableSeeder' => __DIR__ . '/../..' . '/app/seeders/UsersTableSeeder.php',
         'Auth' => __DIR__ . '/../..' . '/kernel/security/Auth.php',
         'Cookie' => __DIR__ . '/../..' . '/kernel/security/Cookie.php',
