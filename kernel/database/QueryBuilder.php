@@ -1,4 +1,6 @@
-<?php namespace Kernel\Database;
+<?php /** @noinspection SpellCheckingInspection */
+
+namespace Kernel\Database;
 
 /**********************************************************
  * Query Builder Class for Strife Framework.
