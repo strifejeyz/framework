@@ -9,6 +9,6 @@
     <meta name="keywords" content="{{@$keywords}}">
     <meta name="description" content="{{@$description}}">
     <meta name="author" content="{{@$author}}">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body style="font-family: 'Segoe UI'">
