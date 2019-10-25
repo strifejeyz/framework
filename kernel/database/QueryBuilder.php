@@ -159,7 +159,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      * Primary Key per table, you may specify
      * this inside your model class
      */
-    protected static $primary_key = null;
+    protected static $primary_key = 'id';
 
     /**
      * Holds dynamically created properties for editing
@@ -561,7 +561,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
     {
         try {
             if (!empty($this->fields)) {
-                if (static::$primary_key) {
+                if (isset(static::$primary_key)) {
                     $primary_key = static::$primary_key;
                 } else {
                     $primary_key = self::$primary_key;

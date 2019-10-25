@@ -66,11 +66,10 @@ class Connection
      * that will be used to connect to.
      * second param will be the array of connection parameters.
      *
-     * @todo connect to database
-     * @param int transact
      * @param string $alias
      * @return mixed
-     **/
+     * @todo connect to database
+     */
     public static function initialize($alias)
     {
         try {
