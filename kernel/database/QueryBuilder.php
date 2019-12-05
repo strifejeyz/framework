@@ -8,7 +8,7 @@ namespace Kernel\Database;
  * database and fully implements active record management
  *
  * Author:  Jeyz Strife
- * website: https://github.com/knyteblayde/strife
+ * website: https://github.com/strifejeyz/framework
  * Date:    11/10/15
  */
 
@@ -120,6 +120,16 @@ interface QueryBuilderInterface
 
     public static function decrement($field, $int = null);
 
+    public static function join($table);
+
+    public static function leftJoin($table);
+
+    public static function rightJoin($table);
+
+    public static function using($field);
+
+    public static function on($condition);
+
     public static function get($fetchMode = PDO::FETCH_OBJ);
 }
 
@@ -214,7 +224,6 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      * @param $name
      * @param array $arguments
      * @return bool|QueryBuilder|mixed
-     * @throws ErrorHandler
      */
     public function __call($name, $arguments = [])
     {
@@ -352,6 +361,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      * Restore a database table
      *
      * @return bool
+     * @throws ErrorHandler
      */
     public static function restore()
     {
@@ -492,6 +502,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      *
      * @param array $valuePairs
      * @return mixed
+     * @throws ErrorHandler
      */
     public static function insert($valuePairs = [])
     {
@@ -516,7 +527,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
             $stmt = self::instance()->prepare($query);
 
             return $stmt->execute($values);
-        } catch (ErrorHandler $e) {
+        } catch (PDOException $e) {
             return print $e->message();
         }
     }
@@ -700,6 +711,11 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
             }
 
             self::$table = static::$table;
+
+            if (isset(static::$alias)) {
+                self::$table = static::$table . " " . static::$alias;
+            }
+
             $selection = "";
 
             if (count(func_get_args()) > 1) {
@@ -876,7 +892,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
     {
         try {
             if (!preg_match('/DESC/i', $order) && !preg_match('/ASC/i', $order)) {
-                throw new ErrorHandler("Second argument passed to order() method should be '<b>ASC</b>' or '<b>DESC</b>'");
+                user_error("Second argument passed to order() method should be '<b>ASC</b>' or '<b>DESC</b>'");
             }
 
             self::$table = static::$table;
@@ -927,7 +943,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function check()
     {
-        return die("<code>" . strtolower(self::parseQuery()) . "</code>");
+        return die("<code>" . self::parseQuery() . "</code>");
     }
 
 
@@ -1441,6 +1457,96 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
 
 
     /**
+     * Inner join
+     *
+     * @param $table
+     * @return QueryBuilder
+     */
+    public static function join($table)
+    {
+        if (isset(self::$query['joins'])) {
+            self::$query['joins'] .= " INNER JOIN $table ";
+        } else {
+            self::$query['joins'] = " INNER JOIN $table ";
+        }
+
+        return new self;
+    }
+
+
+    /**
+     * Left join
+     *
+     * @param $table
+     * @return QueryBuilder
+     */
+    public static function leftJoin($table)
+    {
+        if (isset(self::$query['joins'])) {
+            self::$query['joins'] .= " LEFT JOIN $table ";
+        } else {
+            self::$query['joins'] = " LEFT  JOIN $table ";
+        }
+
+        return new self;
+    }
+
+
+    /**
+     * Right join
+     *
+     * @param $table
+     * @return QueryBuilder
+     */
+    public static function rightJoin($table)
+    {
+        if (isset(self::$query['joins'])) {
+            self::$query['joins'] .= " RIGHT JOIN $table ";
+        } else {
+            self::$query['joins'] = " RIGHT  JOIN $table ";
+        }
+
+        return new self;
+    }
+
+
+    /**
+     * Right join
+     *
+     * @param $field
+     * @return QueryBuilder
+     */
+    public static function using($field)
+    {
+        if (isset(self::$query['joins'])) {
+            self::$query['joins'] .= " USING ($field) ";
+        } else {
+            die("method 'using()' is chained with 'join()'");
+        }
+
+        return new self;
+    }
+
+
+    /**
+     * Right join
+     *
+     * @param $condition
+     * @return QueryBuilder
+     */
+    public static function on($condition)
+    {
+        if (isset(self::$query['joins'])) {
+            self::$query['joins'] .= " ON $condition ";
+        } else {
+            die("method 'on()' is used in conjunction with 'join()'");
+        }
+
+        return new self;
+    }
+
+
+    /**
      * Executes a constructed query string or
      * uses default selection if not present.
      * returns default object
@@ -1489,7 +1595,8 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
         $where = (isset(self::$query['where'])) ? self::$query['where'] : '';
         $order = (isset(self::$query['order'])) ? self::$query['order'] : '';
         $limit = (isset(self::$query['limit'])) ? self::$query['limit'] : '';
+        $joins = (isset(self::$query['joins'])) ? self::$query['joins'] : '';
 
-        return ("{$selection} FROM " . static::$table . " {$where} {$order} {$limit}");
+        return ("{$selection} FROM " . self::$table . " {$where} {$joins} {$order} {$limit}");
     }
 }
