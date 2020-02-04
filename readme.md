@@ -37,5 +37,5 @@
     - Includes bunch of helper functions.
     
     
-### <a href="http://strife.x10.mx">Visit Official Website</a>
-<a href="http://strife.x10.mx/framework">Documentation</a>
+### <a href="http://strife.x10.mx">Visit Official Website(Maintenance)</a>
+<a href="http://strife.x10.mx/framework">Documentation(Maintenance)</a>
