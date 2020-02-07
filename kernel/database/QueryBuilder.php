@@ -340,10 +340,11 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function backup()
     {
-        $filename = storage_dir() . 'backups/' . static::$table . ".json";
+        $filename = '.' . storage_path() . 'backups/' . static::$table . ".json";
         $file = new FileHandler($filename, 'w+');
 
-        if (!empty(self::$result)) {
+        if (!empty(self::$result))
+        {
             $data = json_encode(self::$result);
         } else {
             $data = json_encode(self::get());
@@ -365,14 +366,17 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function restore()
     {
-        $filename = storage_dir() . 'backups/' . static::$table . ".json";
+        $filename = '.' . storage_path() . 'backups/' . static::$table . ".json";
         $result = null;
 
-        if (file_exists($filename)) {
+        if (file_exists($filename))
+        {
             $file = new FileHandler($filename, 'r');
 
-            foreach (json_decode($file->read()) as $data) {
-                if (self::insert((array)$data)) {
+            foreach (json_decode($file->read()) as $data)
+            {
+                if (self::insert((array)$data))
+                {
                     $result = true;
                 } else {
                     $result = false;
@@ -1597,6 +1601,8 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
         $limit = (isset(self::$query['limit'])) ? self::$query['limit'] : '';
         $joins = (isset(self::$query['joins'])) ? self::$query['joins'] : '';
 
-        return ("{$selection} FROM " . self::$table . " {$where} {$joins} {$order} {$limit}");
+        $table = isset(static::$table) ? static::$table : self::$table;
+
+        return ("{$selection} FROM " . $table . " {$where} {$joins} {$order} {$limit}");
     }
 }
