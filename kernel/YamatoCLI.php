@@ -1,4 +1,6 @@
-<?php namespace Kernel;
+<?php /** @noinspection ALL */
+
+namespace Kernel;
 
 use DirectoryIterator;
 use Kernel\Security\Encryption;
@@ -6,30 +8,28 @@ use Kernel\Security\Hash;
 
 /**
  * Class YamatoCLI
+ * $command holds anything you type into YamatoCLI
+ * then passes it to parseCommand($arg) to look for
+ * specific method.
  *
  * @package Kernel
+ * @property $command
  */
 final class YamatoCLI
 {
-    /**
-     * Holds command array of arguments
-     */
     private $command = null;
 
 
     /**
      * Get the arguments on instantiation
+     * also prints yamato ascii art
      *
      * @param $arguments
      */
     public function __construct($arguments = null)
     {
         if (!isset($arguments[1])) {
-        /**
-         * Yamato Cover
-         */
-
-        echo <<<EOF
+            echo <<<EOF
 
            ..      ..   ..     ..    -#      ..
  ,#   x#  - ,#=  ##;;##+,+#   -..x# ++#++ .#+,-#X
@@ -37,7 +37,7 @@ final class YamatoCLI
    #-#+  #X  +#  #   =#   #+ -#.  #. -#   #=    #.
     ##   #X.,##  #.  +#   #x =#..x#. .#-. .#+,-#x
    ;#     ,,.    .    .   .    ;,      ;,   ,;;
-  +X
+  +X    11/10/2015 - 02/07/2020
 
  Yamato is a Command Line Interface(CLI) tool that is
  made to interact with the Strife Framework.
@@ -50,14 +50,14 @@ final class YamatoCLI
   clear:sessions                                clear sessions directory
   clear:logs                                    clear logs directory
   clear:backups                                 clear backups directory
-  clear:all                                     clear all directories(except backups)
+  clear:all                                     clear all backups,logs,sessions
   
 {GENERATORS}
   create:model          [name] [table=null]     create a model class
-  create:controller     [name] [empty=null]     create a controller class
-  create:migration      [name] [table=null]     create a migration class
+  create:controller     [name] [empty=bool]     create a controller class
+  create:migration      [name] [table]          create a migration class
   create:request        [name]                  create a request class
-  create:seeder         [name] [model=null]     create a database seeder class
+  create:seeder         [name] [model]          create a database seeder class
   create:key                                    create an application key
 
 {DATABASE}
@@ -103,9 +103,10 @@ EOF;
              ***************************************************/
 
             case 'clear:all':
-                $this->clear('sessions');
+                $this->clear('backups');
                 $this->clear('logs');
-                return die("all trash cleared.");
+                $this->clear('sessions');
+                return die("Backups/Logs/Sessions were cleared.");
                 break;
 
             case 'clear:sessions':
@@ -124,7 +125,6 @@ EOF;
                 break;
 
 
-
             /*********************************************
              *               Generators                  *
              *********************************************/
@@ -136,14 +136,14 @@ EOF;
                 } else {
                     die("too few arguments, create:model expects [name], [table] is optional");
                 }
-               break;
+                break;
 
             case 'create:controller':
                 if (isset($cmd[2])) {
-                    $option = isset($cmd[3]) ? $cmd[3] : null;
+                    $option = isset($cmd[3]) ? $cmd[3] : "false";
                     $this->createController($cmd[2], $option);
                 } else {
-                    die("too few arguments, create:controller expects [name], [empty] is optional");
+                    die("too few arguments, create:controller expects [name], [empty](bool) is optional");
                 }
                 break;
 
@@ -167,14 +167,13 @@ EOF;
                 if (isset($cmd[2]) && isset($cmd[3])) {
                     $this->createSeeder($cmd[2], $cmd[3]);
                 } else {
-                    die("too few arguments, create:seeder expects [name] [table]");
+                    die("too few arguments, create:seeder expects [name] [model]");
                 }
                 break;
 
             case 'create:key':
                 return die(Hash::generateSalt());
                 break;
-
 
 
             /********************************************************
@@ -198,7 +197,7 @@ EOF;
                 break;
 
             case 'db:table:dump':
-                return $this->tableMigration($cmd[2], 'dump');
+                return $this->tableDump($cmd[2]);
                 break;
 
             case 'db:backup':
@@ -235,9 +234,8 @@ EOF;
             case 'encryption:encode':
                 if (isset($cmd[2]) && !isset($cmd[3])) {
                     return die(Encryption::encode($cmd[2]));
-                }
-                elseif (isset($cmd[2]) && isset($cmd[3])) {
-                    return die(Encryption::encode($cmd[2],$cmd[3]));
+                } elseif (isset($cmd[2]) && isset($cmd[3])) {
+                    return die(Encryption::encode($cmd[2], $cmd[3]));
                 } else {
                     die("hash:verify requires 1 parameter [data], [levels] optional");
                 }
@@ -246,9 +244,8 @@ EOF;
             case 'encryption:decode':
                 if (isset($cmd[2]) && !isset($cmd[3])) {
                     return die(Encryption::decode($cmd[2]));
-                }
-                elseif (isset($cmd[2]) && isset($cmd[3])) {
-                    return die(Encryption::decode($cmd[2],$cmd[3]));
+                } elseif (isset($cmd[2]) && isset($cmd[3])) {
+                    return die(Encryption::decode($cmd[2], $cmd[3]));
                 } else {
                     die("hash:verify requires 1 parameter [data], [levels] optional");
                 }
@@ -267,16 +264,16 @@ EOF;
      * Clear garbage files inside storage.
      *
      * @param $folder
-     * @var $filename
      * @return boolean
+     * @var $filename
      */
     private function clear($folder)
     {
-        $container = storage_dir() . $folder;
+        $container = '.' . storage_path() . $folder;
         $handle = new DirectoryIterator($container);
 
         foreach ($handle as $file) {
-            if ($file->getFilename() == '.' || $file->getFilename() == '..') {
+            if ($file->getFilename() == '.' || $file->getFilename() == '..' || $file->getFilename() == '.htaccess') {
                 continue;
             }
             if (is_file("{$container}/{$file->getFilename()}")) {
@@ -293,15 +290,15 @@ EOF;
      *
      * @param $name
      * @param $table
-     * @var $container
+     * @return string
      * @var $name
      * @var $data
      * @var $file
-     * @return string
+     * @var $container
      */
     private function createModel($name, $table)
     {
-        $container = app_dir() . 'models';
+        $container = '.' . models_path();
         $data = <<<EOF
 <?php namespace App\Models;
 
@@ -327,6 +324,13 @@ EOF;
 
     /**
      * Create a new controller class
+     * By default, second parameter is false
+     * means, it will generate a class along
+     * with predefined methods. If you want
+     * to specify an empty class, use yamato
+     * like this:
+     * php yamato create:controller MyController true
+     * the code above returns an empty class.
      *
      * @param $name
      * @param $option
@@ -337,9 +341,9 @@ EOF;
      * @var $data
      * @var $file
      */
-    private function createController($name, $option = null)
+    private function createController($name, $option = "false")
     {
-        $container = app_dir() . 'controllers';
+        $container = '.' . controllers_path();
         $name = preg_replace('/controller/i', 'Controller', ucfirst($name));
         $append = <<<EOF
 
@@ -438,7 +442,7 @@ EOF;
         /**
          * if $option is 'empty', return an empty class
          */
-        $methods = ($option == 'empty') ? '' : $append;
+        $methods = ($option == "true") ? '' : $append;
 
         $sub = preg_replace('/(.*)\/(.*)/', '$2', $name);
         $data = <<<EOF
@@ -464,6 +468,7 @@ EOF;
 
     /**
      * Create a migration class
+     *
      * @param $name
      * @param $table
      * @var $container
@@ -475,7 +480,7 @@ EOF;
      */
     private function createMigration($name, $table)
     {
-        $container = app_dir() . 'migrations';
+        $container = '.' . migrations_path();
         $name = preg_replace('/migration/i', 'Migration', ucfirst($name));
         $data = <<<EOF
 <?php namespace App\Migrations;
@@ -538,6 +543,7 @@ EOF;
 
     /**
      * Create a request class
+     *
      * @param $name
      * @var $container
      * @var $name
@@ -548,7 +554,7 @@ EOF;
      */
     private function createRequest($name)
     {
-        $container = app_dir() . 'requests';
+        $container = '.' . requests_path();
         $name = preg_replace('/request/i', 'Request', ucfirst($name));
         $data = <<<EOF
 <?php namespace App\Requests;
@@ -584,10 +590,10 @@ EOF;
      */
     private function createSeeder($name, $model)
     {
-        if (!file_exists(app_dir() . "models/$model.php")) {
+        if (!file_exists('.' . models_path() . "$model.php")) {
             return die("Model '$model' does not exist");
         }
-        $container = app_dir() . 'seeders/';
+        $container = '.' . seeders_path();
         $name = preg_replace('/seeder/i', 'Seeder', ucfirst($name));
         $model = ucfirst($model);
         $data = <<<EOF
@@ -625,25 +631,26 @@ EOF;
         return die("'{$name}' class created.");
     }
 
-    
 
     /**
      * Install/Uninstall all migrations
      *
      * @param $action
-     * @var $container
-     * @var $migration
      * @return mixed
+     * @var $migration
+     * @var $container
      */
     private function migrate($action)
     {
-        $directory = app_dir() . 'migrations';
+        $directory = "." . migrations_path();
         $container = new DirectoryIterator($directory);
         $message = ($action == 'down') ? "database rolled back." : "database successfully migrated.";
 
-        foreach ($container as $handle) {
-            if (is_file("{$directory}/{$handle->getFilename()}")) {
-                $migration = "App\\Migrations\\" . $handle->getBasename('.php');
+        foreach ($container as $handle)
+        {
+            if (is_file("{$directory}/{$handle->getFilename()}") && $handle->getFilename() !== '.htaccess')
+            {
+                $migration = self::FixNamespace(MIGRATIONS_PATH, $handle->getBasename('.php'));
                 $migration = new $migration();
                 $migration->$action();
             }
@@ -658,16 +665,18 @@ EOF;
      *
      * @return string
      */
-    private function backup() {
-        $container = app_dir() . 'models/';
+    private function backup()
+    {
+        $container = '.' . models_path();
         $iterator = new DirectoryIterator($container);
 
-        foreach ($iterator as $it) {
-            if (!is_file($container . $it->getFilename())) {
+        foreach ($iterator as $handle)
+        {
+            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess') {
                 continue;
             }
 
-            $model =  'App\Models\\' . str_replace('.php', '', $it->getFilename());
+            $model = self::FixNamespace(MODELS_PATH,  $handle->getBasename('.php'));
             $model = new $model();
             $model->backup();
         }
@@ -681,16 +690,18 @@ EOF;
      *
      * @return string
      */
-    private function restore() {
-        $container = app_dir() . 'models/';
+    private function restore()
+    {
+        $container = '.' . models_path();
         $iterator = new DirectoryIterator($container);
 
-        foreach ($iterator as $it) {
-            if (!is_file($container . $it->getFilename())) {
+        foreach ($iterator as $handle)
+        {
+            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess')
+            {
                 continue;
             }
-
-            $model =  'App\Models\\' . str_replace('.php', '', $it->getFilename());
+            $model = self::FixNamespace(MODELS_PATH,  $handle->getBasename('.php'));
             $model = new $model();
             $model->restore();
         }
@@ -704,16 +715,17 @@ EOF;
      *
      * @return string
      */
-    private function seed() {
-        $container = app_dir() . 'seeders/';
+    private function seed()
+    {
+        $container = '.' . seeders_path();
         $iterator = new DirectoryIterator($container);
 
-        foreach ($iterator as $it) {
-            if (!is_file($container . $it->getFilename())) {
+        foreach ($iterator as $handle)
+        {
+            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess')
                 continue;
-            }
 
-            $seeder =  'App\Seeders\\' . str_replace('.php', '', $it->getFilename());
+            $seeder = self::FixNamespace(SEEDERS_PATH,  $handle->getBasename('.php'));
             new $seeder();
         }
 
@@ -724,30 +736,79 @@ EOF;
     /**
      * Install/Uninstall a migration table
      *
-     * @param $name
+     * @param $className
      * @param $action
-     * @var $container
-     * @var $migration
      * @return mixed
      */
-    private function tableMigration($name, $action)
+    private function tableMigration($className, $action)
     {
-        $className = "App\\Migrations\\" . $name;
+        $filePath = '.' . migrations_path() . $className;
 
-        if (file_exists("./app/migrations/{$name}.php")) {
-            if (class_exists($className)) {
-                $migration = new $className();
+        if (file_exists($filePath . ".php"))
+        {
+            $class = self::FixNamespace(MIGRATIONS_PATH, $className);
+            if (class_exists($class))
+            {
+                $migration = new $class();
                 $migration->$action();
-
                 $message = ($action == 'down') ?
                     "table rolled back." : "table successfully migrated.";
+
             } else {
-                return die("'{$name}' class does not exist.");
+                return die("'{$className}' class does not exist.");
             }
         } else {
-            return die("'{$name}' file does not exist.");
+            return die("'{$className}' file does not exist.");
         }
 
         return die($message);
+    }
+
+
+    /**
+     * Dumps data types of a migration class.
+     * e.g. php yamato db:table:dump MigrationClassName
+     *
+     * @param $className
+     * @return string
+     */
+    private function tableDump($className)
+    {
+        $filePath = '.' . migrations_path() . $className;
+
+        if (file_exists($filePath . ".php")) {
+            $class = self::FixNamespace(MIGRATIONS_PATH, $className);
+            if (class_exists($class)) {
+                $migration = new $class();
+                return $migration->dump();
+            } else {
+                return die("'{$className}' class does not exist.");
+            }
+        } else {
+            return die("'{$className}' file does not exist.");
+        }
+    }
+
+
+    /**
+     * This will fix any Namespacing coming from
+     * a forward slash path as well as fixes any
+     * non uppercase first letter.
+     *
+     *
+     * @param $path
+     * @param $class
+     * @return string
+     */
+    private static function FixNamespace($path, $class)
+    {
+        $namespace = explode('/', trim($path, '/'));
+        $container = null;
+
+        foreach ($namespace as $dir):
+            $container .= ucfirst($dir) . '\\';
+        endforeach;
+
+        return ($container . $class);
     }
 }
