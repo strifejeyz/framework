@@ -19,13 +19,13 @@
 
     .sub {
         margin: 0;
-        font-size: 13px;
+        font-size: 15px;
         color: #787878;
         font-style: italic;
     }
 
     center {
-        font-size: 12px;
+        font-size: 13px;
         position: fixed;
         bottom: 5px;
         width: 100%;
@@ -33,7 +33,7 @@
     }
 </style>
 
-<img src="/assets/img/strife.png" width="120">
+<img src="/assets/img/strife.png" width="150">
 <p class="title">Strife Framework</p>
 <p class="sub">A Fast and Lightweight PHP MVC Framework.</p>
 
