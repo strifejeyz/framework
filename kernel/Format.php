@@ -105,8 +105,8 @@ class Format
      */
     static function dateDifference($date1, $date2)
     {
-        $date_entry = new \DateTime($date1);
-        $dateNow = new \DateTime($date2);
+        $date_entry = new DateTime($date1);
+        $dateNow = new DateTime($date2);
 
         return $dateNow->diff($date_entry)->format("%a");
     }
@@ -140,7 +140,7 @@ class Format
      * @param $string
      * @return string
      */
-    public static function lowercase($string)
+    public static function lc($string)
     {
         return strtolower($string);
     }
@@ -153,7 +153,7 @@ class Format
      * @param $string
      * @return string
      */
-    public static function uppercase($string)
+    public static function uc($string)
     {
         return strtoupper($string);
     }

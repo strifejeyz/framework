@@ -10,8 +10,8 @@ abstract class Route extends Engine
     /**
      * Load routes list
      *
-     * @param $routes
-     * @return string
+     * @param array $routes
+     * @return array
      */
     public static function register($routes = [])
     {

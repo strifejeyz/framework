@@ -11,12 +11,11 @@ class Log
      * log constructor
      *
      * @param $message
-     * @param string $file
-     * @return self
+     * @param string $fileName
      */
-    public function __construct($message, $file = 'logs.txt')
+    public function __construct($message, $fileName = 'logs.txt')
     {
-        $file = fopen(storage_dir() . "logs/" . $file, 'a');
+        $file = fopen(STORAGE_PATH . "logs/" . $fileName, 'a');
 
         if (fwrite($file, $message . "\n")) {
             $result = true;

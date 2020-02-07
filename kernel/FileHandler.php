@@ -52,7 +52,7 @@ class FileHandler
      * Open a file handle
      *
      * @param $mode
-     * @return resource
+     * @return bool
      */
     public function open($mode)
     {
@@ -229,7 +229,7 @@ class FileHandler
     /**
      * Read all lines and set to array
      *
-     * @return bool
+     * @return array
      */
     public function toArray()
     {
@@ -246,7 +246,7 @@ class FileHandler
     /**
      * Read all lines as CSV and set to array
      *
-     * @return bool
+     * @return array
      */
     public function toCsv()
     {
