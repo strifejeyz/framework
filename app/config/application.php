@@ -39,7 +39,7 @@ define('TEMPLATE_TYPE', '.php');
  * password stored on database.
  * generate a new one at least before production
  */
-define('APPLICATION_KEY', 'ttatjqoo1osroi5cc5s00xgypmurnvewcr381ypmqe7bi2kmkc');
+define('APPLICATION_KEY', 'yyeg6ba6r736u2vui8ixsk116eki2zfl63bq0insqs4f7qroi2');
 
 
 /**
@@ -64,7 +64,7 @@ session_save_path('./storage/sessions/');
 define('CONTROLLERS_PATH', '/app/controllers/');
 define('MIGRATIONS_PATH', '/app/migrations/');
 define('REQUESTS_PATH', '/app/requests/');
-define('SEEDERS_PATH', '/app/requests/');
+define('SEEDERS_PATH', '/app/seeders/');
 define('MODELS_PATH', '/app/models/');
 define('CONFIG_PATH', '/app/config/');
 define('VIEWS_PATH', '/app/views/');
