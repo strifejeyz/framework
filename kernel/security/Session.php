@@ -136,15 +136,17 @@ class Session
 
     /**
      * Flush all sessions except session_id
+     * parameter is the route it will redirect to.
      *
+     * @param $route
      * @return mixed
      */
-    public static function destroy()
+    public static function destroy($route)
     {
         unset($_SESSION);
         session_destroy();
         session_regenerate_id();
 
-        header('location: ' . route('auth.login'));
+        header('location: ' . $route);
     }
 }
