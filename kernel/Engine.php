@@ -31,13 +31,13 @@ class Engine
      *
      * @var string
      */
-    private static $controller = "HomeController";
+    private static $controller = null;
     /**
      * default method
      *
      * @var string
      */
-    private static $method = "index";
+    private static $method = null;
     /**
      * container for parameters.
      *
@@ -82,10 +82,6 @@ class Engine
 
         if (MAINTENANCE_MODE == TRUE) {
             return self::error(503);
-        }
-
-        if (IP_BLACKLISTING == TRUE) {
-            self::blacklist();
         }
 
         $originalUrl = self::parseUrl();
@@ -272,10 +268,16 @@ class Engine
             }
         }
 
-        require_once '../app/controllers/' . self::$subdirectory . self::$controller . '.php';
-        $controller = self::$namespace . self::$controller;
+        if (is_null(self::$controller) && is_null(self::$method)) {
+            $controller = self::$namespace . DEFAULT_CONTROLLER;
+            $method = DEFAULT_METHOD;
+        } else {
+            $controller = self::$namespace . self::$controller;
+            $method = self::$method;
+        }
 
-        return (call_user_func_array([new $controller(), self::$method], self::$parameters));
+        require_once '.' . CONTROLLERS_PATH . self::$subdirectory . $controller . '.php';
+        return (call_user_func_array([new $controller(), $method], self::$parameters));
     }
 
 
@@ -318,24 +320,6 @@ class Engine
         return page_error($n);
     }
 
-
-    /**
-     * Block IPs listed on .blacklist file.
-     *
-     * @return mixed
-     */
-    private static function blacklist()
-    {
-        $ips = file_contents_to_array('../.blacklist');
-
-        foreach ($ips as $ip) {
-            if (remote_ip() == $ip) {
-                return self::error(403);
-            } else {
-                continue;
-            }
-        }
-    }
 
 
     /**
