@@ -456,6 +456,6 @@ abstract class Migration extends Connection
      */
     public function dump()
     {
-        return dump($this->fields);
+        return var_export($this->fields);
     }
 }
