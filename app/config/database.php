@@ -18,7 +18,7 @@ Connection::parameters('conn1',[
     'hostname' => 'localhost',
     'database' => 'strife',
     'username' => 'strife',
-    'password' => '',
+    'password' => 'strife',
     'charset'  => 'utf8',
     'port'     => 3306
 ]);
