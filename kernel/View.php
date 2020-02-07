@@ -25,24 +25,23 @@ abstract class View
      * Formatting the content by replacing any
      * custom tags by equivalent code in PHP
      *
+     * Extract the $_ variable to create new variables
+     * from array keys
+     *
      * @param $template
      * @param $_
      * @return view
      */
     public static function render($template, $_ = null)
     {
-        /**
-         * Extract the $_ variable to create new variables
-         * from array keys
-         */
         if (!is_null($_)) {
             extract($_);
         }
 
-        if (preg_match('/(.*)\.' . self::$postfix . '/i', $template)) {
-            $filename = '../views/' . $template;
+        if (preg_match('/(.*)(html|php|htm)/i', $template)) {
+            $filename = "." . VIEWS_PATH . $template;
         } else {
-            $filename = '../views/' . ltrim($template, '/') . self::$postfix;
+            $filename = "." . VIEWS_PATH . ltrim($template, '/') . self::$postfix;
         }
 
         if (!file_exists($filename)) {
