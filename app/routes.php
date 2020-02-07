@@ -2,9 +2,20 @@
 
 /**
  * List of route paths
+ *
+ * Here's an example of a simple route:
+ * assign('MyTestRoute ->> /test', 'TestController::index()')
+ *
+ * Explanation:
+ * 'MyTestRoute' is a route name
+ * '->>' is a pointer
+ * '/test' is the URL
+ * 'TestController::index()' is the Class and Method
  */
 
+
 assign('welcome  ->> /welcome', '/cms/WelcomeController::index');
+
 
 
 /**
