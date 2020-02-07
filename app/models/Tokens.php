@@ -21,6 +21,6 @@ class Tokens extends Model
      * If you don't want to use standard 'id'
      * then put your primary key here.
      */
-    protected static $primary_key = "token_id";
+    protected static $primary_key = "id";
 
 }
