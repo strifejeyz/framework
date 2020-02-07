@@ -22,12 +22,13 @@ class Database extends QueryBuilder
      * full query string
      *
      * @param $query
+     * @param $fetchMode
      * @return boolean
      */
-    public static function query($query)
+    public static function query($query, $fetchMode = PDO::FETCH_OBJ)
     {
         $stmt = self::instance()->query($query);
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $stmt->fetchAll($fetchMode);
     }
 
 
