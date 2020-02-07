@@ -680,90 +680,137 @@ if (!function_exists('referer')) {
  * Application Directories
  */
 
-if (!function_exists('root_dir')) {
+if (!function_exists('root_path')) {
     /**
      * @return mixed
      */
-    function root_dir()
-    {
-        return str_replace('public', '', $_SERVER['DOCUMENT_ROOT']);
-    }
-}
-
-
-if (!function_exists('app_dir')) {
-    /**
-     * @return string
-     */
-    function app_dir()
-    {
-        return str_replace('public', '', $_SERVER['DOCUMENT_ROOT']) . "app" . DIRECTORY_SEPARATOR;
-    }
-}
-
-
-if (!function_exists('config_dir')) {
-    /**
-     * @return string
-     */
-    function config_dir()
-    {
-        return str_replace('public', '', $_SERVER['DOCUMENT_ROOT']) . "config" . DIRECTORY_SEPARATOR;
-    }
-}
-
-
-if (!function_exists('kernel_dir')) {
-    /**
-     * @return string
-     */
-    function kernel_dir()
-    {
-        return str_replace('public', '', $_SERVER['DOCUMENT_ROOT']) . "kernel" . DIRECTORY_SEPARATOR;
-    }
-}
-
-
-if (!function_exists('public_dir')) {
-    /**
-     * @return mixed
-     */
-    function public_dir()
+    function root_path()
     {
         return $_SERVER['DOCUMENT_ROOT'];
     }
 }
 
 
-if (!function_exists('storage_dir')) {
+if (!function_exists('app_path')) {
     /**
      * @return string
      */
-    function storage_dir()
+    function app_path()
     {
-        return str_replace('public', '', $_SERVER['DOCUMENT_ROOT']) . "storage" . DIRECTORY_SEPARATOR;
+        return $_SERVER['DOCUMENT_ROOT'] . "app";
     }
 }
 
 
-if (!function_exists('vendor_dir')) {
+if (!function_exists('config_path')) {
     /**
      * @return string
      */
-    function vendor_dir()
+    function config_path()
     {
-        return str_replace('public', '', $_SERVER['DOCUMENT_ROOT']) . "vendor" . DIRECTORY_SEPARATOR;
+        return $_SERVER['DOCUMENT_ROOT'] . CONFIG_PATH;
     }
 }
 
 
-if (!function_exists('views_dir')) {
+if (!function_exists('kernel_path')) {
     /**
      * @return string
      */
-    function views_dir()
+    function kernel_path()
     {
-        return str_replace('public', '', $_SERVER['DOCUMENT_ROOT']) . "views" . DIRECTORY_SEPARATOR;
+        return $_SERVER['DOCUMENT_ROOT'] . "kernel";
+    }
+}
+
+
+
+if (!function_exists('storage_path')) {
+    /**
+     * @return string
+     */
+    function storage_path()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . STORAGE_PATH;
+    }
+}
+
+
+if (!function_exists('vendor_path')) {
+    /**
+     * @return string
+     */
+    function vendor_path()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . VENDOR_PATH;
+    }
+}
+
+
+if (!function_exists('views_path')) {
+    /**
+     * @return string
+     */
+    function views_path()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . VIEWS_PATH;
+    }
+}
+
+
+if (!function_exists('controllers_path')) {
+    /**
+     * @return string
+     */
+    function controllers_path()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . CONTROLLERS_PATH;
+    }
+}
+
+
+if (!function_exists('requests_path')) {
+    /**
+     * @return string
+     */
+    function requests_path()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . REQUESTS_PATH;
+    }
+}
+
+
+
+if (!function_exists('seeders_path')) {
+    /**
+     * @return string
+     */
+    function seeders_path()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . SEEDERS_PATH;
+    }
+}
+
+
+if (!function_exists('models_path')) {
+    /**
+     * @return string
+     */
+    function models_path()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . MODELS_PATH;
+    }
+}
+
+
+
+if (!function_exists('migrations_path')) {
+    /**
+     * @return string
+     */
+    function migrations_path()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . MIGRATIONS_PATH;
     }
 }
 
