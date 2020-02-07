@@ -5,6 +5,7 @@ use App\Models\Tokens;
 use App\Models\Security;
 use Kernel\Security\Hash;
 use Kernel\Security\Token;
+use Kernel\Database\Database;
 use App\Requests\LoginRequest;
 use Kernel\Security\Encryption;
 use Kernel\Requests\HTTPRequest;
@@ -31,6 +32,7 @@ class AuthController
      * Login a user
      *
      * @return mixed
+     * @throws ErrorHandler
      */
     public function attempt()
     {
@@ -49,7 +51,7 @@ class AuthController
 
             # if user exists and active.
             if (!empty($user)) {
-                $checkToken = new Kernel\Database\Database;
+                $checkToken = new Database;
                 $checkToken = $checkToken->query("SELECT * FROM tokens WHERE user_id = {$user->id} AND failed_login > 4 LIMIT 1");
 
                 if (!empty($checkToken)) {
@@ -130,6 +132,7 @@ class AuthController
      * Password reset attempt
      *
      * @return Route
+     * @throws ErrorHandler
      */
     public function sendEmail()
     {
@@ -274,6 +277,6 @@ class AuthController
      */
     public function logout()
     {
-        return Session::destroy();
+        return Session::destroy(route('auth.login'));
     }
 }
