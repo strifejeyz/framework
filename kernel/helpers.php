@@ -533,7 +533,7 @@ if (!function_exists('page_error')) {
      */
     function page_error($n)
     {
-        include("../views/errors/{$n}.php");
+        include("." . VIEWS_PATH . "errors/{$n}.php");
         return exit();
     }
 }
