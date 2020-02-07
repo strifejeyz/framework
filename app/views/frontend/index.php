@@ -33,7 +33,7 @@
     }
 </style>
 
-<img src="/images/strife.png" width="120">
+<img src="/assets/img/strife.png" width="120">
 <p class="title">Strife Framework</p>
 <p class="sub">A Fast and Lightweight PHP MVC Framework.</p>
 
