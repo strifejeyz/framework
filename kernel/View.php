@@ -2,6 +2,8 @@
 
 /**
  * Class View
+ * contains page Render,Caching,Template Engine
+ * and routing bootstraps.
  */
 abstract class View
 {
