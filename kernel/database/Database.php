@@ -26,7 +26,7 @@ class Database extends QueryBuilder
      * @param int $fetchMode
      * @return void
      */
-    public static function raw($query, $values = null, $fetchRows = true, $fetchMode = PDO::FETCH_OBJ)
+    public static function query($query, $values = null, $fetchRows = true, $fetchMode = PDO::FETCH_OBJ)
     {
         if (!empty($values)) {
             $stmt = self::instance()->prepare($query);
@@ -54,7 +54,7 @@ class Database extends QueryBuilder
      */
     public static function row($query, $values = null, $fetchMode = PDO::FETCH_OBJ)
     {
-        return self::raw($query, $values, false, $fetchMode);
+        return self::query($query, $values, false, $fetchMode);
     }
 
 
