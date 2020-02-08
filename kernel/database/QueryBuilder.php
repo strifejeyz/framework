@@ -334,6 +334,41 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
 
 
     /**
+     * Performs a raw query, returns
+     * multiple rows with fetchAll()
+     * this is just a clone from Database()
+     * class to allow models perform raw queries.
+     *
+     * @param $query
+     * @param array $values
+     * @param bool $rows
+     * @param int $fetchObject
+     */
+    public static function query($query, $values = null, $rows = true, $fetchObject = PDO::FETCH_OBJ)
+    {
+        $stmt = new Database;
+        return $stmt->query($query, $values, $rows, $fetchObject);
+    }
+
+
+    /**
+     * Performs a raw query and only returns
+     * 1 row of data with fetch()
+     * this is just a clone from Database() class
+     * to allow models perform raw queries.
+     *
+     * @param $query
+     * @param null $values
+     * @param int $fetchObject
+     */
+    public static function row($query, $values = null, $fetchObject = PDO::FETCH_OBJ)
+    {
+        $stmt = new Database;
+        return $stmt->query($query, $values, false, $fetchObject);
+    }
+
+
+    /**
      * Backup a database table.
      *
      * @return bool
@@ -343,8 +378,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
         $filename = '.' . storage_path() . 'backups/' . static::$table . ".json";
         $file = new FileHandler($filename, 'w+');
 
-        if (!empty(self::$result))
-        {
+        if (!empty(self::$result)) {
             $data = json_encode(self::$result);
         } else {
             $data = json_encode(self::get());
@@ -369,14 +403,11 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
         $filename = '.' . storage_path() . 'backups/' . static::$table . ".json";
         $result = null;
 
-        if (file_exists($filename))
-        {
+        if (file_exists($filename)) {
             $file = new FileHandler($filename, 'r');
 
-            foreach (json_decode($file->read()) as $data)
-            {
-                if (self::insert((array)$data))
-                {
+            foreach (json_decode($file->read()) as $data) {
+                if (self::insert((array)$data)) {
                     $result = true;
                 } else {
                     $result = false;
@@ -1338,12 +1369,11 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
 
     /**
      * Fetch the single row from database and set $result
-     * from it, return new instance of class itself along with
-     * its preserved properties for it
-     * to be able to use all the methods and for method chaining
-     * like User::first()->delete()
-     * Note: you cannot store new instance of this class in a
-     * session variable. refer to __invoke method
+     * from it, return new instance of class itself along
+     * with its preserved properties to be used for method
+     * chaining like User::first()->delete()
+     * Note: you cannot store new instance of this class to
+     * a session variable. refer to __invoke method
      * to get the original values.
      *
      * @return self|bool
@@ -1468,6 +1498,13 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function join($table)
     {
+        if (empty(self::$table)) {
+            self::$table = static::$table;
+            if (isset(static::$alias)) {
+                self::$table = static::$table . " " . static::$alias;
+            }
+        }
+
         if (isset(self::$query['joins'])) {
             self::$query['joins'] .= " INNER JOIN $table ";
         } else {
