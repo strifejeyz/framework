@@ -50,6 +50,7 @@ final class YamatoCLI
   clear:sessions                                clear sessions directory
   clear:logs                                    clear logs directory
   clear:backups                                 clear backups directory
+  clear:cache                                   clear cached pages
   clear:all                                     clear all backups,logs,sessions
   
 {GENERATORS}
@@ -119,9 +120,14 @@ EOF;
                 return die("logs directory cleared.");
                 break;
 
+            case 'clear:cache':
+                $this->clear('cache');
+                return die("cached pages cleared.");
+                break;
+
             case 'clear:backups':
                 $this->clear('backups');
-                return die("backups directory cleared.");
+                return die("backup directory cleared.");
                 break;
 
 
