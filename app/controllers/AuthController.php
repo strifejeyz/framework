@@ -38,13 +38,13 @@ class AuthController
     {
         $request = new LoginRequest;
 
-        if ($request->validate()) {
-            if (filter_var($request->get('username', FILTER_VALIDATE_EMAIL))) {
+        if ($request->validate()) 
+        {
+            if (preg_match('/(.*)@(.*)/',$request->get('username'))) {
                 $field = "email";
             } else {
                 $field = "username";
             }
-
             $user = User::where($field, $request->get('username'))
                 ->where('password', Hash::encode($request->get('password')))
                 ->where('active', 'yes')->first();
