@@ -162,13 +162,13 @@ if (!function_exists('paths')) {
 }
 
 
-if (!function_exists('path')) {
+if (!function_exists('uri')) {
     /**
      * Returns last URL processed.
      *
      * @return array
      **/
-    function path()
+    function uri()
     {
         if (isset($_SERVER['REQUEST_URI'])) {
             return ($_SERVER['REQUEST_URI']);
