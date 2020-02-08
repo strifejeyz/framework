@@ -18,6 +18,51 @@ class Database extends QueryBuilder
     protected static $table;
 
     /**
+     * Performs a raw query, returns
+     * multiple rows with fetchAll()
+     *
+     * @param $query
+     * @param array $values
+     * @param int $fetchMode
+     * @return void
+     */
+    public static function raw($query, $values = null, $fetchMode = PDO::FETCH_OBJ)
+    {
+        if (!empty($values)) {
+            $stmt = self::instance()->prepare($query);
+            $stmt->execute($values);
+        } else {
+            $stmt = self::instance()->query($query);
+        }
+
+        return $stmt->fetchAll($fetchMode);
+    }
+
+
+    /**
+     * Performs a raw query
+     * and only returns single row
+     * with fetch()
+     *
+     * @param $query
+     * @param array $values
+     * @param int $fetchMode
+     * @return void
+     */
+    public static function pull($query, $values = null, $fetchMode = PDO::FETCH_OBJ)
+    {
+        if (!empty($values)) {
+            $stmt = self::instance()->prepare($query);
+            $stmt->execute($values);
+        } else {
+            $stmt = self::instance()->query($query);
+        }
+
+        return $stmt->fetch($fetchMode);
+    }
+
+
+    /**
      * Performs a query, accepts
      * full query string
      *
@@ -25,7 +70,7 @@ class Database extends QueryBuilder
      * @param $fetchMode
      * @return boolean
      */
-    public static function query($query, $fetchMode = PDO::FETCH_OBJ)
+    public static function singular($query, $fetchMode = PDO::FETCH_OBJ)
     {
         $stmt = self::instance()->query($query);
         return $stmt->fetchAll($fetchMode);
