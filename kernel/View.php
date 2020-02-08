@@ -37,13 +37,37 @@ abstract class View
         if (!is_null($_)) {
             extract($_);
         }
-
         if (preg_match('/(.*)(html|php|htm)/i', $template)) {
             $filename = "." . VIEWS_PATH . $template;
         } else {
             $filename = "." . VIEWS_PATH . ltrim($template, '/') . self::$postfix;
         }
 
+        if (CACHED_VIEWS == true)
+        {
+            $cachedFile = storage_path() . "/cache/" . md5($filename);
+            if (file_exists($cachedFile))
+            {
+                $___ = file_get_contents($cachedFile);
+                return eval(' ?>' . $___ . '<?php ');
+            } else {
+                return self::evaluate($filename);
+            }
+        } else {
+            return self::evaluate($filename);
+        }
+    }
+
+    /**
+     * This is supposed to evaluate(locate and replace)
+     * custom tags and generate cache for views.
+     *
+     * @param $filename
+     * @return eval()
+     **/
+    private static function evaluate($filename)
+    {
+        $cachedFile = storage_path() . "/cache/" . md5($filename);
         if (!file_exists($filename)) {
             trigger_error("File does not exist '{$filename}'", E_USER_ERROR);
         }
@@ -74,6 +98,13 @@ abstract class View
         $___ = preg_replace('/\{endwhile\}/', '<?php endwhile ?>', $___);
         $___ = preg_replace('/\{foreach (.*)\}/', '<?php foreach ($1) : ?>', $___);
         $___ = preg_replace('/\{endforeach\}/', '<?php endforeach ?>', $___);
+
+        if (CACHED_VIEWS == TRUE) {
+            if (!file_exists($cachedFile)) {
+                $file = fopen($cachedFile, 'x');
+                fwrite($file, $___);
+            }
+        }
 
         return eval(' ?>' . $___ . '<?php ');
     }
