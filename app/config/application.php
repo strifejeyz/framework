@@ -20,6 +20,14 @@ define('DEFAULT_CONTROLLER', 'HomeController');
 
 
 /**
+ * Here, you can set the value
+ * to automatically cache your pages
+ * or to turn it off.
+ **/
+define('CACHED_VIEWS', TRUE);
+
+
+/**
  * Here you can define your default method
  **/
 define('DEFAULT_METHOD', 'index');
