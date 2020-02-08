@@ -2,4 +2,4 @@
 
 use Kernel\YamatoCLI as Command;
 
-return new Command($argv)
+return new Command($argv);
