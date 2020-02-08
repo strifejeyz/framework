@@ -52,7 +52,7 @@ class AuthController
             # if user exists and active.
             if (!empty($user)) {
                 $checkToken = new Database;
-                $checkToken = $checkToken->query("SELECT * FROM tokens WHERE user_id = {$user->id} AND failed_login > 4 LIMIT 1");
+                $checkToken = $checkToken->row("SELECT * FROM tokens WHERE user_id=? AND failed_login > 4 LIMIT 1", [$user->id]);
 
                 if (!empty($checkToken)) {
                     setFlash('flash', '<div class="alert alert-danger">Your account has been disabled.</div>');
