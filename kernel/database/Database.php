@@ -26,7 +26,7 @@ class Database extends QueryBuilder
      * @param int $fetchMode
      * @return void
      */
-    public static function raw($query, $values = null, $fetchMode = PDO::FETCH_OBJ)
+    public static function raw($query, $values = null, $fetchRows = true, $fetchMode = PDO::FETCH_OBJ)
     {
         if (!empty($values)) {
             $stmt = self::instance()->prepare($query);
@@ -35,45 +35,26 @@ class Database extends QueryBuilder
             $stmt = self::instance()->query($query);
         }
 
-        return $stmt->fetchAll($fetchMode);
+        if ($fetchRows == true) {
+            return $stmt->fetchAll($fetchMode);
+        } else {
+            return $stmt->fetch($fetchMode);
+        }
     }
 
 
     /**
-     * Performs a raw query
-     * and only returns single row
-     * with fetch()
+     * Performs a raw query and only returns
+     * 1 row of data with fetch()
      *
      * @param $query
-     * @param array $values
+     * @param null $values
      * @param int $fetchMode
      * @return void
      */
-    public static function pull($query, $values = null, $fetchMode = PDO::FETCH_OBJ)
+    public static function row($query, $values = null, $fetchMode = PDO::FETCH_OBJ)
     {
-        if (!empty($values)) {
-            $stmt = self::instance()->prepare($query);
-            $stmt->execute($values);
-        } else {
-            $stmt = self::instance()->query($query);
-        }
-
-        return $stmt->fetch($fetchMode);
-    }
-
-
-    /**
-     * Performs a query, accepts
-     * full query string
-     *
-     * @param $query
-     * @param $fetchMode
-     * @return boolean
-     */
-    public static function singular($query, $fetchMode = PDO::FETCH_OBJ)
-    {
-        $stmt = self::instance()->query($query);
-        return $stmt->fetchAll($fetchMode);
+        return self::raw($query, $values, false, $fetchMode);
     }
 
 
