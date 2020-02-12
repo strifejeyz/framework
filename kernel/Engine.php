@@ -69,12 +69,12 @@ class Engine
      * the assigned controller and it's method along with the
      * parameters based on array given in the get() method.
      *
-     * @var array $originalUrl
+     * @return mixed
      * @var int $compare
      * @var array $path
      * @var array $url
      * @var array $params
-     * @return mixed
+     * @var array $originalUrl
      */
     public function __construct()
     {
@@ -180,12 +180,12 @@ class Engine
      * @param string $url
      * @param string $action
      * @param string $requestMethod
-     * @var string $path
+     * @return bool
      * @var string $sub
      * @var array $data
      * @var mixed $name
      * @var int $param
-     * @return bool
+     * @var string $path
      */
     public static function assign($url, $action, $requestMethod = null, $namespace = null)
     {
@@ -214,17 +214,20 @@ class Engine
             self::$routes[$name]['namespace'] = $namespace;
         }
 
-        $params = 0;
-        for ($i = 0; $i < strlen($url); $i++) {
-            if ($url[$i] == ":") {
-                $params++;
+        $parameter_types = array();
+        $paramScan = explode('/', trim($url, '/'));
+
+        foreach ($paramScan as $datatype) {
+            if ($datatype == ':int' || $datatype == ':str' || $datatype == ':any') {
+                $parameter_types[] = $datatype;
             }
         }
 
-        if (empty($params)) {
+        if (empty($parameter_types)) {
             self::$routes[$name]['params'] = 0;
         } else {
-            self::$routes[$name]['params'] = $params;
+            self::$routes[$name]['params'] = count($parameter_types);
+            self::$routes[$name]['types'] = $parameter_types;
         }
 
         if (is_callable($action)) {
@@ -319,7 +322,6 @@ class Engine
     {
         return page_error($n);
     }
-
 
 
     /**
