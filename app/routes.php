@@ -13,8 +13,7 @@
  * 'TestController::index()' is the Class and Method
  */
 
-
-assign('welcome  ->> /welcome', '/cms/WelcomeController::index');
+assign('welcome ->> /welcome', '/cms/WelcomeController::index');
 
 
 

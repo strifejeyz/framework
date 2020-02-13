@@ -1,4 +1,6 @@
-<?php namespace Kernel;
+<?php /** @noinspection ALL */
+
+namespace Kernel;
 
 
 /**
@@ -92,11 +94,14 @@ class Engine
         } else {
             foreach (array_values(self::$routes) as $route) {
                 $path = explode('/', trim($route['url'], '/'));
-                $route['params'] = empty($route['params']) ? 0 : $route['params'];
+                $route['parameter_count'] = empty($route['parameter_count']) ? 0 : $route['parameter_count'];
 
-                if (count($path) === count($originalUrl)) {
-                    $path = array_slice($path, 0, count($path) - $route['params']);
-                    $url = array_slice($originalUrl, 0, count($originalUrl) - $route['params']);
+                if (count($path) === count($originalUrl))
+                {
+                    $datatypes = $route['datatypes'];
+                    $path = array_slice($path, 0, count($path) - $route['parameter_count']);
+                    $url = array_slice($originalUrl, 0, count($originalUrl) - $route['parameter_count']);
+                    $parameters = array_slice($originalUrl, count($originalUrl) - $route['parameter_count']);
 
                     foreach ($path as $index => $u) {
                         if (self::$strict == true) {
@@ -112,9 +117,42 @@ class Engine
                             $key = preg_replace('/\]/', '\]', $key);
                             $key = preg_replace('/\(/', '\(', $key);
                             $key = preg_replace('/\)/', '\)', $key);
-                            if (preg_match("/^{$key}$/i", $u)) {
-                                $compare++;
-                                continue;
+
+                            if (preg_match("/^{$key}$/i", $u))
+                            {
+                                $validate = function ($datatypes, $parameters)
+                                {
+                                    $matched_datatype_counter = 0;
+                                    foreach ($datatypes as $indexOfData => $data):
+                                        if ($data == ':int' AND is_numeric($parameters[$indexOfData])) {
+                                            $matched_datatype_counter++;
+                                            continue;
+                                        } else if ($data == ':str' AND preg_match('/[a-zA-Z^0-9]/', $parameters[$indexOfData])) {
+                                            $matched_datatype_counter++;
+                                            continue;
+                                        } else if ($data == ':any') {
+                                            $matched_datatype_counter++;
+                                            continue;
+                                        }
+                                        else {
+                                            $matched_datatype_counter = 0;
+                                            break;
+                                        }
+                                    endforeach;
+
+                                    if ($matched_datatype_counter == count($datatypes)) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                };
+                                if (!empty($datatypes) AND call_user_func($validate, $datatypes, $parameters) == true) {
+                                    $compare++;
+                                    continue;
+                                } else {
+                                    $compare++;
+                                    continue;
+                                }
                             } else {
                                 $compare = 0;
                                 break;
@@ -123,20 +161,18 @@ class Engine
                     }
 
                     if ($compare === count($url)) {
-                        $params = array_slice($originalUrl, count($originalUrl) - $route['params']);
-
                         if (isset($route['closure'])) {
                             if (!empty($route['requestMethod'])) {
                                 if (strtoupper($route['requestMethod']) !== $_SERVER['REQUEST_METHOD']) {
                                     return self::error(404);
                                 }
                             }
-                            return call_user_func_array($route['closure'], $params);
+                            return call_user_func_array($route['closure'], $parameters);
                         }
 
                         self::$controller = $route['controller'];
                         self::$method = $route['method'];
-                        self::$parameters = $params;
+                        self::$parameters = $parameters;
                         self::$subdirectory = $route['subdirectory'];
                         self::$namespace = $route['namespace'];
                         self::$requestMethod = $route['requestMethod'];
@@ -201,6 +237,7 @@ class Engine
         }
 
         self::$routes[$name]['url'] = $url;
+        self::$routes[$name]['datatypes'] = array();
 
         if (is_null($requestMethod)) {
             self::$routes[$name]['requestMethod'] = "";
@@ -224,10 +261,10 @@ class Engine
         }
 
         if (empty($parameter_types)) {
-            self::$routes[$name]['params'] = 0;
+            self::$routes[$name]['parameter_count'] = 0;
         } else {
-            self::$routes[$name]['params'] = count($parameter_types);
-            self::$routes[$name]['types'] = $parameter_types;
+            self::$routes[$name]['parameter_count'] = count($parameter_types);
+            self::$routes[$name]['datatypes'] = $parameter_types;
         }
 
         if (is_callable($action)) {
