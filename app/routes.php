@@ -11,6 +11,9 @@
  * '->>' is a pointer
  * '/test' is the URL
  * 'TestController::index()' is the Class and Method
+ *
+ * when Route::strict(true);
+ * e.g. /Foo is not equal to /foo
  */
 
 assign('welcome ->> /welcome', '/cms/WelcomeController::index');
