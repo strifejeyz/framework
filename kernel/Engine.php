@@ -7,9 +7,13 @@ namespace Kernel;
  * Setting and Dispatching routes
  * Class Engine
  * Created 10/23/2015
- * Updated 03/27/2017
+ * Updated 02/13/2020
  *
+ * @since 2015
+ * @author Jesse Strife
  * @package Kernel\Engine
+ * @copyright Strife Framework
+ * @license MIT License
  */
 class Engine
 {
@@ -57,7 +61,7 @@ class Engine
      *
      * @var string
      */
-    private static $requestMethod = null;
+    private static $request_method = null;
     /**
      * in case controllers are using namespace
      *
@@ -71,119 +75,153 @@ class Engine
      * the assigned controller and it's method along with the
      * parameters based on array given in the get() method.
      *
-     * @return mixed
-     * @var int $compare
-     * @var array $path
-     * @var array $url
-     * @var array $params
-     * @var array $originalUrl
+     * @return resource
+     * @var $originalURL (contains raw URL)
+     * @var $route_list (has all route listings from config/routes.php)
+     * @var parameter_count (counts params per route item e.g. /:str/:int = 2)
+     * @var parameter_types (array of rules from a route item e.g. :str,:int)
+     * @var $route_base_url (base url e.g. /foo/bar w/ params sliced)
+     * @var $raw_base_url (base url from originalUrl w/o params)
+     * @var $raw_parameters (has all the parameters from originalUrl)
+     * @var $validate_base_url (closure function to handle anomaly with loops)
+     * @var $url_match_counter (counts all matched route entities)
+     * @var $match_base_url_result (hols the result of entities being matched)
+     * @var $match_parameters_to_rules (function closure to resolve anomaly with loopss)
+     * @var $match_rules_result (holds bool from matching rules)
      */
     public function __construct()
     {
         session_start();
-
-        if (MAINTENANCE_MODE == TRUE) {
-            return self::error(503);
-        }
-
         $originalUrl = self::parseUrl();
-        $compare = 0;
+
+        if (MAINTENANCE_MODE == TRUE):
+            return self::error(503);
+        endif;
 
         if (empty($originalUrl)) {
             return self::dispatch();
         } else {
-            foreach (array_values(self::$routes) as $route) {
-                $path = explode('/', trim($route['url'], '/'));
-                $route['parameter_count'] = empty($route['parameter_count']) ? 0 : $route['parameter_count'];
+            foreach (array_values(self::$routes) as $route)
+            {
+                $route_list = explode('/', trim($route['url'], '/'));
+                $parameter_count = empty($route['parameter_count']) ? 0 : $route['parameter_count'];
 
-                if (count($path) === count($originalUrl))
+                if (count($route_list) == count($originalUrl))
                 {
-                    $datatypes = $route['datatypes'];
-                    $path = array_slice($path, 0, count($path) - $route['parameter_count']);
-                    $url = array_slice($originalUrl, 0, count($originalUrl) - $route['parameter_count']);
-                    $parameters = array_slice($originalUrl, count($originalUrl) - $route['parameter_count']);
+                    $parameter_types = $route['parameter_types'];
+                    $route_base_url = array_slice($route_list, 0, count($route_list) - $parameter_count);
+                    $raw_base_url = array_slice($originalUrl, 0, count($originalUrl) - $parameter_count);
+                    $raw_parameters = array_slice($originalUrl, count($originalUrl) - $parameter_count);
 
-                    foreach ($path as $index => $u) {
-                        if (self::$strict == true) {
-                            if ($u === $url[$index]) {
-                                $compare++;
-                                continue;
-                            } else {
-                                $compare = 0;
-                                break;
-                            }
-                        } else {
-                            $key = preg_replace('/\[/', '\[', $url[$index]);
-                            $key = preg_replace('/\]/', '\]', $key);
-                            $key = preg_replace('/\(/', '\(', $key);
-                            $key = preg_replace('/\)/', '\)', $key);
+                    if (count($raw_base_url) == count($route_base_url)) {
+                        $validate_base_url = function ($raw_base_url, $route_base_url) {
+                            $url_match_counter = 0;
 
-                            if (preg_match("/^{$key}$/i", $u))
-                            {
-                                $validate = function ($datatypes, $parameters)
-                                {
-                                    $matched_datatype_counter = 0;
-                                    foreach ($datatypes as $indexOfData => $data):
-                                        if ($data == ':int' AND is_numeric($parameters[$indexOfData])) {
-                                            $matched_datatype_counter++;
-                                            continue;
-                                        } else if ($data == ':str' AND preg_match('/[a-zA-Z^0-9]/', $parameters[$indexOfData])) {
-                                            $matched_datatype_counter++;
-                                            continue;
-                                        } else if ($data == ':any') {
-                                            $matched_datatype_counter++;
-                                            continue;
+                            for ($counter = 0; $counter < count($raw_base_url); $counter++):
+                                if (self::$strict == true):
+                                    if ($raw_base_url[$counter] == $route_base_url[$counter]):
+                                        $url_match_counter++;
+                                        continue;
+                                    else:
+                                        $url_match_counter = 0;
+                                        break;
+                                    endif;
+                                else:
+                                    if (preg_match("/^{$raw_base_url[$counter]}$/i", $route_base_url[$counter])):
+                                        $url_match_counter++;
+                                        continue;
+                                    else:
+                                        $url_match_counter = 0;
+                                        break;
+                                    endif;
+                                endif;
+                            endfor;
+
+                            if ($url_match_counter == count($raw_base_url)):
+                                return true;
+                            else:
+                                return false;
+                            endif;
+                        };
+                        $match_base_url_result = call_user_func($validate_base_url, $raw_base_url, $route_base_url);
+
+                        if ($match_base_url_result == false):
+                            continue;
+                        else:
+                            if (empty($raw_parameters)):
+                                if (isset($route['closure'])) {
+                                    if (!empty($route['request_method'])) {
+                                        if (strtoupper($route['request_method']) !== $_SERVER['REQUEST_METHOD']) {
+                                            return self::error(404);
                                         }
-                                        else {
-                                            $matched_datatype_counter = 0;
-                                            break;
-                                        }
-                                    endforeach;
-
-                                    if ($matched_datatype_counter == count($datatypes)) {
-                                        return true;
-                                    } else {
-                                        return false;
                                     }
+                                    return call_user_func_array($route['closure'], $raw_parameters);
+                                }
+
+                                self::$controller = $route['controller'];
+                                self::$method = $route['method'];
+                                self::$parameters = $raw_parameters;
+                                self::$subdirectory = $route['subdirectory'];
+                                self::$namespace = $route['namespace'];
+                                self::$request_method = isset($route['request_method']) ? $route['request_method'] : null;
+
+                                return self::dispatch();
+                            else:
+                                $match_parameters_to_rules = function ($parameter_types, $raw_parameters) {
+                                    $rules_match_counter = 0;
+                                    foreach ($parameter_types as $index => $type):
+                                        if ($type == ':int' && is_numeric($raw_parameters[$index])):
+                                            $rules_match_counter++;
+                                            continue;
+                                        elseif ($type == ':str' && preg_match('/[a-zA-Z^0-9]/', $raw_parameters[$index])):
+                                            $rules_match_counter++;
+                                            continue;
+                                        elseif ($type == ':any'):
+                                            $rules_match_counter++;
+                                            continue;
+                                        else:
+                                            continue;
+                                        endif;
+                                    endforeach;
+                                    if ($rules_match_counter == count($raw_parameters)):
+                                        return true;
+                                    else:
+                                        return false;
+                                    endif;
                                 };
-                                if (!empty($datatypes) AND call_user_func($validate, $datatypes, $parameters) == true) {
-                                    $compare++;
-                                    continue;
-                                } else {
-                                    $compare++;
-                                    continue;
-                                }
-                            } else {
-                                $compare = 0;
-                                break;
-                            }
-                        }
-                    }
 
-                    if ($compare === count($url)) {
-                        if (isset($route['closure'])) {
-                            if (!empty($route['requestMethod'])) {
-                                if (strtoupper($route['requestMethod']) !== $_SERVER['REQUEST_METHOD']) {
-                                    return self::error(404);
-                                }
-                            }
-                            return call_user_func_array($route['closure'], $parameters);
-                        }
+                                $match_rules_result = call_user_func($match_parameters_to_rules, $parameter_types, $raw_parameters);
 
-                        self::$controller = $route['controller'];
-                        self::$method = $route['method'];
-                        self::$parameters = $parameters;
-                        self::$subdirectory = $route['subdirectory'];
-                        self::$namespace = $route['namespace'];
-                        self::$requestMethod = $route['requestMethod'];
+                                if ($match_rules_result == true):
+                                    if (isset($route['closure'])) {
+                                        if (!empty($route['request_method'])) {
+                                            if (strtoupper($route['request_method']) !== $_SERVER['REQUEST_METHOD']) {
+                                                return self::error(404);
+                                            }
+                                        }
+                                        return call_user_func_array($route['closure'], $raw_parameters);
+                                    }
 
-                        return self::dispatch();
+                                    self::$controller = $route['controller'];
+                                    self::$method = $route['method'];
+                                    self::$parameters = $raw_parameters;
+                                    self::$subdirectory = $route['subdirectory'];
+                                    self::$namespace = $route['namespace'];
+                                    self::$request_method = isset($route['request_method']) ? $route['request_method'] : null;
+
+                                    return self::dispatch();
+                                else:
+                                    break;
+                                endif;
+                            endif;
+                        endif;
+                    } else {
+                        continue;
                     }
                 } else {
                     continue;
                 }
             }
-
             return self::error(404);
         }
     }
@@ -237,7 +275,7 @@ class Engine
         }
 
         self::$routes[$name]['url'] = $url;
-        self::$routes[$name]['datatypes'] = array();
+        self::$routes[$name]['parameter_types'] = array();
 
         if (is_null($requestMethod)) {
             self::$routes[$name]['requestMethod'] = "";
@@ -264,7 +302,7 @@ class Engine
             self::$routes[$name]['parameter_count'] = 0;
         } else {
             self::$routes[$name]['parameter_count'] = count($parameter_types);
-            self::$routes[$name]['datatypes'] = $parameter_types;
+            self::$routes[$name]['parameter_types'] = $parameter_types;
         }
 
         if (is_callable($action)) {
