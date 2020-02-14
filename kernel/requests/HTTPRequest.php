@@ -54,23 +54,43 @@ class HTTPRequest implements HTTPRequestInterface
     {
         $request = is_null($request) ? $_POST : $request;
 
-        if (is_null($this->request)) {
-            if (array_key_exists('__FORM_TOKEN__', $request)) {
+        if (is_null($this->request)):
+            if (array_key_exists('__FORM_TOKEN__', $request)):
                 unset($request['__FORM_TOKEN__']);
-            }
+            endif;
+
+            if (array_key_exists('__FORM_ORIGIN__', $request)):
+                unset($request['__FORM_ORIGIN__']);
+            endif;
+
             $this->request = filter_var_array($request, FILTER_SANITIZE_STRIPPED);
-        }
-        if (array_key_exists('__FORM_TOKEN__', $_POST)) {
+        endif;
+
+        if (array_key_exists('__FORM_TOKEN__', $_POST)):
             $token = $_POST['__FORM_TOKEN__'];
             unset($_POST['__FORM_TOKEN__']);
 
-            if (!Token::verify($token)) {
-                $auth = new \Auth();
+            if (!Token::verify($token)):
+                $auth = new Auth();
                 return $auth->restartSession();
-            }
-        }
+            endif;
+        endif;
+    }
 
-        return true;
+
+    /**
+     * Returns dynamically called property
+     * if it exists in $this->>request
+     * @param $property
+     * @return string
+     */
+    public function __get($property)
+    {
+        if (array_key_exists($property, $this->request)):
+            return $this->request[$property];
+        else:
+            return null;
+        endif;
     }
 
 
@@ -100,12 +120,26 @@ class HTTPRequest implements HTTPRequestInterface
      * $request property encrypted thru hash.
      *
      * @param $field
-     * @param $sanitized bool
      * @return string
      */
     public function hash($field)
     {
         $this->request[$field] = Hash::encode($this->request[$field]);
+    }
+
+
+    /**
+     * Returns the original URI where the form
+     * come from. Usually useful for redirecting
+     * to the same form after let's say failed validation
+     * and stuff like that.
+     *
+     * @return string
+     */
+    public function origin()
+    {
+        $origin = $_POST['__FORM_ORIGIN__'];
+        return $origin;
     }
 
 
@@ -117,6 +151,19 @@ class HTTPRequest implements HTTPRequestInterface
     public function values()
     {
         return ($this->request);
+    }
+
+
+    /**
+     * returns raw request, equivalent to $_POST
+     * the __FORM_TOKEN__ is removed from __constructor
+     * as it only check for form validity for XSS purposes.
+     * but this will still contain the __FORM_ORIGIN__ tho.
+     * @return string
+     */
+    public function raw()
+    {
+        return $_POST;
     }
 
 
