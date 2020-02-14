@@ -81,6 +81,7 @@ class HTTPRequest implements HTTPRequestInterface
     /**
      * Returns dynamically called property
      * if it exists in $this->>request
+     *
      * @param $property
      * @return string
      */
@@ -159,6 +160,7 @@ class HTTPRequest implements HTTPRequestInterface
      * the __FORM_TOKEN__ is removed from __constructor
      * as it only check for form validity for XSS purposes.
      * but this will still contain the __FORM_ORIGIN__ tho.
+     *
      * @return string
      */
     public function raw()
@@ -194,20 +196,6 @@ class HTTPRequest implements HTTPRequestInterface
             return (false);
         }
     }
-
-
-    /**
-     * Store current field values
-     * to fields session var and can be accessed thru
-     * fields() method
-     *
-     * @return string
-     */
-    public function retain()
-    {
-        return ($_SESSION['__FIELDS__'] = $this->request);
-    }
-
 
     /**
      * Returns a sanitized string
@@ -254,10 +242,6 @@ class HTTPRequest implements HTTPRequestInterface
                         }
                     }
 
-                    /**
-                     * Value should be unique in a field
-                     * on the database
-                     **/
                     if (preg_match('/unique/i', $rule[$z])) {
                         $db = new Database;
                         $value = $this->request[$field[$i]];
@@ -321,7 +305,9 @@ class HTTPRequest implements HTTPRequestInterface
                 }
             }
         }
+
         $fileRules = array_keys($this->rules);
+
         for ($f = 0; $f < count($fileRules); $f++) {
             if (array_key_exists($fileRules[$f], $_FILES)) {
                 if (empty($_FILES[$fileRules[$f]]['name'])) {
