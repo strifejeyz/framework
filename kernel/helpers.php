@@ -416,18 +416,18 @@ if (!function_exists('date_difference')) {
 }
 
 
-if (!function_exists('errors')) {
+if (!function_exists('form_error')) {
     /**
      * Return the errors session
      * values
      *
-     * @param $errorName
+     * @param $field
      * @return string
      */
-    function errors($errorName)
+    function form_error($field)
     {
-        if (isset($_SESSION['__ERRORS__'][$errorName])) {
-            return ($_SESSION['__ERRORS__'][$errorName]);
+        if (isset($_SESSION['__ERRORS__'][$field])) {
+            return ($_SESSION['__ERRORS__'][$field]);
         } else {
             return (null);
         }
