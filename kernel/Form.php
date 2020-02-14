@@ -35,7 +35,7 @@ abstract class Form
             $attr .= " $index='$option'";
         }
 
-        return empty($attr) ? '' : ' '.trim($attr, ' ');
+        return empty($attr) ? '' : ' ' . trim($attr, ' ');
     }
 
 
@@ -51,36 +51,48 @@ abstract class Form
      */
     public static function bind($model, $route = null, $options = [])
     {
-        if (!is_object($model)) {
-            throw new Exception("Argument supplied is not an object type");
-        }
-
+        $opts = self::evalOptions($options);
         self::$fields = $model;
 
-        $opts = self::evalOptions($options);
-        $route = ($route == null) ? $_SERVER['REQUEST_URI'] : $route;
-        $method = (preg_match('/method\=/i', $opts)) ? "" : "method='POST'";
+        if (preg_match('/method\=/i', $opts)):
+            $method = null;
+        else:
+            $method = "method='POST' ";
+        endif;
 
-        return "<form action='{$route}' {$method}{$opts} accept-charset='UTF-8'>\n
-                <input type='hidden' name='__FORM_TOKEN__' value='" . Token::create() . "'>";
+        $token = Token::create();
+        $origin = uri();
+        return <<<EOF
+            <form action='$route' {$method}{$opts} accept-charset='UTF-8'>
+                <input type='hidden' name='__FORM_TOKEN__' value='$token'>
+                <input type='hidden' name='__FORM_ORIGIN__' value='$origin'>
+EOF;
     }
 
 
     /**
      * Construct a form.
      *
-     * @param null $route
+     * @param $route
      * @param array $options
      * @return string
      */
-    public static function open($route = null, $options = [])
+    public static function open($route, $options = [])
     {
         $opts = self::evalOptions($options);
-        $route = ($route == null) ? $_SERVER['REQUEST_URI'] : $route;
-        $method = (preg_match('/method\=/i', $opts)) ? "" : "method='POST' ";
+        if (preg_match('/method\=/i', $opts)):
+            $method = null;
+        else:
+            $method = "method='POST' ";
+        endif;
 
-        return "<form action='{$route}' {$method}{$opts} accept-charset='UTF-8'>\n
-                <input type='hidden' name='__FORM_TOKEN__' value='" . Token::create() . "'>";
+        $token = Token::create();
+        $origin = uri();
+        return <<<EOF
+            <form action='$route' {$method}{$opts} accept-charset='UTF-8'>
+                <input type='hidden' name='__FORM_TOKEN__' value='$token'>
+                <input type='hidden' name='__FORM_ORIGIN__' value='$origin'>
+EOF;
     }
 
 
@@ -114,8 +126,16 @@ abstract class Form
     public static function text($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $field = (!empty(self::$fields)) ? " value='" . self::$fields->$name . "'" : '';
-        $value = (!is_null($value)) ? " value='" . $value . "'" : $field;
+
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "value='" . self::$fields->$name . "'";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
+            endif;
+        else:
+            $value = "value='$value'";
+        endif;
 
         return "<input type='text' name='{$name}' {$value} {$opts}>\n";
     }
@@ -151,8 +171,14 @@ abstract class Form
     public static function textarea($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $field = (!empty(self::$fields)) ? self::$fields->$name : '';
-        $value = (!is_null($value)) ? $value : $field;
+
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = self::$fields->$name;
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = $_SESSION['__FIELDS__'][$name];
+            endif;
+        endif;
 
         return "<textarea name='{$name}' {$opts}>{$value}</textarea>\n";
     }
@@ -169,8 +195,16 @@ abstract class Form
     public static function email($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $field = (!empty(self::$fields)) ? " value='" . self::$fields->$name . "'" : '';
-        $value = (!is_null($value)) ? " value='" . $value . "'" : $field;
+
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "value='" . self::$fields->$name . "'";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
+            endif;
+        else:
+            $value = "value='$value'";
+        endif;
 
         return "<input type='email' name='{$name}' {$value} {$opts}>\n";
     }
@@ -187,8 +221,16 @@ abstract class Form
     public static function number($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $field = (!empty(self::$fields)) ? " value='" . self::$fields->$name . "'" : '';
-        $value = (!is_null($value)) ? " value='" . $value . "'" : $field;
+
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "value='" . self::$fields->$name . "'";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
+            endif;
+        else:
+            $value = "value='$value'";
+        endif;
 
         return "<input type='number' name='{$name}' {$value} {$opts}>\n";
     }
@@ -205,12 +247,19 @@ abstract class Form
     public static function date($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $field = (!empty(self::$fields)) ? " value='" . self::$fields->$name . "'" : '';
-        $value = (!is_null($value)) ? " value='" . $value . "'" : $field;
+
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "value='" . self::$fields->$name . "'";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
+            endif;
+        else:
+            $value = "value='$value'";
+        endif;
 
         return "<input type='date' name='{$name}' {$value} {$opts}>\n";
     }
-
 
 
     /**
@@ -224,10 +273,24 @@ abstract class Form
     public static function checkbox($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $field = (!empty(self::$fields)) ? self::$fields->$name : '';
-        $value = (!is_null($value)) ? " value='" . $value . "'" : $field;
 
-        return "<input type='checkbox' name='{$name}' {$value} {$opts}>";
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "value='" . self::$fields->$name . "'";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
+            endif;
+        else:
+            $value = "value='$value'";
+        endif;
+
+        if (!empty($value)):
+            $checked = "checked='checked'";
+        else:
+            $checked = "";
+        endif;
+
+        return "<input type='checkbox' {$checked} name='{$name}' {$value} {$opts}>";
     }
 
 
@@ -242,10 +305,24 @@ abstract class Form
     public static function radio($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $field = (!empty(self::$fields)) ? self::$fields->$name : '';
-        $value = (!is_null($value)) ? " value='" . $value . "'" : $field;
 
-        return "<input type='radio' name='{$name}' {$value} {$opts}>";
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "value='" . self::$fields->$name . "'";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
+            endif;
+        else:
+            $value = "value='$value'";
+        endif;
+
+        if (!empty($value)):
+            $checked = "checked='checked'";
+        else:
+            $checked = "";
+        endif;
+
+        return "<input type='radio' {$checked} name='{$name}' {$value} {$opts}>";
     }
 
 
@@ -260,8 +337,16 @@ abstract class Form
     public static function hidden($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $field = (!empty(self::$fields)) ? " value='" . self::$fields->$name . "'" : '';
-        $value = (!empty($value)) ? " value='" . $value . "'" : $field;
+
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "value='" . self::$fields->$name . "'";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
+            endif;
+        else:
+            $value = "value='$value'";
+        endif;
 
         return "<input type='hidden' name='{$name}' {$value} {$opts}>\n";
     }
@@ -278,10 +363,18 @@ abstract class Form
     public static function file($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $field = (!empty(self::$fields)) ? " value='" . self::$fields->$name . "'" : '';
-        $value = (!is_null($value)) ? " value='" . $value . "'" : $field;
 
-        return "<input{$value} type='file' name='{$name}' {$opts}>\n";
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "value='" . self::$fields->$name . "'";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
+            endif;
+        else:
+            $value = "value='$value'";
+        endif;
+
+        return "<input {$value} type='file' name='{$name}' {$opts}>\n";
     }
 
 
@@ -293,30 +386,23 @@ abstract class Form
      * @param array $options
      * @return string
      */
-    public static function submit($name, $value = null, $options = [])
+    public static function button($name, $value = null, $options = [])
     {
         $opts = self::evalOptions($options);
-        $value = !empty($value) ? " value='" . $value . "'" : '';
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "value='" . self::$fields->$name . "'";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
+            endif;
+        else:
+            $value = "value='$value'";
+        endif;
 
         return "<input type='submit' name='{$name}' {$value} {$opts}>\n";
     }
 
 
-    /**
-     * Returns a button element
-     *
-     * @param $name
-     * @param null $value
-     * @param array $options
-     * @return string
-     */
-    public static function button($name, $value = null, $options = [])
-    {
-        $opts = self::evalOptions($options);
-        $value = is_null($value) ? $name : $value;
-
-        return "<button name='{$name}' {$opts}>{$value}</button>\n";
-    }
 
 
     /**
@@ -329,23 +415,31 @@ abstract class Form
      * @param array $options
      * @return string
      */
-    public static function select($name, $value = null, $optionValues = [], $options = [])
+    public static function select($name, $value = null, $optionValues = array(), $options = [])
     {
         $opts = self::evalOptions($options);
-        $value = (!empty(self::$fields)) ? self::$fields->$name : $value;
 
-        if (!empty($value)) {
-            if (is_array($value)) {
-                $value = "<option value='" . array_keys($value)[0] . "'>" . array_values($value)[0] . "</option>\n";
-            } else {
-                $value = "<option>$value</option>\n";
-            }
-        }
+        if (is_null($value)):
+            if (!empty(self::$fields)):
+                $value = "<option value='" . ucwords(self::$fields->$name) . "'>" . self::$fields->$name . "</option>\n";
+            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+                $value = "<option value='" . $_SESSION['__FIELDS__'][$name] . "'>" . ucwords($_SESSION['__FIELDS__'][$name]) . "</option>\n";
+            else:
+                $value = null;
+            endif;
+        else:
+            if (!is_array($value)):
+                $value = "<option value='$value'>" . ucwords($value) . "</option>\n";
+            else:
+                $value = "<option value='".array_keys($value)[0]."'>" . ucwords(array_values($value)[0]) . "</option>\n";
+            endif;
+        endif;
 
-        foreach ($optionValues as $index => $optionValue) {
-            $value .= "<option value='{$index}'>{$optionValue}</option>\n";
-        }
+        $arr_values = array_values($optionValues);
+        foreach (array_keys($optionValues) as $index => $op):
+            $value.=  "<option value='" . $op . "'>" . $arr_values[$index] . "</option>\n";
+        endforeach;
 
-        return "<select name='{$name}' {$opts}>{$value}</select>\n";
+        return "<select name='{$name}' {$opts}>\n{$value}</select>\n";
     }
 }
