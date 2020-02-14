@@ -87,19 +87,31 @@ if (!function_exists('download_file')) {
      * Forces a file to be downloaded
      * and not be open by default.
      *
-     * @param $filename
-     * @param $mime_type
-     * @param $preferredFilename
-     **/
-
-    function download_file($filename, $mime_type, $preferredFilename = '')
+     * @param $file
+     * @param null $preferredName
+     * @return bool
+     */
+    function download_file($file, $preferredName = null)
     {
-        $returnedName = (strlen($preferredFilename) > 0) ? $preferredFilename : pathinfo($filename, PATHINFO_FILENAME) . '.' . pathinfo($filename, PATHINFO_EXTENSION);
+        if (!is_null($preferredName)):
+            $filename = $preferredName;
+        else:
+            $filename = $file;
+        endif;
 
-        header("Content-type: $mime_type");
-        header("Content-disposition:attachment;filename=$returnedName");
-
-        readfile($filename);
+        if (file_exists($file)):
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+            exit;
+        else:
+            return false;
+        endif;
     }
 }
 
@@ -200,9 +212,9 @@ if (!function_exists('html')) {
     /**
      * Returns escaped tags.
      *
+     * @param $string
      * @return string
-     **/
-
+     */
     function html($string)
     {
         return htmlspecialchars($string);
@@ -217,7 +229,6 @@ if (!function_exists('redirect')) {
      * @param $route
      * @return string
      **/
-
     function redirect($route)
     {
         return Route::redirect($route);
@@ -227,7 +238,7 @@ if (!function_exists('redirect')) {
 
 if (!function_exists('refresh')) {
     /**
-     * Alternative to Route::redirect()
+     * Alternative to Route::refresh()
      *
      * @param $interval
      * @param $route
@@ -393,11 +404,12 @@ if (!function_exists('date_difference')) {
      * @param $date1
      * @param $date2
      * @return string
+     * @throws Exception
      */
     function date_difference($date1, $date2)
     {
-        $date_entry = new \DateTime($date1);
-        $dateNow = new \DateTime($date2);
+        $date_entry = new DateTime($date1);
+        $dateNow = new DateTime($date2);
 
         return $dateNow->diff($date_entry)->format("%a");
     }
@@ -597,13 +609,13 @@ if (!function_exists('post')) {
      *
      * @param string $url
      * @param string $action
-     * @param string $requestMethod
+     * @param string $request_method
      * @param null $namespace
      * @return mixed
      */
-    function post($url, $action, $requestMethod = 'POST', $namespace = null)
+    function post($url, $action, $request_method = 'POST', $namespace = null)
     {
-        return Route::post($url, $action, $requestMethod, $namespace);
+        return Route::post($url, $action, $request_method, $namespace);
     }
 }
 
@@ -691,13 +703,23 @@ if (!function_exists('root_path')) {
 }
 
 
+if (!function_exists('assets_path')) {
+    /**
+     * @return string
+     */
+    function assets_path()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . ASSETS_PATH;
+    }
+}
+
 if (!function_exists('app_path')) {
     /**
      * @return string
      */
     function app_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . "app";
+        return $_SERVER['DOCUMENT_ROOT'] . APP_PATH;
     }
 }
 
