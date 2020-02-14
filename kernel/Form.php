@@ -27,7 +27,7 @@ abstract class Form
      * @param $options
      * @return mixed
      */
-    private static function evalOptions($options)
+    private static function evaluate($options)
     {
         $attr = "";
         foreach ($options as $index => $option) {
@@ -51,7 +51,7 @@ abstract class Form
      */
     public static function bind($model, $route = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
         self::$fields = $model;
 
         if (preg_match('/method\=/i', $opts)):
@@ -79,7 +79,7 @@ EOF;
      */
     public static function open($route, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
         if (preg_match('/method\=/i', $opts)):
             $method = null;
         else:
@@ -125,7 +125,7 @@ EOF;
      */
     public static function text($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
@@ -153,7 +153,7 @@ EOF;
      */
     public static function password($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
         $value = (!is_null($value)) ? " value='" . $value . "'" : '';
 
         return "<input type='password' name='{$name}' {$value} {$opts}>\n";
@@ -170,7 +170,7 @@ EOF;
      */
     public static function textarea($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
@@ -194,7 +194,7 @@ EOF;
      */
     public static function email($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
@@ -220,7 +220,7 @@ EOF;
      */
     public static function number($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
@@ -246,7 +246,7 @@ EOF;
      */
     public static function date($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
@@ -272,7 +272,7 @@ EOF;
      */
     public static function checkbox($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
@@ -304,7 +304,7 @@ EOF;
      */
     public static function radio($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
@@ -336,7 +336,7 @@ EOF;
      */
     public static function hidden($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
@@ -362,7 +362,7 @@ EOF;
      */
     public static function file($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
@@ -388,7 +388,7 @@ EOF;
      */
     public static function button($name, $value = null, $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
@@ -417,7 +417,7 @@ EOF;
      */
     public static function select($name, $value = null, $optionValues = array(), $options = [])
     {
-        $opts = self::evalOptions($options);
+        $opts = self::evaluate($options);
 
         if (is_null($value)):
             if (!empty(self::$fields)):
