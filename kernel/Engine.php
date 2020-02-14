@@ -88,11 +88,12 @@ class Engine
      * @var $match_base_url_result (hols the result of entities being matched)
      * @var $match_parameters_to_rules (function closure to resolve anomaly with loopss)
      * @var $match_rules_result (holds bool from matching rules)
+     * @returns resource
      */
     public function __construct()
     {
         session_start();
-        $originalUrl = self::parseUrl();
+        $originalUrl = self::parseURL();
 
         if (MAINTENANCE_MODE == TRUE):
             return self::error(503);
@@ -104,7 +105,7 @@ class Engine
             foreach (array_values(self::$routes) as $route)
             {
                 $route_list = explode('/', trim($route['url'], '/'));
-                $parameter_count = empty($route['parameter_count']) ? 0 : $route['parameter_count'];
+                $parameter_count = $route['parameter_count'];
 
                 if (count($route_list) == count($originalUrl))
                 {
@@ -149,21 +150,21 @@ class Engine
                             continue;
                         else:
                             if (empty($raw_parameters)):
-                                if (isset($route['closure'])) {
-                                    if (!empty($route['request_method'])) {
-                                        if (strtoupper($route['request_method']) !== $_SERVER['REQUEST_METHOD']) {
+                                if (isset($route['closure'])):
+                                    if (!empty($route['request_method'])):
+                                        if (strtoupper($route['request_method']) !== $_SERVER['REQUEST_METHOD']):
                                             return self::error(404);
-                                        }
-                                    }
+                                        endif;
+                                    endif;
                                     return call_user_func_array($route['closure'], $raw_parameters);
-                                }
+                                endif;
 
                                 self::$controller = $route['controller'];
                                 self::$method = $route['method'];
                                 self::$parameters = $raw_parameters;
                                 self::$subdirectory = $route['subdirectory'];
                                 self::$namespace = $route['namespace'];
-                                self::$request_method = isset($route['request_method']) ? $route['request_method'] : null;
+                                self::$request_method = $route['request_method'];
 
                                 return self::dispatch();
                             else:
@@ -193,21 +194,21 @@ class Engine
                                 $match_rules_result = call_user_func($match_parameters_to_rules, $parameter_types, $raw_parameters);
 
                                 if ($match_rules_result == true):
-                                    if (isset($route['closure'])) {
-                                        if (!empty($route['request_method'])) {
-                                            if (strtoupper($route['request_method']) !== $_SERVER['REQUEST_METHOD']) {
+                                    if (isset($route['closure'])):
+                                        if (!empty($route['request_method'])):
+                                            if (strtoupper($route['request_method']) !== $_SERVER['REQUEST_METHOD']):
                                                 return self::error(404);
-                                            }
-                                        }
+                                            endif;
+                                        endif;
                                         return call_user_func_array($route['closure'], $raw_parameters);
-                                    }
+                                    endif;
 
                                     self::$controller = $route['controller'];
                                     self::$method = $route['method'];
                                     self::$parameters = $raw_parameters;
                                     self::$subdirectory = $route['subdirectory'];
                                     self::$namespace = $route['namespace'];
-                                    self::$request_method = isset($route['request_method']) ? $route['request_method'] : null;
+                                    self::$request_method = $route['request_method'];
 
                                     return self::dispatch();
                                 else:
@@ -232,14 +233,19 @@ class Engine
      *
      * @return array
      */
-    private static function parseUrl()
+    private static function parseURL()
     {
-        if (isset($_GET['url'])) {
+        if (isset($_GET['url'])):
             $url = filter_var($_GET['url'], FILTER_SANITIZE_URL);
+            $url = preg_replace('/\[/', '\[', $url);
+            $url = preg_replace('/\]/', '\]', $url);
+            $url = preg_replace('/\(/', '\(', $url);
+            $url = preg_replace('/\)/', '\)', $url);
             $url = explode('/', trim($url, '/'));
-        } else {
+            $_GET['url'] = null;
+        else:
             $url = array();
-        }
+        endif;
 
         return ($url);
     }
@@ -261,74 +267,62 @@ class Engine
      * @var int $param
      * @var string $path
      */
-    public static function assign($url, $action, $requestMethod = null, $namespace = null)
+    public static function assign($url, $action, $request_method = null, $namespace = null)
     {
-        if (is_array($url)) {
+        if (is_array($url)):
             $name = array_keys($url)[0];
             $url = array_values($url)[0];
-        } elseif (preg_match('/(.*)\-\>\>(.*)/', $url)) {
-            $data = explode('->>', str_replace(' ', '', $url));
+        elseif (preg_match('/(.*)\-\>(.*)/', $url)):
+            $data = explode('->', str_replace(' ', '', $url));
             $name = $data[0];
             $url = $data[1];
-        } else {
+        else:
             $name = $url;
-        }
+        endif;
 
         self::$routes[$name]['url'] = $url;
         self::$routes[$name]['parameter_types'] = array();
-
-        if (is_null($requestMethod)) {
-            self::$routes[$name]['requestMethod'] = "";
-        } else {
-            self::$routes[$name]['requestMethod'] = $requestMethod;
-        }
-
-        if (is_null($namespace)) {
-            self::$routes[$name]['namespace'] = "";
-        } else {
-            self::$routes[$name]['namespace'] = $namespace;
-        }
+        self::$routes[$name]['request_method'] = $request_method;
+        self::$routes[$name]['namespace'] = $namespace;
 
         $parameter_types = array();
         $paramScan = explode('/', trim($url, '/'));
 
-        foreach ($paramScan as $datatype) {
-            if ($datatype == ':int' || $datatype == ':str' || $datatype == ':any') {
+        foreach ($paramScan as $datatype):
+            if ($datatype == ':int' || $datatype == ':str' || $datatype == ':any'):
                 $parameter_types[] = $datatype;
-            }
-        }
+            endif;
+        endforeach;
 
-        if (empty($parameter_types)) {
+        if (empty($parameter_types)):
             self::$routes[$name]['parameter_count'] = 0;
-        } else {
+        else:
             self::$routes[$name]['parameter_count'] = count($parameter_types);
             self::$routes[$name]['parameter_types'] = $parameter_types;
-        }
+        endif;
 
-        if (is_callable($action)) {
+        if (is_callable($action)):
             return self::$routes[$name]['closure'] = $action;
-        }
+        endif;
 
-        if (!preg_match('/\:\:/', $action)) {
-            return trigger_error("Argument passed via assign() doesn't have a valid separator '::'", E_USER_ERROR);
-        }
+        if (!preg_match('/\@/', $action)):
+            return trigger_error("Argument passed via assign() doesn't have a valid separator '@'", E_USER_ERROR);
+        endif;
 
         $path = explode('/', trim($action, '/'));
 
-        self::$routes[$name]['controller'] = explode('::', $path[count($path) - 1])[0];
-        self::$routes[$name]['method'] = explode('::', trim($path[count($path) - 1], '()'))[1];
+        self::$routes[$name]['controller'] = explode('@', $path[count($path) - 1])[0];
+        self::$routes[$name]['method'] = explode('@', trim($path[count($path) - 1], '()'))[1];
 
-        if (preg_match('/\//', $action)) {
+        if (preg_match('/\//', $action)):
             $sub = "";
-            for ($i = 0; $i < count($path) - 1; $i++) {
+            for ($i = 0; $i < count($path) - 1; $i++):
                 $sub = $sub . $path[$i] . '/';
-            }
+            endfor;
             self::$routes[$name]['subdirectory'] = trim($sub, '/') . '/';
-        } else {
-            self::$routes[$name]['subdirectory'] = "";
-        }
-
-        return (true);
+        else:
+            self::$routes[$name]['subdirectory'] = null;
+        endif;
     }
 
 
@@ -340,19 +334,19 @@ class Engine
      */
     private static function dispatch()
     {
-        if (!empty(self::$requestMethod)) {
-            if (strtoupper(self::$requestMethod) !== $_SERVER['REQUEST_METHOD']) {
+        if (!empty(self::$requestMethod)):
+            if (strtoupper(self::$requestMethod) !== $_SERVER['REQUEST_METHOD']):
                 return self::error(404);
-            }
-        }
+            endif;
+        endif;
 
-        if (is_null(self::$controller) && is_null(self::$method)) {
+        if (is_null(self::$controller) && is_null(self::$method)):
             $controller = self::$namespace . DEFAULT_CONTROLLER;
             $method = DEFAULT_METHOD;
-        } else {
+        else:
             $controller = self::$namespace . self::$controller;
             $method = self::$method;
-        }
+        endif;
 
         require_once '.' . CONTROLLERS_PATH . self::$subdirectory . $controller . '.php';
         return (call_user_func_array([new $controller(), $method], self::$parameters));
@@ -365,13 +359,13 @@ class Engine
      *
      * @param string $url
      * @param string $action
-     * @param string $requestMethod
+     * @param string $request_method
      * @param string $namespace
      * @return mixed
      */
-    public static function post($url, $action, $requestMethod = 'POST', $namespace = null)
+    public static function post($url, $action, $request_method = 'POST', $namespace = null)
     {
-        return self::assign($url, $action, $requestMethod, $namespace);
+        return self::assign($url, $action, $request_method, $namespace);
     }
 
 
@@ -408,11 +402,10 @@ class Engine
      */
     public function strict($bool)
     {
-        if ($bool == true) {
+        if ($bool == true):
             self::$strict = true;
-        } else {
+        else:
             self::$strict = false;
-        }
-        return (true);
+        endif;
     }
 }
