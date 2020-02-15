@@ -1,0 +1,18 @@
+body {
+    font-family: 'Segoe UI', Helvetica
+}
+
+
+
+.strife-heading-image {
+    position: relative;
+    top: -8px;
+}
+
+.all-rights-reserved {
+    font-size: 13px;
+    position: fixed;
+    bottom: 5px;
+    width: 100%;
+    color: #666666;
+}
