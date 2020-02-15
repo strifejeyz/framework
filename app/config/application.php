@@ -9,7 +9,7 @@
  * Define the name for your app here, this will be used for
  * template titles.
  */
-define('APP_NAME', 'Jesse Canonigo');
+define('APP_NAME', 'Strife App');
 
 
 /**
@@ -24,7 +24,7 @@ define('DEFAULT_CONTROLLER', 'HomeController');
  * to automatically cache your pages
  * or to turn it off.
  **/
-define('CACHED_VIEWS', FALSE);
+define('CACHED_VIEWS', TRUE);
 
 
 /**
