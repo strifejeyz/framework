@@ -75,7 +75,6 @@ class Format
     }
 
 
-
     /**
      * Returns a reversed string
      *
@@ -92,7 +91,6 @@ class Format
 
         return ($string);
     }
-
 
 
     /**
@@ -144,7 +142,6 @@ class Format
     {
         return strtolower($string);
     }
-
 
 
     /**
