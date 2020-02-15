@@ -102,13 +102,11 @@ class Engine
         if (empty($originalUrl)) {
             return self::dispatch();
         } else {
-            foreach (array_values(self::$routes) as $route)
-            {
+            foreach (array_values(self::$routes) as $route) {
                 $route_list = explode('/', trim($route['url'], '/'));
                 $parameter_count = $route['parameter_count'];
 
-                if (count($route_list) == count($originalUrl))
-                {
+                if (count($route_list) == count($originalUrl)) {
                     $parameter_types = $route['parameter_types'];
                     $route_base_url = array_slice($route_list, 0, count($route_list) - $parameter_count);
                     $raw_base_url = array_slice($originalUrl, 0, count($originalUrl) - $parameter_count);
