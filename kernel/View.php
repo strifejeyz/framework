@@ -47,17 +47,17 @@ abstract class View
         endif;
         $cachedFile = storage_path() . "/cache/" . md5($filename);
 
-        if (CACHED_VIEWS == true) {
-            if (file_exists($cachedFile)) {
+        if (CACHED_VIEWS == true):
+            if (file_exists($cachedFile)):
                 return eval(' ?>' . self::evaluate($cachedFile) . '<?php ');
-            } else {
+            else:
                 $file = fopen($cachedFile, 'x');
                 fwrite($file, self::evaluate($filename));
                 return eval(' ?>' . self::evaluate($cachedFile) . '<?php ');
-            }
-        } else {
+            endif;
+        else:
             return eval(' ?>' . self::evaluate($filename) . '<?php ');
-        }
+        endif;
     }
 
 
@@ -70,9 +70,9 @@ abstract class View
      **/
     private static function evaluate($filename)
     {
-        if (!file_exists($filename)) {
+        if (!file_exists($filename)):
             trigger_error("File does not exist '{$filename}'", E_USER_ERROR);
-        }
+        endif;
 
         $___ = file_get_contents($filename);
         $___ = preg_replace('/\@extend\((.*)\)/', '<?php View::extend($1) ?>', $___);
