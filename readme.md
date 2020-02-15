@@ -45,4 +45,4 @@
     
     
 ### <a href="http://strifeframework.ml">Visit Official Website</a>
-<a href="http://strifeframework.ml">Documentation</a>
+<a href="http://strifeframework.ml/framework">Documentation</a>

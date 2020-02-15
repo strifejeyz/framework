@@ -11,14 +11,14 @@
             </h3>
             <hr>
             {!Form::open('/password-reset/update')!}
-                <div class="form-group{{!empty(errors('new_password'))?' has-error':''}}">
+                <div class="form-group{{!empty(form_error('new_password'))?' has-error':''}}">
                     <input type="password" placeholder="Enter new password:" class="form-control" name="new_password"/>
-                    <i class="text-error">{{errors('new_password')}}</i>
+                    <i class="text-error">{{form_error('new_password')}}</i>
                 </div>
 
-                <div class="form-group{{!empty(errors('confirm_password'))?' has-error':''}}">
+                <div class="form-group{{!empty(form_error('confirm_password'))?' has-error':''}}">
                     <input type="password" placeholder="Confirm new password:" class="form-control" name="confirm_password"/>
-                    <i class="text-error">{{errors('confirm_password')}}</i>
+                    <i class="text-error">{{form_error('confirm_password')}}</i>
                 </div>
 
                 <input type="hidden" name="user_id" value="{{$authToken->user_id}}">

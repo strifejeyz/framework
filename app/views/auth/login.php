@@ -8,13 +8,13 @@
             {!Form::open(route('auth.attempt'))!}
             <h3 class="help-block text-center"><b>LOGIN</b></h3>
             <hr>
-            <div class="form-group{{!empty(errors('username')) ? ' has-error':''}}">
+            <div class="form-group{{!empty(form_error('username')) ? ' has-error':''}}">
                 {!Form::text('username',fields('username'),['class'=>'form-control','placeholder'=>'Username:'])!}
-                <i class="text-danger">{{errors('username')}}</i>
+                <i class="text-danger">{{form_error('username')}}</i>
             </div>
-            <div class="form-group{{!empty(errors('password')) ? ' has-error':''}}">
+            <div class="form-group{{!empty(form_error('password')) ? ' has-error':''}}">
                 {!Form::password('password',null,['class'=>'form-control','placeholder'=>'Password:'])!}
-                <i class="text-danger">{{errors('password')}}</i>
+                <i class="text-danger">{{form_error('password')}}</i>
             </div>
             <i class="has-error">{!Session::getFlash('flash')!}</i>
             {if flash_exists('message')}

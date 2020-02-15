@@ -16,9 +16,9 @@
             <a href="/login" class="btn btn-info" style="width: 100%">Ok</a>
             {else}
                 {!Form::open('/forgot-password/send-email', ['id'=>'reset-form'])!}
-                <div class="form-group{{!empty(errors('email'))?' has-error':''}}">
+                <div class="form-group{{!empty(form_error('email'))?' has-error':''}}">
                     <input type="email" name="email" class="form-control" required placeholder="Enter your email:"/>
-                    <i class="text-error">{{errors('email')}}</i>
+                    <i class="text-error">{{form_error('email')}}</i>
                 </div>
                 <button class="btn btn-info" style="width: 100%"><i class="glyphicon glyphicon-envelope"></i> Submit</button>
                 {!Form::close()!}
