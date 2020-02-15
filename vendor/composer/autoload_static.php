@@ -20,7 +20,6 @@ class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/models/User.php',
         'App\\Requests\\LoginRequest' => __DIR__ . '/../..' . '/app/requests/LoginRequest.php',
         'App\\Requests\\ResetPasswordRequest' => __DIR__ . '/../..' . '/app/requests/ResetPasswordRequest.php',
-        'App\\Requests\\UserRequest' => __DIR__ . '/../..' . '/app/requests/UserRequest.php',
         'App\\Seeders\\UsersTableSeeder' => __DIR__ . '/../..' . '/app/seeders/UsersTableSeeder.php',
         'Auth' => __DIR__ . '/../..' . '/kernel/security/Auth.php',
         'Cookie' => __DIR__ . '/../..' . '/kernel/security/Cookie.php',
