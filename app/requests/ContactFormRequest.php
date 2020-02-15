@@ -12,7 +12,7 @@ class ContactFormRequest extends HTTPRequest
         'name'    => 'name:Your name|required',
         'email'   => 'name:E-mail|required|email',
         'subject' => 'name:Subject|required',
-        'message' => 'name:Your message|required|min:20|max:150',
+        'message' => 'name:Your message|required|min:20|max:250',
     ];
 
 }
