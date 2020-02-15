@@ -130,7 +130,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
             endif;
         else:
@@ -175,7 +175,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = self::$fields->$name;
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = $_SESSION['__FIELDS__'][$name];
             endif;
         endif;
@@ -199,7 +199,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
             endif;
         else:
@@ -225,7 +225,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
             endif;
         else:
@@ -251,7 +251,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
             endif;
         else:
@@ -277,7 +277,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
             endif;
         else:
@@ -309,7 +309,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
             endif;
         else:
@@ -341,7 +341,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
             endif;
         else:
@@ -367,7 +367,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
             endif;
         else:
@@ -392,7 +392,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "value='" . self::$fields->$name . "'";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "value='" . $_SESSION['__FIELDS__'][$name] . "'";
             endif;
         else:
@@ -401,8 +401,6 @@ EOF;
 
         return "<input type='submit' name='{$name}' {$value} {$opts}>\n";
     }
-
-
 
 
     /**
@@ -422,7 +420,7 @@ EOF;
         if (is_null($value)):
             if (!empty(self::$fields)):
                 $value = "<option value='" . ucwords(self::$fields->$name) . "'>" . self::$fields->$name . "</option>\n";
-            elseif(isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
+            elseif (isset($_SESSION['__FIELDS__']) AND isset($_SESSION['__FIELDS__'][$name])):
                 $value = "<option value='" . $_SESSION['__FIELDS__'][$name] . "'>" . ucwords($_SESSION['__FIELDS__'][$name]) . "</option>\n";
             else:
                 $value = null;
@@ -431,13 +429,13 @@ EOF;
             if (!is_array($value)):
                 $value = "<option value='$value'>" . ucwords($value) . "</option>\n";
             else:
-                $value = "<option value='".array_keys($value)[0]."'>" . ucwords(array_values($value)[0]) . "</option>\n";
+                $value = "<option value='" . array_keys($value)[0] . "'>" . ucwords(array_values($value)[0]) . "</option>\n";
             endif;
         endif;
 
         $arr_values = array_values($optionValues);
         foreach (array_keys($optionValues) as $index => $op):
-            $value.=  "<option value='" . $op . "'>" . $arr_values[$index] . "</option>\n";
+            $value .= "<option value='" . $op . "'>" . $arr_values[$index] . "</option>\n";
         endforeach;
 
         return "<select name='{$name}' {$opts}>\n{$value}</select>\n";
