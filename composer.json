@@ -2,24 +2,19 @@
   "name": "strifejeyz/framework",
   "authors": [
     {
-      "name": "Jeyz Strife",
+      "name": "Jesse Strife",
       "email": "strifejeyz@gmail.com"
     }
   ],
   "description": "A Fast and Lightweight PHP MVC Framework.",
-  "keywords": [
-    "framework",
-    "strife",
-    "mvc",
-    "rad"
-  ],
+  "keywords": ["framework","strife","mvc","rad"],
   "license": "MIT",
   "version": "3.0.1",
   "type": "project",
+  "minimum-stability": "stable",
   "require": {
     "php": ">=5.6.14"
   },
-  "minimum-stability": "dev",
   "autoload": {
     "classmap": [
       "kernel",
@@ -31,8 +26,8 @@
       "app/migrations"
     ],
     "files": [
-      "kernel/helpers.php",
       "app/routes.php",
+      "kernel/helpers.php",
       "app/config/database.php",
       "app/config/application.php"
     ]
