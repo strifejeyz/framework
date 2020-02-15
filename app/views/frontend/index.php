@@ -1,9 +1,11 @@
 @extend('layouts/frontend', ['title' => 'Homepage'])
 
+
 <style type="text/css">
     body {
-        background: #f9f9f9;
+        background: #0b0218;
         text-align: center;
+        font-family: 'Tomorrow', sans-serif;
     }
 
     img {
@@ -12,8 +14,9 @@
 
     .title {
         text-align: center;
-        color: rgba(48, 48, 48, 0.84);
-        font-size: 24px;
+        color: #00fcff;
+        text-shadow: -2px 2px 0px rgba(255, 0, 229, 0.8);
+        font-size: 28px;
         margin: 0
     }
 
@@ -21,7 +24,6 @@
         margin: 0;
         font-size: 15px;
         color: #787878;
-        font-style: italic;
     }
 
     center {

@@ -24,7 +24,7 @@ define('DEFAULT_CONTROLLER', 'HomeController');
  * to automatically cache your pages
  * or to turn it off.
  **/
-define('CACHED_VIEWS', TRUE);
+define('CACHED_VIEWS', FALSE);
 
 
 /**
