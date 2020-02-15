@@ -233,7 +233,6 @@ class HTTPRequest implements HTTPRequestInterface
      * e.g. $rules = [
      *     'password' => 'min:8|max:50|unique:users|match:ConfirmPassword'
      * ];
-     *
      * @return bool|void
      */
     public function validate()
