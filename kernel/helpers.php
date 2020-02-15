@@ -47,7 +47,6 @@ if (!function_exists('random_string')) {
 }
 
 
-
 if (!function_exists('csv_encode')) {
     /**
      * encode an array to csv values
@@ -102,7 +101,7 @@ if (!function_exists('download_file')) {
         if (file_exists($file)):
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+            header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
             header('Expires: 0');
             header('Cache-Control: must-revalidate');
             header('Pragma: public');
@@ -746,7 +745,6 @@ if (!function_exists('kernel_path')) {
 }
 
 
-
 if (!function_exists('storage_path')) {
     /**
      * @return string
@@ -802,7 +800,6 @@ if (!function_exists('requests_path')) {
 }
 
 
-
 if (!function_exists('seeders_path')) {
     /**
      * @return string
@@ -823,7 +820,6 @@ if (!function_exists('models_path')) {
         return $_SERVER['DOCUMENT_ROOT'] . MODELS_PATH;
     }
 }
-
 
 
 if (!function_exists('migrations_path')) {
