@@ -40,16 +40,10 @@ class AuthController
 
         if ($request->validate()) 
         {
-            if (preg_match('/(.*)@(.*)/',$request->get('username'))) {
-                $field = "email";
-            } else {
-                $field = "username";
-            }
-            $user = User::where($field, $request->get('username'))
+            $user = User::where('username', $request->get('username'))
                 ->where('password', Hash::encode($request->get('password')))
                 ->where('active', 'yes')->first();
 
-            # if user exists and active.
             if (!empty($user)) {
                 $checkToken = new Database;
                 $checkToken = $checkToken->row("SELECT * FROM tokens WHERE user_id=? AND failed_login > 4 LIMIT 1", [$user->id]);
@@ -58,14 +52,11 @@ class AuthController
                     setFlash('flash', '<div class="alert alert-danger">Your account has been disabled.</div>');
                     return redirect('/login');
                 } else {
-                    # Yay! successfully logged in. now save the session
-                    # and delete any tokens (if there's any)
                     $user->remember_token = Token::create();
                     $user->save();
                     $_SESSION['user'] = $user();
                     Tokens::where('user_id', $user->id)->delete();
 
-                    # if supposed to visit a link, it takes you there after login
                     if (intended()) {
                         return redirect(intended());
                     } else {
@@ -74,12 +65,8 @@ class AuthController
                 }
             }
 
-            # ==========================================================
-            # If user does exist, we'll increment 'failed_login' field
-            # every failed login attempt.
-
             else {
-                $isExistingUser = User::where($field, $request->get('username'))->first();
+                $isExistingUser = User::where('username', $request->get('username'))->first();
                 if (!empty($isExistingUser)) {
                     $tokenEntry = Tokens::where('user_id', $isExistingUser->id)->first();
                     if (!empty($tokenEntry)) {
@@ -140,7 +127,6 @@ class AuthController
         $user = User::where('email', $request->get('email', true))->first();
         $url = 'http://strife.local/password-reset';
 
-        # if email/username is valid
         if (!empty($user)) {
             $userToken = Tokens::whereUser_Id($user->id)->first();
             $createdToken = Encryption::encode(Token::create() . '#' . $user->email);
@@ -156,12 +142,11 @@ class AuthController
                 ]);
 
                 $this->mailPassword($user->email, "http://strife.local/password-reset/{$createdToken}");
-            } # There's already a token entry for the user.
+            }
             else {
-                # check if user tried 5 times, then blocked
                 if ($userToken->reset_attempts >= 5) {
                     setflash("message", "<div class='alert alert-success'>Your access have been disabled for excessive attempts, please contact system administrator.</div>");
-                } # if < 5, then good for another.
+                }
                 else {
                     $userToken->updated = time();
                     $userToken->increment('reset_attempts');
@@ -174,12 +159,9 @@ class AuthController
                 }
             }
 
-            # redirect to the same window for results
             return redirect('/forgot-password');
-        } # if not in db, say nothing.
+        }
         else {
-            # because we don't want to give them a hint that the email they entered is correct.
-            # security wise
             setflash("message", "<div class='alert alert-danger'>We cannot process your request this time, please try again later.</div>");
             return redirect('/forgot-password');
         }
