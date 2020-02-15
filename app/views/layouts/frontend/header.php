@@ -10,6 +10,5 @@
     <meta name="description" content="{{@$description}}">
     <meta name="author" content="{{@$author}}">
     <link rel="stylesheet" href="https://bootswatch.com/3/slate/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
 </head>
 <body>
