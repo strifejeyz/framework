@@ -278,14 +278,14 @@ EOF;
         $container = '.' . storage_path() . $folder;
         $handle = new DirectoryIterator($container);
 
-        foreach ($handle as $file) {
-            if ($file->getFilename() == '.' || $file->getFilename() == '..' || $file->getFilename() == '.htaccess') {
+        foreach ($handle as $file):
+            if ($file->getFilename() == '.' || $file->getFilename() == '..' || $file->getFilename() == '.htaccess'):
                 continue;
-            }
-            if (is_file("{$container}/{$file->getFilename()}")) {
+            endif;
+            if (is_file("{$container}/{$file->getFilename()}")):
                 unlink("{$container}/{$file->getFilename()}");
-            }
-        }
+            endif;
+        endforeach;
 
         return true;
     }
@@ -316,9 +316,9 @@ class {$name} extends Model
 }
 EOF;
 
-        if (file_exists("{$container}/{$name}.php")) {
+        if (file_exists("{$container}/{$name}.php")):
             return die("model '{$name}' already exists");
-        }
+        endif;
 
         $file = fopen("{$container}/{$name}.php", 'x');
         fwrite($file, $data);
@@ -461,9 +461,9 @@ class {$sub}
 
 EOF;
 
-        if (file_exists("{$container}/{$name}.php")) {
+        if (file_exists("{$container}/{$name}.php")):
             return die("controller '{$name}' already exists");
-        }
+        endif;
 
         $file = fopen("{$container}/{$name}.php", 'x');
         fwrite($file, $data);
@@ -535,9 +535,9 @@ class {$name} extends Migration
 }
 EOF;
 
-        if (file_exists("{$container}/{$name}.php")) {
+        if (file_exists("{$container}/{$name}.php")):
             return die("migration '{$name}' already exists");
-        }
+        endif;
 
         $file = fopen("{$container}/{$name}.php", 'x');
         fwrite($file, $data);
@@ -578,9 +578,9 @@ class {$name} extends HTTPRequest
 }
 EOF;
 
-        if (file_exists("{$container}/{$name}.php")) {
+        if (file_exists("{$container}/{$name}.php")):
             return die("request '{$name}' already exists");
-        }
+        endif;
 
         $file = fopen("{$container}/{$name}.php", 'x');
         fwrite($file, $data);
@@ -596,9 +596,9 @@ EOF;
      */
     private function createSeeder($name, $model)
     {
-        if (!file_exists('.' . models_path() . "$model.php")) {
+        if (!file_exists('.' . models_path() . "$model.php")):
             return die("Model '$model' does not exist");
-        }
+        endif;
         $container = '.' . seeders_path();
         $name = preg_replace('/seeder/i', 'Seeder', ucfirst($name));
         $model = ucfirst($model);
@@ -626,9 +626,9 @@ class {$name}
 }
 EOF;
 
-        if (file_exists("{$container}/{$name}.php")) {
+        if (file_exists("{$container}/{$name}.php")):
             return die("seeder '{$name}' already exists");
-        }
+        endif;
 
         $file = fopen("{$container}/{$name}.php", 'x');
         fwrite($file, $data);
@@ -652,10 +652,8 @@ EOF;
         $container = new DirectoryIterator($directory);
         $message = ($action == 'down') ? "database rolled back." : "database successfully migrated.";
 
-        foreach ($container as $handle)
-        {
-            if (is_file("{$directory}/{$handle->getFilename()}") && $handle->getFilename() !== '.htaccess')
-            {
+        foreach ($container as $handle) {
+            if (is_file("{$directory}/{$handle->getFilename()}") && $handle->getFilename() !== '.htaccess') {
                 $migration = self::FixNamespace(MIGRATIONS_PATH, $handle->getBasename('.php'));
                 $migration = new $migration();
                 $migration->$action();
@@ -676,16 +674,15 @@ EOF;
         $container = '.' . models_path();
         $iterator = new DirectoryIterator($container);
 
-        foreach ($iterator as $handle)
-        {
-            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess') {
+        foreach ($iterator as $handle):
+            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess'):
                 continue;
-            }
+            endif;
 
-            $model = self::FixNamespace(MODELS_PATH,  $handle->getBasename('.php'));
+            $model = self::FixNamespace(MODELS_PATH, $handle->getBasename('.php'));
             $model = new $model();
             $model->backup();
-        }
+        endforeach;
 
         return die("Database tables backed up.");
     }
@@ -701,16 +698,14 @@ EOF;
         $container = '.' . models_path();
         $iterator = new DirectoryIterator($container);
 
-        foreach ($iterator as $handle)
-        {
-            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess')
-            {
+        foreach ($iterator as $handle):
+            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess'):
                 continue;
-            }
-            $model = self::FixNamespace(MODELS_PATH,  $handle->getBasename('.php'));
+            endif;
+            $model = self::FixNamespace(MODELS_PATH, $handle->getBasename('.php'));
             $model = new $model();
             $model->restore();
-        }
+        endforeach;
 
         return die("Database restored.");
     }
@@ -726,14 +721,14 @@ EOF;
         $container = '.' . seeders_path();
         $iterator = new DirectoryIterator($container);
 
-        foreach ($iterator as $handle)
-        {
-            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess')
+        foreach ($iterator as $handle):
+            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess'):
                 continue;
+            endif;
 
-            $seeder = self::FixNamespace(SEEDERS_PATH,  $handle->getBasename('.php'));
+            $seeder = self::FixNamespace(SEEDERS_PATH, $handle->getBasename('.php'));
             new $seeder();
-        }
+        endforeach;
 
         return die("Seeding completed.");
     }
@@ -750,22 +745,18 @@ EOF;
     {
         $filePath = '.' . migrations_path() . $className;
 
-        if (file_exists($filePath . ".php"))
-        {
+        if (file_exists($filePath . ".php")):
             $class = self::FixNamespace(MIGRATIONS_PATH, $className);
-            if (class_exists($class))
-            {
+            if (class_exists($class)):
                 $migration = new $class();
                 $migration->$action();
-                $message = ($action == 'down') ?
-                    "table rolled back." : "table successfully migrated.";
-
-            } else {
+                $message = ($action == 'down') ? "table rolled back." : "table successfully migrated.";
+            else:
                 return die("'{$className}' class does not exist.");
-            }
-        } else {
+            endif;
+        else:
             return die("'{$className}' file does not exist.");
-        }
+        endif;
 
         return die($message);
     }
@@ -782,17 +773,17 @@ EOF;
     {
         $filePath = '.' . migrations_path() . $className;
 
-        if (file_exists($filePath . ".php")) {
+        if (file_exists($filePath . ".php")):
             $class = self::FixNamespace(MIGRATIONS_PATH, $className);
-            if (class_exists($class)) {
+            if (class_exists($class)):
                 $migration = new $class();
                 return $migration->dump();
-            } else {
+            else:
                 return die("'{$className}' class does not exist.");
-            }
-        } else {
+            endif;
+        else:
             return die("'{$className}' file does not exist.");
-        }
+        endif;
     }
 
 
