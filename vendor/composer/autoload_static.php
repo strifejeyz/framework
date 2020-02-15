@@ -18,6 +18,7 @@ class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
         'App\\Migrations\\UsersTableMigration' => __DIR__ . '/../..' . '/app/migrations/UsersTableMigration.php',
         'App\\Models\\Tokens' => __DIR__ . '/../..' . '/app/models/Tokens.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/models/User.php',
+        'App\\Requests\\ContactFormRequest' => __DIR__ . '/../..' . '/app/requests/ContactFormRequest.php',
         'App\\Requests\\LoginRequest' => __DIR__ . '/../..' . '/app/requests/LoginRequest.php',
         'App\\Requests\\ResetPasswordRequest' => __DIR__ . '/../..' . '/app/requests/ResetPasswordRequest.php',
         'App\\Seeders\\UsersTableSeeder' => __DIR__ . '/../..' . '/app/seeders/UsersTableSeeder.php',
