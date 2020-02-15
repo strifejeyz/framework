@@ -23,6 +23,7 @@ class Database extends QueryBuilder
      *
      * @param $query
      * @param array $values
+     * @param bool $fetchRows
      * @param int $fetchMode
      * @return void
      */
