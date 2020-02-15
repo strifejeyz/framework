@@ -31,13 +31,13 @@ abstract class Route extends Engine
         $path = preg_replace('/\:(.*)/', '', self::$routes[$route]['url']);
         $args = func_get_args();
 
-        if (count($args) > 1) {
+        if (count($args) > 1):
             unset($args[0]);
-            foreach ($args as $arg) {
+            foreach ($args as $arg):
                 $path .= $arg . "/";
-            }
+            endforeach;
             $path = rtrim($path, '/');
-        }
+        endif;
 
         return ($path);
     }
