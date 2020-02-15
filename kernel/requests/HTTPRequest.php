@@ -213,6 +213,22 @@ class HTTPRequest implements HTTPRequestInterface
      * Actual validation of request with rules implied
      * from its child classes.
      *
+     * Rules List:
+     * -> name:First Name
+     * -> required
+     * -> unique:TableName
+     * -> email
+     * -> alphanumeric
+     * -> letters
+     * -> numbers
+     * -> numeric
+     * -> min:(number here)
+     * -> max:(number here)
+     * -> match:TextFieldName
+     *
+     * e.g. $rules = [
+     *     'password' => 'min:8|max:50|unique:users|match:ConfirmPassword'
+     * ];
      * @return bool|void
      */
     public function validate()
@@ -274,7 +290,7 @@ class HTTPRequest implements HTTPRequestInterface
                             break;
                         }
                     }
-                    if ($rule[$z] == 'number' || $rule[$z] == 'numeric') {
+                    if ($rule[$z] == 'numbers' || $rule[$z] == 'numeric') {
                         if (!preg_match('/[0-9]/', $this->request[$field[$i]])) {
                             $this->errors[$field[$i]] = $prefix . " should be numeric.";
                             break;
