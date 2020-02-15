@@ -1,37 +1,34 @@
 <?php
+
 use App\Requests\ContactFormRequest as Request;
 
-/**
- * List of route paths
- *
- * Here's an example of a simple route:
- * assign('MyTestRoute ->> /test', 'TestController@index()')
- *
- * Explanation:
- * 'MyTestRoute' is a route name
- * '->>' is a pointer
- * '/test' is the URL
- * 'TestController@index()' is the Class and Method
- *
- * when Route@strict(true);
- * e.g. /Foo is not equal to /foo
- */
 
 assign('welcome ->> /welcome', '/cms/WelcomeController@index');
 
-post('/contact/send', function(){
+post('/contact/send', function () {
     $request = new Request;
 
     if ($request->validate() == true):
+        $from = "From:contact@jessestrife.cf";
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= 'From: '.$from."\r\n".
+            'Reply-To: '.$from."\r\n" .
+            'X-Mailer: PHP/' . phpversion();
 
         $subject = $request->get('subject');
-        $message = $request->get('message');
+        $message = "<h4><br>Sender: {$request->get('name')}</br>";
+        $message.= "<br>E-mail: {$request->get('email')}</br>";
+        $message.= "<br>Subject: {$request->get('subject')}</br>";
+        $message.= "<br>Message: {$request->get('message')}</h4>";
         $myEmail = "strifejeyz@gmail.com";
 
-        $mail = mail($myEmail, $subject, $message, "From:contact@jessestrife.cf");
 
-        if($mail):
-            setflash('flash',"<i class='text-success'>Your message was sent, I'll reply to you the soonest!</i>");
+
+        $mail = mail($myEmail, $subject, $message, $headers);
+
+        if ($mail):
+            setflash('flash', "<i class='text-success'>Your message was sent, I'll reply to you the soonest!</i>");
         else:
             setflash('flash', "<i class='text-danger'>Your message could not be sent.</i>");
         endif;
@@ -41,10 +38,9 @@ post('/contact/send', function(){
 });
 
 
-assign('/hire-me/cv', function(){
-    download_file(assets_path() .'/files/cv.pdf', 'cv.pdf');
+assign('/hire-me/cv', function () {
+    download_file(assets_path() . '/files/cv.pdf', 'cv.pdf');
 });
-
 
 
 /**
