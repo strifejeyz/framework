@@ -43,6 +43,11 @@ class HTTPRequest implements HTTPRequestInterface
      */
     public $errors = null;
 
+    /**
+     * Holds the URI who sent the request.
+     * useful for redirecting to the same page it came from.
+     */
+    private $origin_uri = null;
 
     /**
      * Catches request method, and filter
@@ -59,11 +64,12 @@ class HTTPRequest implements HTTPRequestInterface
                 unset($request['__FORM_TOKEN__']);
             endif;
 
-            if (array_key_exists('__FORM_ORIGIN__', $request)):
-                unset($request['__FORM_ORIGIN__']);
-            endif;
-
             $this->request = filter_var_array($request, FILTER_SANITIZE_STRIPPED);
+        endif;
+
+        if (array_key_exists('__FORM_ORIGIN__', $request)):
+            $this->origin_uri = $request['__FORM_ORIGIN__'];
+            unset($_POST['__FORM_ORIGIN__']);
         endif;
 
         if (array_key_exists('__FORM_TOKEN__', $_POST)):
@@ -139,8 +145,7 @@ class HTTPRequest implements HTTPRequestInterface
      */
     public function origin()
     {
-        $origin = $_POST['__FORM_ORIGIN__'];
-        return $origin;
+        return $this->origin_uri;
     }
 
 
@@ -157,9 +162,8 @@ class HTTPRequest implements HTTPRequestInterface
 
     /**
      * returns raw request, equivalent to $_POST
-     * the __FORM_TOKEN__ is removed from __constructor
+     * the __FORM_TOKEN__ and __FORM_ORIGIN__ are removed from __constructor
      * as it only check for form validity for XSS purposes.
-     * but this will still contain the __FORM_ORIGIN__ tho.
      *
      * @return string
      */
