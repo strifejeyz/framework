@@ -32,7 +32,6 @@ class AuthController
      * Login a user
      *
      * @return mixed
-     * @throws ErrorHandler
      */
     public function attempt()
     {
@@ -119,13 +118,12 @@ class AuthController
      * Password reset attempt
      *
      * @return Route
-     * @throws ErrorHandler
      */
     public function sendEmail()
     {
         $request = new HTTPRequest;
         $user = User::where('email', $request->get('email', true))->first();
-        $url = 'http://strife.local/password-reset';
+        $url = BASE_URL . '/password-reset';
 
         if (!empty($user)) {
             $userToken = Tokens::whereUser_Id($user->id)->first();
