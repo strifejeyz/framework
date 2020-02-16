@@ -11,7 +11,7 @@ use Kernel\Security\Token;
  */
 interface HTTPRequestInterface
 {
-    public function __construct($request);
+    public function __construct();
 
     public function get($field);
 
@@ -52,23 +52,11 @@ class HTTPRequest implements HTTPRequestInterface
     /**
      * Catches request method, and filter
      * each values
-     *
-     * @param $request
      */
-    public function __construct($request = null)
+    public function __construct()
     {
-        $request = is_null($request) ? $_POST : $request;
-
-        if (is_null($this->request)):
-            if (array_key_exists('__FORM_TOKEN__', $request)):
-                unset($request['__FORM_TOKEN__']);
-            endif;
-
-            $this->request = filter_var_array($request, FILTER_SANITIZE_STRIPPED);
-        endif;
-
-        if (array_key_exists('__FORM_ORIGIN__', $request)):
-            $this->origin_uri = $request['__FORM_ORIGIN__'];
+        if (array_key_exists('__FORM_ORIGIN__', $_POST)):
+            $this->origin_uri = $_POST['__FORM_ORIGIN__'];
             unset($_POST['__FORM_ORIGIN__']);
         endif;
 
@@ -81,6 +69,8 @@ class HTTPRequest implements HTTPRequestInterface
                 return $auth->restartSession();
             endif;
         endif;
+
+        $this->request = filter_var_array($_POST, FILTER_SANITIZE_STRIPPED);
     }
 
 
@@ -122,6 +112,21 @@ class HTTPRequest implements HTTPRequestInterface
         }
     }
 
+
+    /**
+     * Returns a hashed value
+     * $request property.
+     *
+     * @param $field
+     * @param $sanitized bool
+     * @return string
+     */
+    public function get_hash($field, $sanitized = true)
+    {
+        return Hash::encode($this->get($field,$sanitized));
+    }
+
+
     /**
      * Returns a field that is present in
      * $request property encrypted thru hash.
@@ -129,7 +134,7 @@ class HTTPRequest implements HTTPRequestInterface
      * @param $field
      * @return string
      */
-    public function hash($field)
+    public function set_hash($field)
     {
         $this->request[$field] = Hash::encode($this->request[$field]);
     }
@@ -263,7 +268,7 @@ class HTTPRequest implements HTTPRequestInterface
                         }
                     }
 
-                    if (preg_match('/unique/i', $rule[$z])) {
+                    if (preg_match('/unique\:/i', $rule[$z])) {
                         $db = new Database;
                         $value = $this->request[$field[$i]];
                         foreach ($rule as $item) {
@@ -272,8 +277,12 @@ class HTTPRequest implements HTTPRequestInterface
                                 break;
                             }
                         }
-                        if ($db->table(explode(':', $rule[$z])[1])->where($field[$i], $value)->exists()) {
-                            $this->errors[$field[$i]] = $prefix . " not available.";
+
+                        $query = "SELECT * FROM " .explode(':', $rule[$z])[1] . " WHERE {$field[$i]}='$value'";
+                        $row = $db->row($query);
+
+                        if ($row == true) {
+                            $this->errors[$field[$i]] = $prefix . " is not available.";
                             break;
                         }
                     }
