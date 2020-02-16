@@ -133,10 +133,9 @@ interface QueryBuilderInterface
     public static function get($fetchMode = PDO::FETCH_OBJ);
 }
 
-use ErrorHandler;
-use Kernel\FileHandler;
 use PDO;
 use PDOException;
+use Kernel\FileHandler;
 
 /**
  * Class QueryBuilder
@@ -260,46 +259,55 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     private static function callParser($name, $arguments)
     {
-        if (preg_match('/^where/i', $name)) {
+        if (preg_match('/^where/i', $name)):
             $name = strtolower(preg_replace('/^where/i', '', $name));
-            if (count($arguments) > 1) {
+            if (count($arguments) > 1):
                 return self::where($name, $arguments[0], $arguments[1]);
-            } else {
+            else:
                 return self::where($name, $arguments[0]);
-            }
-        } elseif (preg_match('/^orWhere/i', $name)) {
+            endif;
+
+        elseif (preg_match('/^orWhere/i', $name)):
             $name = strtolower(preg_replace('/^orWhere/i', '', $name));
-            if (count($arguments) > 1) {
+            if (count($arguments) > 1):
                 return self::orWhere($name, $arguments[0], $arguments[1]);
-            } else {
+            else:
                 return self::orWhere($name, $arguments[0]);
-            }
-        } elseif (preg_match('/^increment/i', $name)) {
+            endif;
+
+        elseif (preg_match('/^increment/i', $name)):
             $name = strtolower(preg_replace('/^increment/i', '', $name));
             $int = isset($arguments[0]) ? $arguments[0] : 1;
             return self::increment($name, $int);
-        } elseif (preg_match('/^decrement/i', $name)) {
+
+        elseif (preg_match('/^decrement/i', $name)):
             $name = strtolower(preg_replace('/^decrement/i', '', $name));
             $int = isset($arguments[0]) ? $arguments[0] : 1;
             return self::decrement($name, $int);
-        } elseif (preg_match('/^min/i', $name)) {
+
+        elseif (preg_match('/^min/i', $name)):
             $name = strtolower(preg_replace('/^min/i', '', $name));
             return self::min($name);
-        } elseif (preg_match('/^max/i', $name)) {
+
+        elseif (preg_match('/^max/i', $name)):
             $name = strtolower(preg_replace('/^max/i', '', $name));
             return self::max($name);
-        } elseif (preg_match('/^sum/i', $name)) {
+
+        elseif (preg_match('/^sum/i', $name)):
             $name = strtolower(preg_replace('/^sum/i', '', $name));
             return self::sum($name);
-        } elseif (preg_match('/^avg/i', $name)) {
+
+        elseif (preg_match('/^avg/i', $name)):
             $name = strtolower(preg_replace('/^avg/i', '', $name));
             return self::avg($name);
-        } elseif (preg_match('/^order/i', $name)) {
+
+        elseif (preg_match('/^order/i', $name)):
             $name = strtolower(preg_replace('/^order/i', '', $name));
             return self::order($name, $arguments[0]);
-        } else {
+
+        else:
             return (false);
-        }
+        endif;
     }
 
 
@@ -312,11 +320,11 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public function __get($property)
     {
-        if (property_exists($this->original, $property)) {
+        if (property_exists($this->original, $property)):
             return $this->original->$property;
-        } else {
+        else:
             return (null);
-        }
+        endif;
     }
 
 
@@ -378,17 +386,17 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
         $filename = '.' . storage_path() . 'backups/' . static::$table . ".json";
         $file = new FileHandler($filename, 'w+');
 
-        if (!empty(self::$result)) {
+        if (!empty(self::$result)):
             $data = json_encode(self::$result);
-        } else {
+        else:
             $data = json_encode(self::get());
-        }
+        endif;
 
-        if ($file->write($data . "\n", 'w')) {
+        if ($file->write($data . "\n", 'w')):
             return true;
-        } else {
+        else:
             return (false);
-        }
+        endif;
     }
 
 
@@ -396,28 +404,27 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      * Restore a database table
      *
      * @return bool
-     * @throws ErrorHandler
      */
     public static function restore()
     {
         $filename = '.' . storage_path() . 'backups/' . static::$table . ".json";
         $result = null;
 
-        if (file_exists($filename)) {
+        if (file_exists($filename)):
             $file = new FileHandler($filename, 'r');
 
-            foreach (json_decode($file->read()) as $data) {
-                if (self::insert((array)$data)) {
+            foreach (json_decode($file->read()) as $data):
+                if (self::insert((array)$data)):
                     $result = true;
-                } else {
+                else:
                     $result = false;
                     continue;
-                }
-            }
+                endif;
+            endforeach;
             return $result == true ? true : false;
-        } else {
+        else:
             return (false);
-        }
+        endif;
     }
 
 
@@ -444,11 +451,11 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function append($name, $value)
     {
-        if (self::$result->$name = $value) {
+        if (self::$result->$name = $value):
             return true;
-        } else {
+        else:
             return false;
-        }
+        endif;
     }
 
 
@@ -462,12 +469,12 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function remove($name)
     {
-        if (array_key_exists($name, self::$result)) {
+        if (array_key_exists($name, self::$result)):
             unset(self::$result->$name);
             return (true);
-        } else {
+        else:
             return (null);
-        }
+        endif;
     }
 
 
@@ -537,34 +544,25 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      *
      * @param array $valuePairs
      * @return mixed
-     * @throws ErrorHandler
      */
     public static function insert($valuePairs = [])
     {
-        try {
-            if (empty($valuePairs)) {
-                throw new ErrorHandler("insert() expects one argument, array of field => value pairs.");
-            }
+        $keys = array_keys($valuePairs);
+        $values = array_values($valuePairs);
+        $params = "";
+        $fields = "";
 
-            $keys = array_keys($valuePairs);
-            $values = array_values($valuePairs);
-            $params = "";
-            $fields = "";
+        for ($i = 0; $i < count($valuePairs); $i++):
+            $params .= ("?,");
+            $fields .= ("{$keys[$i]},");
+        endfor;
 
-            for ($i = 0; $i < count($valuePairs); $i++) {
-                $params .= ("?,");
-                $fields .= ("{$keys[$i]},");
-            }
+        $params = trim($params, ',');
+        $fields = trim($fields, ',');
+        $query = "INSERT INTO " . static::$table . "({$fields}) VALUES({$params});";
+        $stmt = self::instance()->prepare($query);
 
-            $params = trim($params, ',');
-            $fields = trim($fields, ',');
-            $query = "INSERT INTO " . static::$table . "({$fields}) VALUES({$params});";
-            $stmt = self::instance()->prepare($query);
-
-            return $stmt->execute($values);
-        } catch (PDOException $e) {
-            return print $e->message();
-        }
+        return $stmt->execute($values);
     }
 
 
@@ -578,23 +576,19 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function insertExcept($valuePairs = [], $exceptions = [])
     {
-        try {
-            if (empty($valuePairs) || empty($exceptions)) {
-                throw new ErrorHandler("method requires 2 arguments to be array and not null.");
-            }
+        if (empty($valuePairs) || empty($exceptions)):
+            return trigger_error("InsertExcept() requires 2 arguments to be array and not null.", E_USER_ERROR);
+        endif;
 
-            $values = array_values($exceptions);
+        $values = array_values($exceptions);
 
-            for ($i = 0; $i < count($exceptions); $i++) {
-                if (array_key_exists($values[$i], $valuePairs)) {
-                    unset($valuePairs[$values[$i]]);
-                }
-            }
+        for ($i = 0; $i < count($exceptions); $i++):
+            if (array_key_exists($values[$i], $valuePairs)):
+                unset($valuePairs[$values[$i]]);
+            endif;
+        endfor;
 
-            return self::insert($valuePairs);
-        } catch (ErrorHandler $e) {
-            return print $e->message();
-        }
+        return self::insert($valuePairs);
     }
 
 
@@ -643,39 +637,35 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function update($valuePairs = [], $id = null)
     {
-        try {
-            if (empty($valuePairs)) {
-                return false;
+        if (empty($valuePairs)) {
+            return false;
+        } else {
+            if (isset(static::$primary_key)) {
+                $primary_key = static::$primary_key;
             } else {
-                if (isset(static::$primary_key)) {
-                    $primary_key = static::$primary_key;
-                } else {
-                    $primary_key = self::$primary_key;
-                }
-
-                if (array_key_exists($primary_key, self::$result)) {
-                    $id = self::$result->$primary_key;
-                } else {
-                    if (is_null($id)) {
-                        throw new ErrorHandler("Second argument is required if result set is null.");
-                    }
-                }
-
-                $keys = array_keys($valuePairs);
-                $values = array_values($valuePairs);
-                $params = null;
-
-                foreach ($keys as $key) {
-                    $params .= ($key . "=?,");
-                }
-
-                $params = trim($params, ',');
-                $stmt = self::instance()->prepare("UPDATE " . self::$table . " SET {$params} WHERE {$primary_key}={$id}");
-
-                return $stmt->execute($values);
+                $primary_key = self::$primary_key;
             }
-        } catch (ErrorHandler $e) {
-            return print $e->message();
+
+            if (array_key_exists($primary_key, self::$result)) {
+                $id = self::$result->$primary_key;
+            } else {
+                if (is_null($id)) {
+                    return trigger_error("update() requires a primary key for the second argument if result set is null.", E_USER_WARNING);
+                }
+            }
+
+            $keys = array_keys($valuePairs);
+            $values = array_values($valuePairs);
+            $params = null;
+
+            foreach ($keys as $key) {
+                $params .= ($key . "=?,");
+            }
+
+            $params = trim($params, ',');
+            $stmt = self::instance()->prepare("UPDATE " . self::$table . " SET {$params} WHERE {$primary_key}={$id}");
+
+            return $stmt->execute($values);
         }
     }
 
@@ -688,44 +678,41 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      * @method delete($id = null)
      * @param null $id
      * @return mixed
-     * @throws ErrorHandler
      */
     public static function delete($id = null)
     {
-        try {
-            self::$table = static::$table;
-            $stmt = null;
-            if (isset(static::$primary_key)) {
-                $primary_key = static::$primary_key;
-            } else {
-                $primary_key = self::$primary_key;
-            }
+        self::$table = static::$table;
+        $stmt = null;
 
-            if (is_null($id) && empty(self::$result)) {
-                throw new ErrorHandler("delete() requires an existing object or pass in a primary key if none.");
-            } else {
-                if (!empty(self::$query)) {
-                    self::$query['select'] = 'DELETE';
-                    $stmt = self::instance()->prepare(self::parseQuery());
-                    $result = $stmt->execute(array_values(self::$values));
-                    self::$query = [];
-                    self::$values = [];
-                    return ($result);
-                } else {
-                    $id = (!is_null($id)) ? $id : self::$result->$primary_key;
-                }
-            }
-            if (count(func_get_args()) > 1) {
-                foreach (func_get_args() as $arg) {
-                    $stmt = self::instance()->exec("DELETE FROM " . static::$table . " WHERE {$primary_key}={$arg};");
-                }
-            } else {
-                $stmt = self::instance()->exec("DELETE FROM " . static::$table . " WHERE {$primary_key}={$id};");
-            }
-            return ($stmt);
-        } catch (PDOException $e) {
-            return print $e->getMessage();
+        if (isset(static::$primary_key)) {
+            $primary_key = static::$primary_key;
+        } else {
+            $primary_key = self::$primary_key;
         }
+
+        if (is_null($id) && empty(self::$result)) {
+            return trigger_error("delete() requires existing object or a primary key.");
+        } else {
+            if (!empty(self::$query)) {
+                self::$query['select'] = 'DELETE';
+                $stmt = self::instance()->prepare(self::parseQuery());
+                $result = $stmt->execute(array_values(self::$values));
+                self::$query = [];
+                self::$values = [];
+                return ($result);
+            } else {
+                $id = (!is_null($id)) ? $id : self::$result->$primary_key;
+            }
+        }
+        if (count(func_get_args()) > 1) {
+            foreach (func_get_args() as $arg) {
+                $stmt = self::instance()->exec("DELETE FROM " . static::$table . " WHERE {$primary_key}={$arg};");
+            }
+        } else {
+            $stmt = self::instance()->exec("DELETE FROM " . static::$table . " WHERE {$primary_key}={$id};");
+        }
+        return ($stmt);
+
     }
 
 
@@ -740,33 +727,28 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function select($columns)
     {
-        try {
-            if (empty($columns)) {
-                throw new ErrorHandler("method expects 1 argument (string) column(s) in the database.");
-            }
-
-            self::$table = static::$table;
-
-            if (isset(static::$alias)) {
-                self::$table = static::$table . " " . static::$alias;
-            }
-
-            $selection = "";
-
-            if (count(func_get_args()) > 1) {
-                foreach (func_get_args() as $arg) {
-                    $selection .= $arg . ",";
-                }
-            } else {
-                $selection = $columns;
-            }
-
-            self::$query['select'] = trim($selection, ',');
-
-            return new self;
-        } catch (ErrorHandler $e) {
-            return print $e->message();
+        if (empty($columns)) {
+            return trigger_error("select(\$columns) expects 1 argument (string) column(s) from database.");
         }
+
+        self::$table = static::$table;
+
+        if (isset(static::$alias)) {
+            self::$table = static::$table . " " . static::$alias;
+        }
+
+        $selection = "";
+
+        if (count(func_get_args()) > 1) {
+            foreach (func_get_args() as $arg) {
+                $selection .= $arg . ",";
+            }
+        } else {
+            $selection = $columns;
+        }
+
+        self::$query['select'] = trim($selection, ',');
+        return new self;
     }
 
 
@@ -865,21 +847,16 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function orWhereBetween($column, $first, $second)
     {
-        try {
-            self::$table = static::$table;
-            self::$values[] = $first;
-            self::$values[] = $second;
+        self::$table = static::$table;
+        self::$values[] = $first;
+        self::$values[] = $second;
 
-            if (isset(self::$query['where']) && preg_match('/WHERE/i', self::$query['where'])) {
-                self::$query['where'] = self::$query['where'] . " OR {$column} BETWEEN ? AND ?";
-            } else {
-                throw new ErrorHandler("orWhereBetween() should be called next to where() method.");
-            }
-            return new self;
-
-        } catch (ErrorHandler $e) {
-            return print $e->message();
+        if (isset(self::$query['where']) && preg_match('/WHERE/i', self::$query['where'])) {
+            self::$query['where'] = self::$query['where'] . " OR {$column} BETWEEN ? AND ?";
+        } else {
+            return trigger_error("orWhereBetween() should be called next to where() method.");
         }
+        return new self;
     }
 
 
@@ -893,26 +870,22 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function orWhere($field, $a = null, $b = null)
     {
-        try {
-            self::$table = static::$table;
+        self::$table = static::$table;
 
-            if (!is_null($b)) {
-                $param = "{$a} ?";
-                self::$values[] = $b;
-            } else {
-                $param = "= ?";
-                self::$values[] = $a;
-            }
-
-            if (isset(self::$query['where']) && preg_match('/WHERE/i', self::$query['where'])) {
-                self::$query['where'] = self::$query['where'] . " OR {$field} {$param}";
-            } else {
-                throw new ErrorHandler("orWhere() should be called next to where() method.");
-            }
-            return new self;
-        } catch (ErrorHandler $e) {
-            return print $e->message();
+        if (!is_null($b)) {
+            $param = "{$a} ?";
+            self::$values[] = $b;
+        } else {
+            $param = "= ?";
+            self::$values[] = $a;
         }
+
+        if (isset(self::$query['where']) && preg_match('/WHERE/i', self::$query['where'])) {
+            self::$query['where'] = self::$query['where'] . " OR {$field} {$param}";
+        } else {
+            return trigger_error("orWhere() must be called next to where() method.", E_USER_ERROR);
+        }
+        return new self;
     }
 
 
@@ -925,18 +898,14 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function order($field, $order)
     {
-        try {
-            if (!preg_match('/DESC/i', $order) && !preg_match('/ASC/i', $order)) {
-                user_error("Second argument passed to order() method should be '<b>ASC</b>' or '<b>DESC</b>'");
-            }
-
-            self::$table = static::$table;
-            self::$query['order'] = "ORDER BY $field " . strtoupper($order);
-
-            return new self;
-        } catch (ErrorHandler $e) {
-            return print $e->message();
+        if (!preg_match('/DESC/i', $order) && !preg_match('/ASC/i', $order)) {
+            return trigger_error("order() expects either 'ASC' or 'DESC'", E_USER_ERROR);
         }
+
+        self::$table = static::$table;
+        self::$query['order'] = "ORDER BY $field " . strtoupper($order);
+
+        return new self;
     }
 
 
@@ -944,30 +913,25 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      * limit statement where $limit is the number
      * of rows to be returned.
      *
-     * @param $limit
      * @param $offset null
+     * @param null $rowCount
      * @return mixed
-     * @throws ErrorHandler
      */
-    public static function limit($limit, $offset = null)
+    public static function limit($offset, $rowCount = null)
     {
-        try {
-            if (!is_numeric($limit)) {
-                throw new ErrorHandler("Argument passed in limit() method should be numeric.");
-            }
-
-            self::$table = static::$table;
-
-            if (is_null($offset)) {
-                self::$query['limit'] = "LIMIT {$limit}";
-            } else {
-                self::$query['limit'] = "LIMIT {$limit}, {$offset}";
-            }
-
-            return new self;
-        } catch (PDOException $e) {
-            return print $e->getMessage();
+        if (!is_numeric($offset)) {
+            return trigger_error("limit() Argument passed in  method should be numeric.", E_USER_ERROR);
         }
+
+        self::$table = static::$table;
+
+        if (is_null($rowCount)) {
+            self::$query['limit'] = "LIMIT {$offset}";
+        } else {
+            self::$query['limit'] = "LIMIT {$offset}, {$rowCount}";
+        }
+
+        return new self;
     }
 
 
@@ -998,32 +962,28 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function find($id)
     {
-        try {
-            if (!is_numeric($id)) {
-                throw new ErrorHandler("required parameter should be numeric, " . gettype($id) . " given.");
-            }
+        if (!is_numeric($id)) {
+            return trigger_error("find(\$id) requires numeric argument, " . gettype($id) . " was given.", E_USER_ERROR);
+        }
 
-            self::$table = static::$table;
-            self::$primary_key = static::$primary_key;
+        self::$table = static::$table;
+        self::$primary_key = static::$primary_key;
 
-            if (isset(static::$primary_key)) {
-                $primary_key = static::$primary_key;
-            } else {
-                $primary_key = self::$primary_key;
-            }
+        if (isset(static::$primary_key)) {
+            $primary_key = static::$primary_key;
+        } else {
+            $primary_key = self::$primary_key;
+        }
 
-            $stmt = self::instance()->prepare("SELECT * FROM " . static::$table . " WHERE {$primary_key}=? LIMIT 1");
-            $stmt->execute([$id]);
-            $result = $stmt->fetch(PDO::FETCH_OBJ);
+        $stmt = self::instance()->prepare("SELECT * FROM " . static::$table . " WHERE {$primary_key}=? LIMIT 1");
+        $stmt->execute([$id]);
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-            if ($result) {
-                self::$result = $result;
-                return new self($result);
-            } else {
-                return (null);
-            }
-        } catch (ErrorHandler $e) {
-            return print $e->message();
+        if ($result) {
+            self::$result = $result;
+            return new self($result);
+        } else {
+            return (null);
         }
     }
 
@@ -1134,7 +1094,6 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
     public static function lastRow()
     {
         try {
-
             self::$table = static::$table;
             if (isset(static::$primary_key)) {
                 $primary_key = static::$primary_key;
@@ -1196,23 +1155,19 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function min($field)
     {
-        try {
-            if (!is_string($field)) {
-                throw new ErrorHandler("required parameter should be string, " . gettype($field) . " given.");
-            }
+        if (!is_string($field)) {
+            return trigger_error("required parameter should be string, " . gettype($field) . " was given.", E_USER_ERROR);
+        }
 
-            self::$table = static::$table;
-            $stmt = self::instance()->prepare("SELECT MIN({$field}) AS {$field} FROM " . static::$table . ";");
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_OBJ);
+        self::$table = static::$table;
+        $stmt = self::instance()->prepare("SELECT MIN({$field}) AS {$field} FROM " . static::$table . ";");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-            if ($result) {
-                return ($result->{$field});
-            } else {
-                return (null);
-            }
-        } catch (ErrorHandler $e) {
-            return print $e->message();
+        if ($result) {
+            return ($result->{$field});
+        } else {
+            return (null);
         }
     }
 
@@ -1225,24 +1180,19 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function max($field)
     {
-        try {
-            if (!is_string($field)) {
-                throw new ErrorHandler("required parameter should be string, " . gettype($field) . " given.");
+        if (!is_string($field)) {
+            return trigger_error("required parameter should be string, " . gettype($field) . " was given.", E_USER_ERROR);
+        } else {
+            self::$table = static::$table;
+            $stmt = self::instance()->prepare("SELECT MAX({$field}) AS {$field} FROM " . static::$table . ";");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+            if ($result) {
+                return ($result->{$field});
             } else {
-                self::$table = static::$table;
-                $stmt = self::instance()->prepare("SELECT MAX({$field}) AS {$field} FROM " . static::$table . ";");
-                $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_OBJ);
-
-                if ($result) {
-                    return ($result->{$field});
-                } else {
-                    return (null);
-                }
+                return (null);
             }
-
-        } catch (ErrorHandler $e) {
-            return print $e->message();
         }
     }
 
@@ -1255,23 +1205,19 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function sum($field)
     {
-        try {
-            if (!is_string($field)) {
-                throw new ErrorHandler("required parameter should be string, " . gettype($field) . " given.");
-            } else {
-                self::$table = static::$table;
-                $stmt = self::instance()->prepare("SELECT SUM({$field}) AS {$field} FROM " . static::$table . ";");
-                $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_OBJ);
+        if (!is_string($field)) {
+            return trigger_error("required parameter should be string, " . gettype($field) . " was given.", E_USER_ERROR);
+        } else {
+            self::$table = static::$table;
+            $stmt = self::instance()->prepare("SELECT SUM({$field}) AS {$field} FROM " . static::$table . ";");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-                if ($result) {
-                    return ($result->{$field});
-                } else {
-                    return (null);
-                }
+            if ($result) {
+                return ($result->{$field});
+            } else {
+                return (null);
             }
-        } catch (ErrorHandler $e) {
-            return print $e->message();
         }
     }
 
@@ -1284,23 +1230,19 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function avg($field)
     {
-        try {
-            if (!is_string($field)) {
-                throw new ErrorHandler("required parameter should be string, " . gettype($field) . " given.");
-            } else {
-                self::$table = static::$table;
-                $stmt = self::instance()->prepare("SELECT AVG({$field}) AS {$field} FROM " . static::$table . ";");
-                $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_OBJ);
+        if (!is_string($field)) {
+            return trigger_error("required parameter should be string, " . gettype($field) . " given.", E_USER_ERROR);
+        } else {
+            self::$table = static::$table;
+            $stmt = self::instance()->prepare("SELECT AVG({$field}) AS {$field} FROM " . static::$table . ";");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-                if ($result) {
-                    return ($result->{$field});
-                } else {
-                    return (null);
-                }
+            if ($result) {
+                return ($result->{$field});
+            } else {
+                return (null);
             }
-        } catch (ErrorHandler $e) {
-            return print $e->message();
         }
     }
 
@@ -1412,35 +1354,31 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function increment($field, $int = null)
     {
-        try {
-            if (!empty(self::$result)) {
-                if (property_exists(self::$result, $field)) {
-                    if (!is_numeric(self::$result->$field)) {
-                        throw new ErrorHandler("Field '$field' is not of a numeric type, cannot do an increment.");
-                    }
-                } else {
-                    throw new ErrorHandler("Field '$field' does not exist in \"" . self::$table . "\"'s table.");
+        if (!empty(self::$result)) {
+            if (property_exists(self::$result, $field)) {
+                if (!is_numeric(self::$result->$field)) {
+                    return trigger_error("Field '$field' is not of a numeric type, cannot do an increment.", E_USER_ERROR);
                 }
-
-                if (isset(static::$primary_key)) {
-                    $primary_key = static::$primary_key;
-                } else {
-                    $primary_key = self::$primary_key;
-                }
-
-                if (is_null($int)) {
-                    $value = (self::$result->$field + 1);
-                } else {
-                    $value = (self::$result->$field + $int);
-                }
-
-                $stmt = self::instance()->exec("UPDATE " . self::$table . " SET {$field}={$value} WHERE {$primary_key}=" . self::$result->$primary_key);
-                return ($stmt);
             } else {
-                return false;
+                return trigger_error("Field '$field' does not exist in '" . self::$table . "' table.", E_USER_WARNING);
             }
-        } catch (ErrorHandler $e) {
-            return print $e->message();
+
+            if (isset(static::$primary_key)) {
+                $primary_key = static::$primary_key;
+            } else {
+                $primary_key = self::$primary_key;
+            }
+
+            if (is_null($int)) {
+                $value = (self::$result->$field + 1);
+            } else {
+                $value = (self::$result->$field + $int);
+            }
+
+            $stmt = self::instance()->exec("UPDATE " . self::$table . " SET {$field}={$value} WHERE {$primary_key}=" . self::$result->$primary_key);
+            return ($stmt);
+        } else {
+            return false;
         }
     }
 
@@ -1461,10 +1399,10 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
             if (!empty(self::$result)) {
                 if (property_exists(self::$result, $field)) {
                     if (!is_numeric(self::$result->$field)) {
-                        throw new ErrorHandler("Field '$field' is not of a numeric type, cannot do an increment.");
+                        return trigger_error("Field '$field' is not of a numeric type, cannot do an increment.", E_USER_ERROR);
                     }
                 } else {
-                    throw new ErrorHandler("Field '$field' does not exist in \"" . self::$table . "\"'s table.");
+                    return trigger_error("Field '$field' does not exist in '" . self::$table . "' table.", E_USER_WARNING);
                 }
 
                 if (isset(static::$primary_key)) {
@@ -1562,7 +1500,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
         if (isset(self::$query['joins'])) {
             self::$query['joins'] .= " USING ($field) ";
         } else {
-            die("method 'using()' is chained with 'join()'");
+            return trigger_error("method 'using()' is chained with 'join()'", E_USER_WARNING);
         }
 
         return new self;
@@ -1580,7 +1518,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
         if (isset(self::$query['joins'])) {
             self::$query['joins'] .= " ON $condition ";
         } else {
-            die("method 'on()' is used in conjunction with 'join()'");
+            return trigger_error("method 'on()' is used in conjunction with 'join()'", E_USER_WARNING);
         }
 
         return new self;
