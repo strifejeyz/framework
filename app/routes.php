@@ -10,6 +10,17 @@
 assign('welcome -> /welcome', '/cms/WelcomeController@index');
 
 
+assign('/test/:int', function(){
+    return print "param";
+});
+assign('/test/play', function(){
+    return print "hard";
+});
+
+
+
+
+
 /**
  * Authentication & Password
  * reset routes
