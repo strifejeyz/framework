@@ -172,7 +172,7 @@ class Engine
                                         if ($type == ':int' && is_numeric($raw_parameters[$index])):
                                             $rules_match_counter++;
                                             continue;
-                                        elseif ($type == ':str' && preg_match('/[a-zA-Z^0-9]/', $raw_parameters[$index])):
+                                        elseif ($type == ':str' && ctype_alpha($raw_parameters[$index])):
                                             $rules_match_counter++;
                                             continue;
                                         elseif ($type == ':any'):
