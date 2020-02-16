@@ -71,7 +71,7 @@ if (!function_exists('csv_decode')) {
      * encode an array to csv values
      *
      * @param array $values
-     * @return string
+     * @return array
      */
     function csv_decode($values)
     {
@@ -430,6 +430,21 @@ if (!function_exists('form_error')) {
         } else {
             return (null);
         }
+    }
+}
+
+
+if (!function_exists('set_form_error')) {
+    /**
+     * Set a form error
+     *
+     * @param $name
+     * @param $value
+     * @return string
+     */
+    function set_form_error($name, $value)
+    {
+        $_SESSION['__ERRORS__'][$name] = $value;
     }
 }
 
