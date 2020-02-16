@@ -210,7 +210,7 @@ class Engine
 
                                     return self::dispatch();
                                 else:
-                                    break;
+                                    continue;
                                 endif;
                             endif;
                         endif;
