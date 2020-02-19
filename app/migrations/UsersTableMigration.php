@@ -38,7 +38,7 @@ class UsersTableMigration extends Migration
         ]);
         $this->varchar('active');
         $this->varchar('remember_token', [
-            'null' => true
+            'nullable' => true
         ]);
         $this->int('created');
         $this->int('updated');
