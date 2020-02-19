@@ -71,9 +71,9 @@ abstract class Migration extends Connection
         }
         if (array_key_exists('nullable', $attributes)) {
             if ($attributes['nullable'] == true) {
-                $attr['null'] = "NULL";
+                $attr['nullable'] = "NULL";
             } else {
-                $attr['null'] = "NOT NULL";
+                $attr['nullable'] = "NOT NULL";
             }
         }
         if (array_key_exists('unique', $attributes)) {
