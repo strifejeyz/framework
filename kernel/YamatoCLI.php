@@ -107,27 +107,27 @@ EOF;
                 $this->clear('backups');
                 $this->clear('logs');
                 $this->clear('sessions');
-                return die("Backups/Logs/Sessions were cleared.");
+                return die("Backups/Logs/Sessions were cleared.\n");
                 break;
 
             case 'clear:sessions':
                 $this->clear('sessions');
-                return die("sessions directory cleared.");
+                return die("sessions directory cleared.\n");
                 break;
 
             case 'clear:logs':
                 $this->clear('logs');
-                return die("logs directory cleared.");
+                return die("logs directory cleared.\n");
                 break;
 
             case 'clear:cache':
                 $this->clear('cache');
-                return die("cached pages cleared.");
+                return die("cached pages cleared.\n");
                 break;
 
             case 'clear:backups':
                 $this->clear('backups');
-                return die("backup directory cleared.");
+                return die("backup directory cleared.\n");
                 break;
 
 
@@ -140,7 +140,7 @@ EOF;
                     $option = isset($cmd[3]) ? $cmd[3] : strtolower($cmd[2]);
                     return $this->createModel($cmd[2], $option);
                 } else {
-                    die("too few arguments, create:model expects [name], [table] is optional");
+                    die("too few arguments, create:model expects [name], [table] is optional.\n");
                 }
                 break;
 
@@ -149,7 +149,7 @@ EOF;
                     $option = isset($cmd[3]) ? $cmd[3] : "false";
                     $this->createController($cmd[2], $option);
                 } else {
-                    die("too few arguments, create:controller expects [name], [empty](bool) is optional");
+                    die("too few arguments, create:controller expects [name], [empty](bool) is optional.\n");
                 }
                 break;
 
@@ -157,7 +157,7 @@ EOF;
                 if (isset($cmd[2]) && isset($cmd[3])) {
                     $this->createMigration($cmd[2], $cmd[3]);
                 } else {
-                    die("too few arguments, create:migration expects [name] [table]");
+                    die("too few arguments, create:migration expects [name] [table].\n");
                 }
                 break;
 
@@ -165,7 +165,7 @@ EOF;
                 if (isset($cmd[2])) {
                     $this->createRequest($cmd[2]);
                 } else {
-                    die("create:request expects 1 parameter [name]");
+                    die("create:request expects 1 parameter [name].\n");
                 }
                 break;
 
@@ -173,7 +173,7 @@ EOF;
                 if (isset($cmd[2]) && isset($cmd[3])) {
                     $this->createSeeder($cmd[2], $cmd[3]);
                 } else {
-                    die("too few arguments, create:seeder expects [name] [model]");
+                    die("too few arguments, create:seeder expects [name] [model].\n");
                 }
                 break;
 
@@ -225,14 +225,14 @@ EOF;
 
             case 'hash:encode':
                 if (!isset($cmd[2])) {
-                    die("hash:verify expects 1 parameter [data]");
+                    die("hash:verify expects 1 parameter [data].\n");
                 }
                 return die(Hash::encode(trim($cmd[2], ' ')));
                 break;
 
             case 'hash:verify':
                 if (!isset($cmd[2]) || !isset($cmd[3])) {
-                    die("too few arguments, hash:verify expects [data] and [hashed] value");
+                    die("too few arguments, hash:verify expects [data] and [hashed] value.\n");
                 }
                 return (Hash::verify($cmd[2], $cmd[3])) ? die("true") : die("false");
                 break;
@@ -243,7 +243,7 @@ EOF;
                 } elseif (isset($cmd[2]) && isset($cmd[3])) {
                     return die(Encryption::encode($cmd[2], $cmd[3]));
                 } else {
-                    die("hash:verify requires 1 parameter [data], [levels] optional");
+                    die("hash:verify requires 1 parameter [data], [levels] optional.\n");
                 }
                 break;
 
@@ -253,12 +253,12 @@ EOF;
                 } elseif (isset($cmd[2]) && isset($cmd[3])) {
                     return die(Encryption::decode($cmd[2], $cmd[3]));
                 } else {
-                    die("hash:verify requires 1 parameter [data], [levels] optional");
+                    die("hash:verify requires 1 parameter [data], [levels] optional.\n");
                 }
                 break;
 
             default:
-                die("error: unknown command '{$cmd[1]}' read documentation for info.");
+                die("error: unknown command '{$cmd[1]}' read documentation for info.\n");
                 break;
         }
 
@@ -317,14 +317,14 @@ class {$name} extends Model
 EOF;
 
         if (file_exists("{$container}/{$name}.php")):
-            return die("model '{$name}' already exists");
+            return die("model '{$name}' already exists.\n");
         endif;
 
         $file = fopen("{$container}/{$name}.php", 'x');
         fwrite($file, $data);
         exec('composer dump-autoload');
 
-        return die("'{$name}' model class created.");
+        return die("'{$name}' model class created.\n");
     }
 
 
@@ -462,13 +462,13 @@ class {$sub}
 EOF;
 
         if (file_exists("{$container}/{$name}.php")):
-            return die("controller '{$name}' already exists");
+            return die("controller '{$name}' already exists.\n");
         endif;
 
         $file = fopen("{$container}/{$name}.php", 'x');
         fwrite($file, $data);
 
-        return die("'{$sub}' class created.");
+        return die("'{$sub}' class created.\n");
     }
 
 
@@ -536,14 +536,14 @@ class {$name} extends Migration
 EOF;
 
         if (file_exists("{$container}/{$name}.php")):
-            return die("migration '{$name}' already exists");
+            return die("migration '{$name}' already exists.\n");
         endif;
 
         $file = fopen("{$container}/{$name}.php", 'x');
         fwrite($file, $data);
         exec('composer dump-autoload');
 
-        return die("'{$name}' class created.");
+        return die("'{$name}' class created.\n");
     }
 
 
@@ -579,14 +579,14 @@ class {$name} extends HTTPRequest
 EOF;
 
         if (file_exists("{$container}/{$name}.php")):
-            return die("request '{$name}' already exists");
+            return die("request '{$name}' already exists.\n");
         endif;
 
         $file = fopen("{$container}/{$name}.php", 'x');
         fwrite($file, $data);
         exec('composer dump-autoload');
 
-        return die("'{$name}' class created.");
+        return die("'{$name}' class created.\n");
     }
 
 
@@ -597,7 +597,7 @@ EOF;
     private function createSeeder($name, $model)
     {
         if (!file_exists('.' . models_path() . "$model.php")):
-            return die("Model '$model' does not exist");
+            return die("Model '$model' does not exist\n");
         endif;
         $container = '.' . seeders_path();
         $name = preg_replace('/seeder/i', 'Seeder', ucfirst($name));
@@ -634,7 +634,7 @@ EOF;
         fwrite($file, $data);
         exec('composer dump-autoload');
 
-        return die("'{$name}' class created.");
+        return die("'{$name}' class created.\n");
     }
 
 
@@ -650,7 +650,7 @@ EOF;
     {
         $directory = "." . migrations_path();
         $container = new DirectoryIterator($directory);
-        $message = ($action == 'down') ? "database rolled back." : "database successfully migrated.";
+        $message = ($action == 'down') ? "database rolled back.\n" : "database successfully migrated.\n";
 
         foreach ($container as $handle) {
             if (is_file("{$directory}/{$handle->getFilename()}") && $handle->getFilename() !== '.htaccess') {
@@ -684,7 +684,7 @@ EOF;
             $model->backup();
         endforeach;
 
-        return die("Database tables backed up.");
+        return die("Database tables backed up.\n");
     }
 
 
@@ -707,7 +707,7 @@ EOF;
             $model->restore();
         endforeach;
 
-        return die("Database restored.");
+        return die("Database restored.\n");
     }
 
 
@@ -730,7 +730,7 @@ EOF;
             new $seeder();
         endforeach;
 
-        return die("Seeding completed.");
+        return die("Seeding completed.\n");
     }
 
 
@@ -750,12 +750,12 @@ EOF;
             if (class_exists($class)):
                 $migration = new $class();
                 $migration->$action();
-                $message = ($action == 'down') ? "table rolled back." : "table successfully migrated.";
+                $message = ($action == 'down') ? "table rolled back.\n" : "table successfully migrated.\n";
             else:
-                return die("'{$className}' class does not exist.");
+                return die("'{$className}' class does not exist.\n");
             endif;
         else:
-            return die("'{$className}' file does not exist.");
+            return die("'{$className}' file does not exist.\n");
         endif;
 
         return die($message);
@@ -779,10 +779,10 @@ EOF;
                 $migration = new $class();
                 return $migration->dump();
             else:
-                return die("'{$className}' class does not exist.");
+                return die("'{$className}' class does not exist.\n");
             endif;
         else:
-            return die("'{$className}' file does not exist.");
+            return die("'{$className}' file does not exist.\n");
         endif;
     }
 
