@@ -7,9 +7,7 @@ namespace Kernel;
  * Setting and Dispatching routes
  * Class Engine
  * Created 10/23/2015
- * Updated 02/13/2020
  *
- * @since 2015
  * @author Jesse Strife
  * @package Kernel\Engine
  * @copyright Strife Framework
