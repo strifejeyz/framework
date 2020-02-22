@@ -2,8 +2,10 @@
 
 <style type="text/css">
     body {
+        font-family: 'Barlow Condensed';
         background: #f9f9f9;
         text-align: center;
+        font-size: 18px;
     }
 
     img {
