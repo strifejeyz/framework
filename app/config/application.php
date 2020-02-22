@@ -67,7 +67,7 @@ define('MAINTENANCE_MODE', FALSE);
  * default dir
  * just omit if you want to use default dir.
  */
-session_save_path('./storage/sessions/');
+session_save_path('./storage/sessions');
 
 
 /**
