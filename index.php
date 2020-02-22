@@ -7,7 +7,6 @@
  * Author:  Jesse Strife
  * website: https://github.com/strifejeyz/framework
  * Date:    11/10/2015
- * Last Updated: 02/15/2020
  */
 
 
