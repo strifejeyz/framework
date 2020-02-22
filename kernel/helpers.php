@@ -92,13 +92,13 @@ if (!function_exists('download_file')) {
      */
     function download_file($file, $preferredName = null)
     {
-        if (!is_null($preferredName)):
+        if (!is_null($preferredName)) {
             $filename = $preferredName;
-        else:
+        } else {
             $filename = $file;
-        endif;
+        }
 
-        if (file_exists($file)):
+        if (file_exists($file)) {
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
@@ -108,9 +108,9 @@ if (!function_exists('download_file')) {
             header('Content-Length: ' . filesize($file));
             readfile($file);
             exit;
-        else:
+        } else {
             return false;
-        endif;
+        }
     }
 }
 
@@ -157,7 +157,7 @@ if (!function_exists('route')) {
 }
 
 
-if (!function_exists('paths')) {
+if (!function_exists('route_paths')) {
     /**
      * Alternative use of Route::paths()
      * inherited the $routes array from
@@ -166,7 +166,7 @@ if (!function_exists('paths')) {
      * @return array
      **/
 
-    function paths()
+    function route_paths()
     {
         return Route::paths();
     }
@@ -244,7 +244,7 @@ if (!function_exists('refresh')) {
      * @return string
      **/
 
-    function refresh($interval, $route)
+    function refresh($route, $interval)
     {
         return Route::refresh($interval, $route);
     }
@@ -330,7 +330,7 @@ if (!function_exists('filename')) {
 }
 
 
-if (!function_exists('extension')) {
+if (!function_exists('file_extension')) {
     /**
      * Returns an extension of a
      * given string variable
@@ -339,7 +339,7 @@ if (!function_exists('extension')) {
      * @return string
      **/
 
-    function extension($string_var)
+    function file_extension($string_var)
     {
         return pathinfo($string_var, PATHINFO_EXTENSION);
     }
@@ -449,7 +449,7 @@ if (!function_exists('set_form_error')) {
 }
 
 
-if (!function_exists('fields')) {
+if (!function_exists('form_values')) {
     /**
      * Return the last form values returned
      * from request class
@@ -457,53 +457,13 @@ if (!function_exists('fields')) {
      * @param $name
      * @return string
      */
-    function fields($name)
+    function form_values($name)
     {
         if (isset($_SESSION['__FIELDS__'][$name])) {
             return ($_SESSION['__FIELDS__'][$name]);
         } else {
             return (null);
         }
-    }
-}
-
-
-if (!function_exists('date_now')) {
-    /**
-     * Return current date
-     *
-     * @param $separator
-     * @return string
-     */
-    function date_now($separator = ' ')
-    {
-        return Date("F{$separator}j,{$separator}Y");
-    }
-}
-
-
-if (!function_exists('time_now')) {
-    /**
-     * Return current time
-     *
-     * @return string
-     */
-    function time_now()
-    {
-        return Date('h:i A');
-    }
-}
-
-
-if (!function_exists('year_now')) {
-    /**
-     * Return current year
-     *
-     * @return string
-     */
-    function year_now()
-    {
-        return Date('Y');
     }
 }
 
