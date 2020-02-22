@@ -1,5 +1,5 @@
 ![Strife Framework](assets/img/strife.png)
-# {{ Strife Framework }}
+# {{ Strife }}
 # A Fast and Lightweight PHP MVC Framework.
 ### Developed for any type of web applications.
 ### Composed of handy and powerful set of tools for faster and secure development of robust applications.
