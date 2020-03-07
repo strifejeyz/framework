@@ -26,8 +26,8 @@
       "app/migrations"
     ],
     "files": [
-      "app/routes.php",
       "kernel/helpers.php",
+      "app/routes.php",
       "config/database.php",
       "config/application.php"
     ]

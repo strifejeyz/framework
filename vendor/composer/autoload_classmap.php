@@ -15,7 +15,6 @@ return array(
     'App\\Seeders\\UsersTableSeeder' => $baseDir . '/app/seeders/UsersTableSeeder.php',
     'Auth' => $baseDir . '/kernel/security/Auth.php',
     'Cookie' => $baseDir . '/kernel/security/Cookie.php',
-    'ErrorHandler' => $baseDir . '/kernel/ErrorHandler.php',
     'Form' => $baseDir . '/kernel/Form.php',
     'Kernel\\Database\\Connection' => $baseDir . '/kernel/database/Connection.php',
     'Kernel\\Database\\Database' => $baseDir . '/kernel/database/Database.php',
