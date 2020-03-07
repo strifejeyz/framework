@@ -28,8 +28,8 @@
     "files": [
       "app/routes.php",
       "kernel/helpers.php",
-      "app/config/database.php",
-      "app/config/application.php"
+      "config/database.php",
+      "config/application.php"
     ]
   }
 }

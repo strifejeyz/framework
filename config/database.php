@@ -16,9 +16,9 @@ use Kernel\Database\Connection;
 Connection::parameters('conn1',[
     'driver'   => 'mysql',
     'hostname' => 'localhost',
-    'database' => 'traveller',
-    'username' => 'root',
-    'password' => '',
+    'database' => 'strife',
+    'username' => 'strife',
+    'password' => 'strife',
     'charset'  => 'utf8',
     'port'     => 3306
 ]);
@@ -27,4 +27,4 @@ Connection::parameters('conn1',[
 /**
  * Begin Transaction with database
  */
-Connection::initialize('conn1');
+#Connection::initialize('conn1');
