@@ -15,7 +15,21 @@ interface HTTPRequestInterface
 
     public function get($field);
 
+    public function get_hash($field, $sanitized = true);
+
+    public function set_hash($field);
+
+    public function origin();
+
     public function values();
+
+    public function raw();
+
+    public function append($name, $value);
+
+    public function remove($name);
+
+    public function retain();
 
     public function sanitize($string);
 
@@ -204,6 +218,19 @@ class HTTPRequest implements HTTPRequestInterface
         } else {
             return (false);
         }
+    }
+
+    /**
+     * For special scenarions where you validate()
+     * is set to true but you have to redirect for
+     * there's a form error, this can retain the form
+     * values and is accessible via fields('field_name')
+     *
+     * @return mixed
+     */
+    public function retain()
+    {
+        return $_SESSION['__FIELDS__'] = $this->request;
     }
 
     /**

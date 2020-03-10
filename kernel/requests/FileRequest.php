@@ -40,9 +40,13 @@ class FileRequest implements FileRequestInterface
      *
      * @param $request
      */
-    public function __construct($request)
+    public function __construct($request = null)
     {
-        return $this->request = $request;
+        if (is_null($request)) {
+            $this->request = $_FILES;
+        } else {
+            $this->request = $request;
+        }
     }
 
 
