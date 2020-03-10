@@ -25,6 +25,21 @@ if (!function_exists('dump')) {
 }
 
 
+if (!function_exists('to_megabytes')) {
+    /**
+     * Spit and Stop
+     *
+     * @param $bytes
+     * @param int $structure
+     * @return string|null
+     */
+    function to_megabytes($bytes, $structure = 3)
+    {
+        return bcdiv($bytes, 1048576, $structure);
+    }
+}
+
+
 if (!function_exists('random_string')) {
     /**
      * Returns a randomized pseudo
