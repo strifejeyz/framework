@@ -913,14 +913,22 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      * limit statement where $limit is the number
      * of rows to be returned.
      *
+     * also has fallback procedures in case you don't
+     * want to break out of chained queries to false-limit
+     * the row count $offset = false means no limit.
+     *
      * @param $offset null
      * @param null $rowCount
      * @return mixed
      */
     public static function limit($offset, $rowCount = null)
     {
+        if ($offset == false) {
+            return new self;
+        }
+
         if (!is_numeric($offset)) {
-            return trigger_error("limit() Argument passed in  method should be numeric.", E_USER_ERROR);
+            return trigger_error("limit() Argument passed in  method should be numeric or false.", E_USER_ERROR);
         }
 
         self::$table = static::$table;
