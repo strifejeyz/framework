@@ -1,44 +1,8 @@
-@extend('layouts/frontend', ['title' => 'Homepage'])
+@extend('layouts/frontend')
 
-<style type="text/css">
-    body {
-        font-family: 'Barlow Condensed';
-        background: #f9f9f9;
-        text-align: center;
-        font-size: 18px;
-    }
-
-    img {
-        margin-top: 15%;
-    }
-
-    .title {
-        text-align: center;
-        color: rgba(48, 48, 48, 0.84);
-        font-size: 24px;
-        margin: 0
-    }
-
-    .sub {
-        margin: 0;
-        font-size: 15px;
-        color: #787878;
-        font-style: italic;
-    }
-
-    center {
-        font-size: 13px;
-        position: fixed;
-        bottom: 5px;
-        width: 100%;
-        color: #666666;
-    }
-</style>
-
-<img src="/assets/img/strife.png" width="150">
+<img src="/assets/img/strife.png" width="120">
 <p class="title">Strife Framework</p>
 <p class="sub">A Fast and Lightweight PHP MVC Framework.</p>
-
-<center>&copy; 2020 Strife Framework. All rights reserved.</center>
+<div style="text-align: center">&copy; 2020 Strife Framework. All rights reserved.</div>
 
 @stop()
