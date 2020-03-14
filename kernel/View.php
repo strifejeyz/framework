@@ -154,8 +154,7 @@ abstract class View
         } else {
             if (is_file(views_path() . $footer)) {
                 $footer = trim($footer, '/');
-            }
-            elseif (is_dir(views_path() . $footer)) {
+            } elseif (is_dir(views_path() . $footer)) {
                 if (file_exists(views_path() . $footer . "/footer.php")) {
                     $footer = $footer . "/footer.php";
                 } else {
@@ -177,11 +176,11 @@ abstract class View
      */
     public static function get($template)
     {
-        if (preg_match('/(.*)(html|php|htm)/i', $template)):
-            $filename = "." . VIEWS_PATH . $template;
-        else:
-            $filename = "." . VIEWS_PATH . ltrim($template, '/') . self::$postfix;
-        endif;
+        if (preg_match('/(.*)(html|php|htm)/i', $template)) {
+            $filename = views_path() . $template;
+        } else {
+            $filename = views_path() . ltrim($template, '/') . self::$postfix;
+        }
 
         return include("$filename");
     }
