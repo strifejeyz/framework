@@ -16,6 +16,13 @@ abstract class View
 
 
     /**
+     * This will help layout files receive
+     * available variables from the originally rendered page
+     */
+    private static $variables = null;
+
+
+    /**
      * The default file type to be used
      * on all template files.
      * (defined on config/application.php)
@@ -36,28 +43,30 @@ abstract class View
      */
     public static function render($template, $_ = null)
     {
-        if (!is_null($_)):
+        if (!is_null($_)) {
             extract($_);
-        endif;
+            self::$variables = $_;
+        }
 
-        if (preg_match('/(.*)(html|php|htm)/i', $template)):
-            $filename = "." . VIEWS_PATH . $template;
-        else:
-            $filename = "." . VIEWS_PATH . ltrim($template, '/') . self::$postfix;
-        endif;
+        if (preg_match('/(.*)(html|php|htm)/i', $template)) {
+            $filename = views_path() . $template;
+        } else {
+            $filename = views_path() . ltrim($template, '/') . self::$postfix;
+        }
+
         $cachedFile = storage_path() . "/cache/" . md5($filename);
 
-        if (CACHED_VIEWS == true):
-            if (file_exists($cachedFile)):
+        if (CACHED_VIEWS == true) {
+            if (file_exists($cachedFile)) {
                 return eval(' ?>' . self::evaluate($cachedFile) . '<?php ');
-            else:
+            } else {
                 $file = fopen($cachedFile, 'x');
                 fwrite($file, self::evaluate($filename));
                 return eval(' ?>' . self::evaluate($cachedFile) . '<?php ');
-            endif;
-        else:
+            }
+        } else {
             return eval(' ?>' . self::evaluate($filename) . '<?php ');
-        endif;
+        }
     }
 
 
@@ -109,26 +118,53 @@ abstract class View
      * Extends a view
      *
      * @param $layout
-     * @param $var
      * @return self::render
      */
-    public static function extend($layout, $var = [])
+    public static function extend($layout)
     {
-        self::$layout = trim($layout, '/');
+        if (is_dir(views_path() . $layout)) {
+            self::$layout = $layout;
+            $filename = trim($layout, '/') . "/header.php";
+        } else {
+            if (preg_match('/(.*)(html|php|htm)/i', $layout)) {
+                $filename = ltrim($layout, '/');
+            } else {
+                $filename = ltrim($layout, '/') . self::$postfix;
+            }
+        }
 
-        return self::render(self::$layout . '/header', $var);
+        return self::render($filename, self::$variables);
     }
 
 
     /**
      * Require a footer file.
      *
-     * @param $var
+     * @param $footer
      * @return self::render
      */
-    public static function stop($var = [])
+    public static function stop($footer = null)
     {
-        return self::render(self::$layout . '/footer', $var);
+        if (is_null($footer) && !is_null(self::$layout)) {
+            if (file_exists(views_path() . self::$layout . "/footer.php")) {
+                $footer = self::$layout . "/footer.php";
+            } else {
+                trigger_error(views_path() . " does not contain any footer file.", E_USER_WARNING);
+            }
+        } else {
+            if (is_file(views_path() . $footer)) {
+                $footer = trim($footer, '/');
+            }
+            elseif (is_dir(views_path() . $footer)) {
+                if (file_exists(views_path() . $footer . "/footer.php")) {
+                    $footer = $footer . "/footer.php";
+                } else {
+                    trigger_error(views_path() . " does not contain any footer file.", E_USER_WARNING);
+                }
+            }
+        }
+
+        return self::render($footer, self::$variables);
     }
 
 
@@ -141,11 +177,11 @@ abstract class View
      */
     public static function get($template)
     {
-        if (preg_match('/(.*)\.' . self::$postfix . '/i', $template)) {
-            $filename = '../views/' . $template;
-        } else {
-            $filename = '../views/' . $template . self::$postfix;
-        }
+        if (preg_match('/(.*)(html|php|htm)/i', $template)):
+            $filename = "." . VIEWS_PATH . $template;
+        else:
+            $filename = "." . VIEWS_PATH . ltrim($template, '/') . self::$postfix;
+        endif;
 
         return include("$filename");
     }
