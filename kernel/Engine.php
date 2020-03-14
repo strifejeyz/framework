@@ -13,6 +13,8 @@ namespace Kernel;
  * @copyright Strife Framework
  * @license MIT License
  */
+use Kernel\Errors;
+
 class Engine
 {
     /**
@@ -100,9 +102,22 @@ class Engine
         if (empty($originalUrl)) {
             return self::dispatch();
         } else {
+
             foreach (array_values(self::$routes) as $route) {
                 $route_list = explode('/', trim($route['url'], '/'));
                 $parameter_count = $route['parameter_count'];
+
+                if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                    if ($route['request_method'] !== "POST") {
+                        continue;
+                    }
+                }
+
+                if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+                    if ($route['request_method'] == 'POST') {
+                        continue;
+                    }
+                }
 
                 if (count($route_list) == count($originalUrl)) {
                     $parameter_types = $route['parameter_types'];
@@ -142,18 +157,14 @@ class Engine
                         };
                         $match_base_url_result = call_user_func($validate_base_url, $raw_base_url, $route_base_url);
 
-                        if ($match_base_url_result == false):
+                        if ($match_base_url_result == false) {
                             continue;
-                        else:
+                        }
+                        else {
                             if (empty($raw_parameters)):
-                                if (isset($route['closure'])):
-                                    if (!empty($route['request_method'])):
-                                        if (strtoupper($route['request_method']) !== $_SERVER['REQUEST_METHOD']):
-                                            return self::error(404);
-                                        endif;
-                                    endif;
+                                if (isset($route['closure'])) {
                                     return call_user_func_array($route['closure'], $raw_parameters);
-                                endif;
+                                }
 
                                 self::$controller = $route['controller'];
                                 self::$method = $route['method'];
@@ -166,7 +177,7 @@ class Engine
                             else:
                                 $match_parameters_to_rules = function ($parameter_types, $raw_parameters) {
                                     $rules_match_counter = 0;
-                                    foreach ($parameter_types as $index => $type):
+                                    foreach ($parameter_types as $index => $type) {
                                         if ($type == ':int' && is_numeric($raw_parameters[$index])):
                                             $rules_match_counter++;
                                             continue;
@@ -179,23 +190,18 @@ class Engine
                                         else:
                                             continue;
                                         endif;
-                                    endforeach;
-                                    if ($rules_match_counter == count($raw_parameters)):
+                                    }
+                                    if ($rules_match_counter == count($raw_parameters)) {
                                         return true;
-                                    else:
+                                    }else {
                                         return false;
-                                    endif;
+                                    }
                                 };
 
                                 $match_rules_result = call_user_func($match_parameters_to_rules, $parameter_types, $raw_parameters);
 
                                 if ($match_rules_result == true):
                                     if (isset($route['closure'])):
-                                        if (!empty($route['request_method'])):
-                                            if (strtoupper($route['request_method']) !== $_SERVER['REQUEST_METHOD']):
-                                                return self::error(404);
-                                            endif;
-                                        endif;
                                         return call_user_func_array($route['closure'], $raw_parameters);
                                     endif;
 
@@ -211,7 +217,7 @@ class Engine
                                     continue;
                                 endif;
                             endif;
-                        endif;
+                        }
                     } else {
                         continue;
                     }
@@ -255,7 +261,7 @@ class Engine
      *
      * @param string $url
      * @param string $action
-     * @param string $requestMethod
+     * @param string $request_method
      * @return bool
      * @var string $sub
      * @var array $data
@@ -302,7 +308,7 @@ class Engine
         endif;
 
         if (!preg_match('/\@/', $action)):
-            return trigger_error("Argument passed via assign() doesn't have a valid separator '@'", E_USER_ERROR);
+            return Errors::trigger('routes.php', "Argument passed via assign() doesn't have a valid separator '@' in routes.php", 1);
         endif;
 
         $path = explode('/', trim($action, '/'));
@@ -330,22 +336,21 @@ class Engine
      */
     private static function dispatch()
     {
-        if (!empty(self::$requestMethod)):
-            if (strtoupper(self::$requestMethod) !== $_SERVER['REQUEST_METHOD']):
-                return self::error(404);
-            endif;
-        endif;
-
-        if (is_null(self::$controller) && is_null(self::$method)):
+        if (is_null(self::$controller) && is_null(self::$method)) {
             $controller = self::$namespace . DEFAULT_CONTROLLER;
             $method = DEFAULT_METHOD;
-        else:
+        } else {
             $controller = self::$namespace . self::$controller;
             $method = self::$method;
-        endif;
+        }
 
-        require_once '.' . CONTROLLERS_PATH . self::$subdirectory . $controller . '.php';
-        return (call_user_func_array([new $controller(), $method], self::$parameters));
+        require_once ('.' . CONTROLLERS_PATH . self::$subdirectory . $controller . '.php');
+
+        if (method_exists(new $controller, $method)) {
+            return (call_user_func_array([new $controller(), $method], self::$parameters));
+        } else {
+            return Errors::trigger(app_path() . 'routes.php', "Method '$method' does not exist in '$controller' class.", 1);
+        }
     }
 
 

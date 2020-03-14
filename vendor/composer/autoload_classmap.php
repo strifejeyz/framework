@@ -23,6 +23,7 @@ return array(
     'Kernel\\Database\\QueryBuilderInterface' => $baseDir . '/kernel/database/QueryBuilder.php',
     'Kernel\\Database\\QueryBuilderMagicInterface' => $baseDir . '/kernel/database/QueryBuilder.php',
     'Kernel\\Engine' => $baseDir . '/kernel/Engine.php',
+    'Kernel\\Errors' => $baseDir . '/kernel/Errors.php',
     'Kernel\\FileHandler' => $baseDir . '/kernel/FileHandler.php',
     'Kernel\\Format' => $baseDir . '/kernel/Format.php',
     'Kernel\\Log' => $baseDir . '/kernel/Log.php',

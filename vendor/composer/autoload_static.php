@@ -31,6 +31,7 @@ class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
         'Kernel\\Database\\QueryBuilderInterface' => __DIR__ . '/../..' . '/kernel/database/QueryBuilder.php',
         'Kernel\\Database\\QueryBuilderMagicInterface' => __DIR__ . '/../..' . '/kernel/database/QueryBuilder.php',
         'Kernel\\Engine' => __DIR__ . '/../..' . '/kernel/Engine.php',
+        'Kernel\\Errors' => __DIR__ . '/../..' . '/kernel/Errors.php',
         'Kernel\\FileHandler' => __DIR__ . '/../..' . '/kernel/FileHandler.php',
         'Kernel\\Format' => __DIR__ . '/../..' . '/kernel/Format.php',
         'Kernel\\Log' => __DIR__ . '/../..' . '/kernel/Log.php',
