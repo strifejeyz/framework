@@ -572,7 +572,7 @@ if (!function_exists('hash_verify')) {
     }
 }
 
-if (!function_exists('assign')) {
+if (!function_exists('get')) {
 
     /**
      * Assign a route config.
@@ -584,7 +584,7 @@ if (!function_exists('assign')) {
      * @param null $namespace
      * @return mixed
      */
-    function assign($url, $action, $requestMethod = null, $namespace = null)
+    function get($url, $action, $requestMethod = null, $namespace = null)
     {
         return Route::assign($url, $action, $requestMethod, $namespace);
     }

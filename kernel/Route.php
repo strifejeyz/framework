@@ -8,20 +8,10 @@ use Kernel\Engine;
 abstract class Route extends Engine
 {
     /**
-     * Load routes list
-     *
-     * @param array $routes
-     * @return array
-     */
-    public static function register($routes = [])
-    {
-        return self::$routes = $routes;
-    }
-
-
-    /**
-     * Returns the path of a route (parameters stripped by default)
-     * parses given arguments and concat it to $path recursively
+     * This method will get the route url
+     * get('route.name -> /foo/bar')
+     * Route::get('route.name.here')
+     * output: /foo/bar
      *
      * @param $route
      * @return mixed
