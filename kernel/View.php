@@ -133,20 +133,6 @@ abstract class View
 
 
     /**
-     * Include a file and render custom tags.
-     * similar to render
-     *
-     * @param $template
-     * @param $var
-     * @return self::render
-     */
-    public static function parse($template, $var = [])
-    {
-        return self::render($template, $var);
-    }
-
-
-    /**
      * Include a file.
      * you cannot use custom tags with this.
      *
