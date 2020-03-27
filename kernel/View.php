@@ -65,7 +65,11 @@ abstract class View
                 return eval(' ?>' . self::evaluate($cachedFile) . '<?php ');
             }
         } else {
-            return eval(' ?>' . self::evaluate($filename) . '<?php ');
+            try  {
+                return eval(' ?>' . self::evaluate($filename) . '<?php ');
+            } catch (ParseError $e) {
+                print "<b>Parse Error:</b> {$e->getMessage()} in <b>$filename</b> on line <b>{$e->getLine()}</b>";
+            }
         }
     }
 
