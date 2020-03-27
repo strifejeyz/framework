@@ -244,7 +244,7 @@ class Engine
             $url = preg_replace('/\(/', '\(', $url);
             $url = preg_replace('/\)/', '\)', $url);
             $url = explode('/', trim($url, '/'));
-            $_GET['url'] = null;
+            unset($_GET['url']);
         else:
             $url = array();
         endif;
