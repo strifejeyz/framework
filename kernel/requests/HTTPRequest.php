@@ -66,25 +66,47 @@ class HTTPRequest implements HTTPRequestInterface
     /**
      * Catches request method, and filter
      * each values
+     *
+     * @param $method
      */
-    public function __construct()
+    public function __construct($method = "post")
     {
-        if (array_key_exists('__FORM_ORIGIN__', $_POST)):
-            $this->origin_uri = $_POST['__FORM_ORIGIN__'];
-            unset($_POST['__FORM_ORIGIN__']);
-        endif;
-
-        if (array_key_exists('__FORM_TOKEN__', $_POST)):
-            $token = $_POST['__FORM_TOKEN__'];
-            unset($_POST['__FORM_TOKEN__']);
-
-            if (!Token::verify($token)):
-                $auth = new Auth();
-                return $auth->restartSession();
+        if ($method == "post") {
+            if (array_key_exists('__FORM_ORIGIN__', $_POST)):
+                $this->origin_uri = $_POST['__FORM_ORIGIN__'];
+                unset($_POST['__FORM_ORIGIN__']);
             endif;
-        endif;
 
-        $this->request = filter_var_array($_POST, FILTER_SANITIZE_STRIPPED);
+            if (array_key_exists('__FORM_TOKEN__', $_POST)):
+                $token = $_POST['__FORM_TOKEN__'];
+                unset($_POST['__FORM_TOKEN__']);
+
+                if (!Token::verify($token)):
+                    $auth = new Auth();
+                    return $auth->restartSession();
+                endif;
+            endif;
+
+            $this->request = filter_var_array($_POST, FILTER_SANITIZE_STRIPPED);
+
+        } else {
+            if (array_key_exists('__FORM_ORIGIN__', $_GET)):
+                $this->origin_uri = $_GET['__FORM_ORIGIN__'];
+                unset($_GET['__FORM_ORIGIN__']);
+            endif;
+
+            if (array_key_exists('__FORM_TOKEN__', $_GET)):
+                $token = $_GET['__FORM_TOKEN__'];
+                unset($_GET['__FORM_TOKEN__']);
+
+                if (!Token::verify($token)):
+                    $auth = new Auth();
+                    return $auth->restartSession();
+                endif;
+            endif;
+
+            $this->request = filter_var_array($_GET, FILTER_SANITIZE_STRIPPED);
+        }
     }
 
 
@@ -137,7 +159,7 @@ class HTTPRequest implements HTTPRequestInterface
      */
     public function get_hash($field, $sanitized = true)
     {
-        return Hash::encode($this->get($field,$sanitized));
+        return Hash::encode($this->get($field, $sanitized));
     }
 
 
@@ -305,7 +327,7 @@ class HTTPRequest implements HTTPRequestInterface
                             }
                         }
 
-                        $query = "SELECT * FROM " .explode(':', $rule[$z])[1] . " WHERE {$field[$i]}='$value'";
+                        $query = "SELECT * FROM " . explode(':', $rule[$z])[1] . " WHERE {$field[$i]}='$value'";
                         $row = $db->row($query);
 
                         if ($row == true) {
