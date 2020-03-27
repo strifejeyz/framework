@@ -90,7 +90,7 @@ abstract class View
         $___ = file_get_contents($filename);
         $___ = preg_replace('/\@extend\((.*)\)/', '<?php View::extend($1) ?>', $___);
         $___ = preg_replace('/\@stop\((.*)\)/', '<?php View::stop($1) ?>', $___);
-        $___ = preg_replace('/\@parse\((.*)\)/', '<?php View::parse($1) ?>', $___);
+        $___ = preg_replace('/\@render\((.*)\)/', '<?php View::render($1) ?>', $___);
         $___ = preg_replace('/\@get\((.*)\)/', '<?php View::get($1) ?>', $___);
         $___ = preg_replace('/\@import\((.*)\)/', '<?php use $1 ?>', $___);
         $___ = preg_replace('/\{\{(.*)\}\}$/', '<?php echo htmlentities($1) ?>', $___);
