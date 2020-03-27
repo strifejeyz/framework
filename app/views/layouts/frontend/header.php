@@ -9,41 +9,7 @@
     <meta name="author" content="{{@$author}}">
     <meta name="keywords" content="{{@$keywords}}">
     <meta name="description" content="{{@$description}}">
-    <link href="https://bootswatch.com/3/slate/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed&display=swap" rel="stylesheet">
-    <style type="text/css">
-        body {
-            font-family: 'Barlow Condensed';
-            background: #f9f9f9;
-            text-align: center;
-            font-size: 18px;
-        }
-
-        img {
-            margin-top: 15%;
-        }
-
-        .title {
-            text-align: center;
-            color: rgba(48, 48, 48, 0.84);
-            font-size: 24px;
-            margin: 0
-        }
-
-        .sub {
-            margin: 0;
-            font-size: 15px;
-            color: #787878;
-            font-style: italic;
-        }
-
-        div {
-            font-size: 13px;
-            position: fixed;
-            bottom: 5px;
-            width: 100%;
-            color: #666666;
-        }
-    </style>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Barlow+Condensed&display=swap">
 </head>
 <body>
