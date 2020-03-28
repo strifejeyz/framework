@@ -383,16 +383,19 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function backup()
     {
-        $filename = '.' . storage_path() . 'backups/' . static::$table . ".json";
-        $file = new FileHandler($filename, 'w+');
+        $filename = storage_path() . 'backups/' . static::$table . ".json";
 
         if (!empty(self::$result)):
             $data = json_encode(self::$result);
         else:
-            $data = json_encode(self::get());
+            if (!empty(self::get())) {
+                $data = json_encode(self::get());
+            } else {
+                $data = null;
+            }
         endif;
 
-        if ($file->write($data . "\n", 'w')):
+        if (!is_null($data) && file_put_contents($filename, $data)):
             return true;
         else:
             return (false);
@@ -407,14 +410,14 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function restore()
     {
-        $filename = '.' . storage_path() . 'backups/' . static::$table . ".json";
+        $filename = storage_path() . 'backups/' . static::$table . ".json";
         $result = null;
 
         if (file_exists($filename)):
             $file = new FileHandler($filename, 'r');
 
             foreach (json_decode($file->read()) as $data):
-                if (self::insert((array)$data)):
+                if (!empty($data) && self::insert((array)$data)):
                     $result = true;
                 else:
                     $result = false;
