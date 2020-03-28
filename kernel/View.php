@@ -39,19 +39,30 @@ abstract class View
      *
      * @param $template
      * @param $_
+     * @param $layout_var
      * @return view
      */
-    public static function render($template, $_ = null)
+    public static function render($template, $_ = null, $layout_var = null)
     {
         if (!is_null($_)) {
             extract($_);
-            self::$variables = $_;
+            if (is_null(self::$variables)) {
+                self::$variables = $_;
+            } else {
+                self::$variables[] = $_;
+            }
         }
 
+        if (!is_null($layout_var)) {
+            extract($layout_var);
+        }
+
+        $root_dir = str_replace('\\', '/', str_replace('\kernel', '', __DIR__));
+
         if (preg_match('/(.*)(html|php|htm)/i', $template)) {
-            $filename = views_path() . $template;
+            $filename = $root_dir . VIEWS_PATH . $template;
         } else {
-            $filename = views_path() . ltrim($template, '/') . self::$postfix;
+            $filename = $root_dir . VIEWS_PATH . ltrim($template, '/') . self::$postfix;
         }
 
         $cachedFile = storage_path() . "/cache/" . md5($filename);
@@ -65,7 +76,7 @@ abstract class View
                 return eval(' ?>' . self::evaluate($cachedFile) . '<?php ');
             }
         } else {
-            try  {
+            try {
                 return eval(' ?>' . self::evaluate($filename) . '<?php ');
             } catch (ParseError $e) {
                 print "<b>Parse Error:</b> {$e->getMessage()} in <b>$filename</b> on line <b>{$e->getLine()}</b>";
@@ -122,11 +133,14 @@ abstract class View
      * Extends a view
      *
      * @param $layout
+     * @param $variables = null
      * @return self::render
      */
-    public static function extend($layout)
+    public static function extend($layout, $variables = null)
     {
-        if (is_dir(views_path() . $layout)) {
+        $root_dir = str_replace('\\', '/', str_replace('\kernel', '', __DIR__));
+
+        if (is_dir($root_dir . VIEWS_PATH . $layout)) {
             self::$layout = $layout;
             $filename = trim($layout, '/') . "/header.php";
         } else {
@@ -137,7 +151,7 @@ abstract class View
             }
         }
 
-        return self::render($filename, self::$variables);
+        return self::render($filename, self::$variables, $variables);
     }
 
 
@@ -149,20 +163,23 @@ abstract class View
      */
     public static function stop($footer = null)
     {
+        $root_dir = str_replace('\\', '/', str_replace('\kernel', '', __DIR__));
+        $view_dir = $root_dir . VIEWS_PATH;
+
         if (is_null($footer) && !is_null(self::$layout)) {
-            if (file_exists(views_path() . self::$layout . "/footer.php")) {
+            if (file_exists($view_dir . self::$layout . "/footer.php")) {
                 $footer = self::$layout . "/footer.php";
             } else {
-                trigger_error(views_path() . " does not contain any footer file.", E_USER_WARNING);
+                trigger_error($view_dir . " does not contain any footer file.", E_USER_WARNING);
             }
         } else {
-            if (is_file(views_path() . $footer)) {
+            if (is_file($view_dir . $footer)) {
                 $footer = trim($footer, '/');
-            } elseif (is_dir(views_path() . $footer)) {
-                if (file_exists(views_path() . $footer . "/footer.php")) {
+            } elseif (is_dir($view_dir . $footer)) {
+                if (file_exists($view_dir . $footer . "/footer.php")) {
                     $footer = $footer . "/footer.php";
                 } else {
-                    trigger_error(views_path() . " does not contain any footer file.", E_USER_WARNING);
+                    trigger_error($view_dir . " does not contain any footer file.", E_USER_WARNING);
                 }
             }
         }
