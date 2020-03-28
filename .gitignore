@@ -2,3 +2,4 @@
 .cmd
 .sh
 .idea/
+storage/sessions/**
