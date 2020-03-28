@@ -161,7 +161,7 @@ abstract class View
      * @param $footer
      * @return self::render
      */
-    public static function stop($footer = null)
+    public static function stop($footer = null, $variables = null)
     {
         $root_dir = str_replace('\\', '/', str_replace('\kernel', '', __DIR__));
         $view_dir = $root_dir . VIEWS_PATH;
@@ -184,7 +184,7 @@ abstract class View
             }
         }
 
-        return self::render($footer, self::$variables);
+        return self::render($footer, self::$variables, $variables);
     }
 
 
