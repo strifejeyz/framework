@@ -1,4 +1,4 @@
-@extend('layouts/frontend',['title' => 'Welcome'])
+@extend('layouts/backend',['title' => 'Welcome'])
 
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
