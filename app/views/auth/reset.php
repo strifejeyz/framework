@@ -1,4 +1,4 @@
-@extend('layouts/frontend', ['title' => 'Password Recovery'])
+@extend('layouts/auth', ['title' => 'Password Recovery'])
 
 <div class="container">
     <div class="col-md-4"></div>

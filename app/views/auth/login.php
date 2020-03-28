@@ -1,4 +1,4 @@
-@extend('layouts/frontend', ['title' => 'Sign In'])
+@extend('layouts/auth', ['title' => 'Sign In'])
 
 <br><br><br>
 
