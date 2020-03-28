@@ -101,17 +101,17 @@ abstract class View
         $___ = preg_replace('/\!\}/', ' ?>', $___);
         $___ = preg_replace('/\\\{\\\{/', '{{', $___);
         $___ = preg_replace('/\\\}\\\}/', '}}', $___);
-        $___ = preg_replace('/\{if (.*)\}/', '<?php if ($1) : ?>', $___);
-        $___ = preg_replace('/\{elseif (.*)\}/', '<?php elseif ($1) : ?>', $___);
+        $___ = preg_replace('/\{if(.*)\}/', '<?php if ($1) : ?>', $___);
+        $___ = preg_replace('/\{elseif(.*)\}/', '<?php elseif ($1) : ?>', $___);
         $___ = preg_replace('/\{else\}/', '<?php else : ?>', $___);
         $___ = preg_replace('/\{endif\}/', '<?php endif ?>', $___);
-        $___ = preg_replace('/\{for (.*)\}/', '<?php for ($1) : ?>', $___);
+        $___ = preg_replace('/\{for(.*)\}/', '<?php for ($1) : ?>', $___);
         $___ = preg_replace('/\{endfor\}/', '<?php endfor ?>', $___);
         $___ = preg_replace('/\{do\}/', '<?php do { ?>', $___);
-        $___ = preg_replace('/\{enddo (.*)\}/', '<?php } while($1) ?>', $___);
-        $___ = preg_replace('/\{while (.*)\}/', '<?php while ($1) : ?>', $___);
+        $___ = preg_replace('/\{enddo(.*)\}/', '<?php } while($1) ?>', $___);
+        $___ = preg_replace('/\{while(.*)\}/', '<?php while ($1) : ?>', $___);
         $___ = preg_replace('/\{endwhile\}/', '<?php endwhile ?>', $___);
-        $___ = preg_replace('/\{foreach (.*)\}/', '<?php foreach ($1) : ?>', $___);
+        $___ = preg_replace('/\{foreach(.*)\}/', '<?php foreach ($1) : ?>', $___);
         $___ = preg_replace('/\{endforeach\}/', '<?php endforeach ?>', $___);
 
         return ($___);
