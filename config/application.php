@@ -1,8 +1,8 @@
 <?php
 
-/**
- * This is your project's main configuration file.
- */
+/**================================================*
+ * This is your project's main configuration file. *
+ *=================================================*/
 
 
 /**
@@ -86,10 +86,3 @@ define('STORAGE_PATH', '/storage/');
 define('ASSETS_PATH', '/assets/');
 define('VENDOR_PATH', '/vendor/');
 define('APP_PATH', '/app/');
-
-
-
-
-
-
-
