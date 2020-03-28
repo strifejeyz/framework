@@ -107,7 +107,7 @@ EOF;
                 $this->clear('backups');
                 $this->clear('logs');
                 $this->clear('sessions');
-                return die("Backups/Logs/Sessions were cleared.\n");
+                return die("backups,logs,sessions,cache were cleared.\n");
                 break;
 
             case 'clear:sessions':
