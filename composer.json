@@ -7,9 +7,15 @@
     }
   ],
   "description": "A Fast and Lightweight PHP MVC Framework.",
-  "keywords": ["framework","strife","mvc","rad"],
+  "keywords": [
+    "framework",
+    "strife",
+    "MVC",
+    "RAD",
+    "OOP"
+  ],
   "license": "MIT",
-  "version": "3.0.1",
+  "version": "1.4.2",
   "type": "project",
   "minimum-stability": "stable",
   "require": {
@@ -27,7 +33,7 @@
     ],
     "files": [
       "kernel/helpers.php",
-      "app/routes.php",
+      "config/routes.php",
       "config/database.php",
       "config/application.php"
     ]
