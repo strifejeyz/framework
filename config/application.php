@@ -22,12 +22,12 @@ define('DEFAULT_CONTROLLER', 'HomeController');
 /**
  * For the purpose of redirects
  **/
-define('BASE_URL', 'http://strife');
+define('BASE_URL', 'http://framework/');
 
 
 /**
- * Here, you can set the value
- * to automatically cache your pages
+ * Here, you can set the value to
+ * automatically cache your pages
  * or to turn it off.
  **/
 define('CACHED_VIEWS', FALSE);
