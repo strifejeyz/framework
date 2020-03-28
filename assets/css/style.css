@@ -6,16 +6,25 @@ body {
     font-size: 16px;
 }
 
+img {
+    transition: .4s;
+    transform: scale(0.8);
+}
+
+img:hover {
+    transform: scale(1);
+}
+
 .title {
-    font-size: 35px;
+    font-size: 30px;
     color: #5a5a5a;
     padding: 0;
     margin: 0;
-    text-shadow: -2px 2px 2px #d6d6d6
+    text-shadow: -2px 2px 2px #d6d6d6;
 }
 
 .sub-title {
-    font-size: 20px;
+    font-size: 18px;
     margin: 0;
     color: #575757;
 }
@@ -42,48 +51,49 @@ body {
     width: 80px;
     margin-bottom: 5px;
     color: #ffffff;
+    transition: .3s;
     box-shadow: 0 3px 6px #aaaaaa;
 }
 
 .list li a.git {
     background: #00a2e9;
-
+    border-bottom: 3px solid #008ac7;
 }
 
 .list li a.site {
     background: #22c892;
+    border-bottom: 3px solid #14a777;
 }
 
 .list li a.docs {
     background: #d5567e;
+    border-bottom: 3px solid #bb2f5b;
 }
 
-.list li a:hover {
-    color: #000;
-    background: white;
-    transition: .3s;
+.list li a.git:hover {
+    background: #008ac7;
 }
 
-.footer {
-    position: fixed;
-    bottom: 0;
-    text-align: center;
-    width: 100%;
-    color: #888888;
-    margin-bottom: 5px;
+.list li a.site:hover {
+    background: #14a777;
 }
+
+.list li a.docs:hover {
+    background: #bb2f5b;
+}
+
 
 .panel {
     background: #fdfdfd;
     width: 60%;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 5px;
+    border-radius: 7px;
     box-shadow: -5px 8px 5px #cbcbcb;
-    background: -moz-linear-gradient(45deg,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
-    background: -webkit-linear-gradient(45deg,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
-    background: linear-gradient(45deg,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
+    background: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    background: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=1);
 }
 
 .panel .panel-header {
@@ -93,14 +103,17 @@ body {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     background: #4c4c4c;
-    background: -moz-linear-gradient(-45deg,  #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%);
-    background: -webkit-linear-gradient(-45deg,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%);
-    background: linear-gradient(135deg,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=1 );
+    background: -moz-linear-gradient(-45deg, #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%);
+    background: -webkit-linear-gradient(-45deg, #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%);
+    background: linear-gradient(135deg, #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4c4c4c', endColorstr='#131313', GradientType=1);
 }
 
 .panel .panel-content {
     padding: 50px 0;
+    box-shadow: inset 5px 0 30px #e6e6e6;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
 }
 
 .panel .panel-header ul {
@@ -129,6 +142,17 @@ body {
 .panel .panel-header ul li.green {
     background: #3ebd24;
 }
+
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    color: #888888;
+    margin-bottom: 5px;
+}
+
 
 @media (max-width: 1920px) {
     .panel {
