@@ -12,6 +12,7 @@ class HomeController
     public function index()
     {
         $title = "Home Page";
+
         return View::render('frontend/index', compact('title'));
     }
 }
