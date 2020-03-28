@@ -9,7 +9,7 @@
         </ul>
     </div>
     <div class="panel-content">
-        <img src="/assets/img/strife.png" width="130">
+        <img src="assets/img/strife.png" width="130">
         <p class="title">Strife Framework</p>
         <p class="sub-title">A Fast and Lightweight PHP MVC Framework.</p>
 
