@@ -76,13 +76,13 @@ session_save_path('./storage/sessions');
  **/
 
 define('CONTROLLERS_PATH', '/app/controllers/');
-define('MIGRATIONS_PATH', '/app/migrations/');
-define('REQUESTS_PATH', '/app/requests/');
-define('SEEDERS_PATH', '/app/seeders/');
-define('MODELS_PATH', '/app/models/');
-define('CONFIG_PATH', '/app/config/');
-define('VIEWS_PATH', '/app/views/');
-define('STORAGE_PATH', '/storage/');
-define('ASSETS_PATH', '/assets/');
-define('VENDOR_PATH', '/vendor/');
-define('APP_PATH', '/app/');
+define('MIGRATIONS_PATH',  '/app/migrations/');
+define('REQUESTS_PATH',    '/app/requests/');
+define('SEEDERS_PATH',     '/app/seeders/');
+define('MODELS_PATH',      '/app/models/');
+define('CONFIG_PATH',      '/app/config/');
+define('VIEWS_PATH',       '/app/views/');
+define('STORAGE_PATH',     '/storage/');
+define('ASSETS_PATH',      '/assets/');
+define('VENDOR_PATH',      '/vendor/');
+define('APP_PATH',         '/app/');
