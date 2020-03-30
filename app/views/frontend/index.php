@@ -15,8 +15,8 @@
 
         <ul class="list">
             <li><a class="git" href="https://github.com/strifejeyz/framework">Github</a></li>
-            <li><a class="site" href="http://strifeframework.ml">Official Site</a></li>
-            <li><a class="docs" href="http://strifeframework.ml/docs">Documentation</a></li>
+            <li><a class="site" href="http://strifeframework.cf">Official Site</a></li>
+            <li><a class="docs" href="http://docs.strifeframework.cf">Documentation</a></li>
         </ul>
     </div>
 </div>
