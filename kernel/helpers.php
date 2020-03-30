@@ -1,15 +1,19 @@
 <?php
 
-/**
- * Helper Functions
- *
+/**=============================================*
+ *              Helper Functions                *
+ *===============================================
  * set of useful functions for performing
  * simple tasks.
  **/
 
+
+
+
+
 if (!function_exists('dump')) {
     /**
-     * Spit and Stop
+     * Data dump
      *
      * @param $variable
      * @param bool $die
@@ -27,7 +31,7 @@ if (!function_exists('dump')) {
 
 if (!function_exists('to_megabytes')) {
     /**
-     * Spit and Stop
+     * Convert bytes to megabytes
      *
      * @param $bytes
      * @param int $structure
