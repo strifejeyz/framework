@@ -57,7 +57,9 @@ abstract class View
             extract($layout_var);
         }
 
-        $root_dir = str_replace('\\', '/', str_replace('\kernel', '', __DIR__));
+        $root_dir = str_replace('\\', '/', __DIR__);
+        $root_dir = str_replace('kernel', '', $root_dir);
+        $root_dir = rtrim($root_dir, '/');
 
         if (preg_match('/(.*)(html|php|htm)/i', $template)) {
             $filename = $root_dir . VIEWS_PATH . $template;
@@ -112,6 +114,8 @@ abstract class View
         $___ = preg_replace('/\!\}/', ' ?>', $___);
         $___ = preg_replace('/\\\{\\\{/', '{{', $___);
         $___ = preg_replace('/\\\}\\\}/', '}}', $___);
+        $___ = preg_replace('/\\\{\\\!/', '{!', $___);
+        $___ = preg_replace('/\\\!\\\}/', '!}', $___);
         $___ = preg_replace('/\{if(.*)\}/', '<?php if ($1) : ?>', $___);
         $___ = preg_replace('/\{elseif(.*)\}/', '<?php elseif ($1) : ?>', $___);
         $___ = preg_replace('/\{else\}/', '<?php else : ?>', $___);
@@ -138,7 +142,9 @@ abstract class View
      */
     public static function extend($layout, $variables = null)
     {
-        $root_dir = str_replace('\\', '/', str_replace('\kernel', '', __DIR__));
+        $root_dir = str_replace('\\', '/', __DIR__);
+        $root_dir = str_replace('kernel', '', $root_dir);
+        $root_dir = rtrim($root_dir, '/');
 
         if (is_dir($root_dir . VIEWS_PATH . $layout)) {
             self::$layout = $layout;
@@ -159,11 +165,15 @@ abstract class View
      * Require a footer file.
      *
      * @param $footer
+     * @param null $variables
      * @return self::render
      */
     public static function stop($footer = null, $variables = null)
     {
-        $root_dir = str_replace('\\', '/', str_replace('\kernel', '', __DIR__));
+        $root_dir = str_replace('\\', '/', __DIR__);
+        $root_dir = str_replace('kernel', '', $root_dir);
+        $root_dir = rtrim($root_dir, '/');
+
         $view_dir = $root_dir . VIEWS_PATH;
 
         if (is_null($footer) && !is_null(self::$layout)) {
@@ -197,10 +207,14 @@ abstract class View
      */
     public static function get($template)
     {
+        $root_dir = str_replace('\\', '/', __DIR__);
+        $root_dir = str_replace('kernel', '', $root_dir);
+        $root_dir = rtrim($root_dir, '/');
+
         if (preg_match('/(.*)(html|php|htm)/i', $template)) {
-            $filename = views_path() . $template;
+            $filename = $root_dir . VIEWS_PATH . $template;
         } else {
-            $filename = views_path() . ltrim($template, '/') . self::$postfix;
+            $filename = $root_dir . VIEWS_PATH . ltrim($template, '/') . self::$postfix;
         }
 
         return include("$filename");
