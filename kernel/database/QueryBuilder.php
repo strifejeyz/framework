@@ -66,7 +66,7 @@ interface QueryBuilderInterface
 
     public static function insertExcept($valuePairs = [], $exception = []);
 
-    public static function update($id, $valuePairs = []);
+    public static function update($valuePairs = [], $id);
 
     public static function delete();
 
@@ -786,8 +786,9 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
 
 
     /**
-     * Selects a row with value that is equal to
-     * second argument.
+     * Selects a row where the value is in the given array
+     * for second argument.
+     * translation: where id = 1 or id = 2 etc.
      *
      * @param $column
      * @param array $values
@@ -1259,8 +1260,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
 
 
     /**
-     * Return that last fed id
-     * from database.
+     * Return that last fed id from database.
      * NOTE: this can only be fetched right after the active query
      * is being carried out.
      *
