@@ -45,4 +45,4 @@
     
     
 ### <a href="http://strifeframework.cf">Visit Official Website</a>
-<a href="http://docs.strifeframework.cf">Documentation</a> | <a href="http://docs.strifeframework.cf">API Reference</a>  
+<a href="http://docs.strifeframework.cf">Documentation</a> | <a href="http://api.strifeframework.cf">API Reference</a>  
