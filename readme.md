@@ -44,5 +44,5 @@
     - Includes bunch of helper functions at your fingertips.
     
     
-### <a href="http://strifeframework.ml">Visit Official Website</a>
-<a href="http://strifeframework.ml/framework">Documentation</a>
+### <a href="http://strifeframework.cf">Visit Official Website</a>
+<a href="http://docs.strifeframework.cf">Documentation</a> | <a href="http://docs.strifeframework.cf">API Reference</a>  
