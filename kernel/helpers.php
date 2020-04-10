@@ -702,7 +702,7 @@ if (!function_exists('assets_path')) {
      */
     function assets_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . ASSETS_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(ASSETS_PATH, '/');
     }
 }
 
@@ -712,7 +712,7 @@ if (!function_exists('app_path')) {
      */
     function app_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . APP_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(APP_PATH, '/');
     }
 }
 
@@ -723,7 +723,7 @@ if (!function_exists('config_path')) {
      */
     function config_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . CONFIG_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(CONFIG_PATH, '/');
     }
 }
 
@@ -745,7 +745,7 @@ if (!function_exists('storage_path')) {
      */
     function storage_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . STORAGE_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(STORAGE_PATH, '/');
     }
 }
 
@@ -756,7 +756,7 @@ if (!function_exists('vendor_path')) {
      */
     function vendor_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . VENDOR_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(VENDOR_PATH, '/');
     }
 }
 
@@ -767,7 +767,7 @@ if (!function_exists('views_path')) {
      */
     function views_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . VIEWS_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(VIEWS_PATH, '/');
     }
 }
 
@@ -778,7 +778,7 @@ if (!function_exists('controllers_path')) {
      */
     function controllers_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . CONTROLLERS_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(CONTROLLERS_PATH, '/');
     }
 }
 
@@ -789,7 +789,7 @@ if (!function_exists('requests_path')) {
      */
     function requests_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . REQUESTS_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(REQUESTS_PATH, '/');
     }
 }
 
@@ -800,7 +800,7 @@ if (!function_exists('seeders_path')) {
      */
     function seeders_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . SEEDERS_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(SEEDERS_PATH, '/');
     }
 }
 
@@ -811,7 +811,7 @@ if (!function_exists('models_path')) {
      */
     function models_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . MODELS_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(MODELS_PATH, '/');
     }
 }
 
@@ -822,7 +822,7 @@ if (!function_exists('migrations_path')) {
      */
     function migrations_path()
     {
-        return $_SERVER['DOCUMENT_ROOT'] . MIGRATIONS_PATH;
+        return $_SERVER['DOCUMENT_ROOT'] . ltrim(MIGRATIONS_PATH, '/');
     }
 }
 
