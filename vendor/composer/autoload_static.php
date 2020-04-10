@@ -8,7 +8,7 @@ class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
 {
     public static $files = array (
         '3eac8a9ce007dee7165fbccb8e4c63f7' => __DIR__ . '/../..' . '/kernel/helpers.php',
-        'b0c103fab895ab6e4e8d3d75fb043e57' => __DIR__ . '/../..' . '/config/routes.php',
+        '555082641dfed149832ebe1b57ef25e3' => __DIR__ . '/../..' . '/app/routes.php',
         '63fa2066443e0bea4c25c52cd29fb025' => __DIR__ . '/../..' . '/config/database.php',
         '7ed5f8beb43243ac61b542c40bd39cda' => __DIR__ . '/../..' . '/config/application.php',
     );
