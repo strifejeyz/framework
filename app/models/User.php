@@ -9,14 +9,11 @@ use Kernel\Database\QueryBuilder as Model;
  */
 class User extends Model
 {
-    /**
-     * table name that will be used by this model
-     *
-     * you may also specify an Alias
+    /**========================================
+     * You may also specify an alias
      * e.g. protected static $alias = "U";
-     *
-     * or specify a primary key like so
-     * protected static $primary_key = "U";
+     * or specify a primary key like so:
+     * protected static $primary_key = "user_id";
      *
      * @var string
      */
