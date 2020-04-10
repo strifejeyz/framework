@@ -33,7 +33,7 @@
     ],
     "files": [
       "kernel/helpers.php",
-      "config/routes.php",
+      "app/routes.php",
       "config/database.php",
       "config/application.php"
     ]
