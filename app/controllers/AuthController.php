@@ -59,7 +59,7 @@ class AuthController
                     if (intended()) {
                         return redirect(intended());
                     } else {
-                        return redirect('/welcome');
+                        return redirect(route('welcome'));
                     }
                 }
             }
