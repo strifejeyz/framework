@@ -1,9 +1,10 @@
 body {
     font-family: 'Barlow Condensed', sans-serif;
-    background: #e4e4e4;
+    background: #0e0e0e;
     text-align: center;
     margin-top: 15%;
     font-size: 16px;
+
 }
 
 img {
@@ -17,16 +18,15 @@ img:hover {
 
 .title {
     font-size: 30px;
-    color: #5a5a5a;
+    color: #05a26d;
     padding: 0;
     margin: 0;
-    text-shadow: -2px 2px 2px #d6d6d6;
 }
 
 .sub-title {
     font-size: 18px;
     margin: 0;
-    color: #575757;
+    color: #808080;
 }
 
 .list {
@@ -45,55 +45,60 @@ img:hover {
     background: #ffffff;
     text-decoration: none;
     display: inline-table;
-    border-radius: 3px;
+    border-radius: 15px;
     font-size: 14px;
     color: #ffffff;
     width: 80px;
     margin-bottom: 5px;
     color: #ffffff;
     transition: .3s;
-    box-shadow: 0 3px 6px #aaaaaa;
 }
 
 .list li a.git {
-    background: #00a2e9;
-    border-bottom: 3px solid #008ac7;
+    background: none;
+    border: 1px solid #007fb7;
+    color: #00b1ff
 }
 
 .list li a.site {
-    background: #22c892;
-    border-bottom: 3px solid #14a777;
+    background: none;
+    border: 1px solid #9400ff;
+    color: #9400ff
 }
 
 .list li a.docs {
-    background: #d5567e;
-    border-bottom: 3px solid #bb2f5b;
+    background: none;
+    border: 1px solid #ff0050;
+    color: #ff0050
 }
 
 .list li a.git:hover {
-    background: #008ac7;
+    background: #00b1ff;
+    color: #ffffff
 }
 
 .list li a.site:hover {
-    background: #14a777;
+    background: #9400ff;
+    color: #ffffff
 }
 
 .list li a.docs:hover {
-    background: #bb2f5b;
+    background: #ff0050;
+    color: #ffffff
 }
 
 
 .panel {
-    background: #fdfdfd;
+    background: #000000;
     width: 60%;
     margin-left: auto;
     margin-right: auto;
     border-radius: 7px;
-    box-shadow: -5px 8px 5px #cbcbcb;
-    background: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-    background: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-    background: linear-gradient(45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=1);
+    background: #141212;
+    background: -moz-linear-gradient(top,  #141212 0%, #000000 100%);
+    background: -webkit-linear-gradient(top,  #141212 0%,#000000 100%);
+    background: linear-gradient(to bottom,  #141212 0%,#000000 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#141212', endColorstr='#000000',GradientType=0 );
 }
 
 .panel .panel-header {
@@ -111,7 +116,6 @@ img:hover {
 
 .panel .panel-content {
     padding: 50px 0;
-    box-shadow: inset 5px 0 30px #e6e6e6;
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
 }
