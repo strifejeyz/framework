@@ -2,9 +2,10 @@
 
 namespace Kernel;
 
+use Exception;
 use DirectoryIterator;
-use Kernel\Security\Encryption;
 use Kernel\Security\Hash;
+use Kernel\Security\Encryption;
 
 /**
  * Class YamatoCLI
@@ -275,19 +276,25 @@ EOF;
      */
     private function clear($folder)
     {
-        $container = '.' . storage_path() . $folder;
-        $handle = new DirectoryIterator($container);
+        $container = storage_path() . $folder;
 
-        foreach ($handle as $file):
-            if ($file->getFilename() == '.' || $file->getFilename() == '..' || $file->getFilename() == '.htaccess'):
-                continue;
-            endif;
-            if (is_file("{$container}/{$file->getFilename()}")):
-                unlink("{$container}/{$file->getFilename()}");
-            endif;
-        endforeach;
+        try {
+            $handle = new DirectoryIterator($container);
 
-        return true;
+            foreach ($handle as $file):
+                if ($file->getFilename() == '.' || $file->getFilename() == '..'):
+                    continue;
+                endif;
+                if (is_file("{$container}/{$file->getFilename()}")):
+                    unlink("{$container}/{$file->getFilename()}");
+                endif;
+            endforeach;
+
+            return true;
+        }
+        catch (Exception $e) {
+            return die($e->getMessage());
+        }
     }
 
 
@@ -304,12 +311,17 @@ EOF;
      */
     private function createModel($name, $table)
     {
-        $container = '.' . models_path();
+        $container = models_path();
         $data = <<<EOF
 <?php namespace App\Models;
 
 use Kernel\Database\QueryBuilder as Model;
 
+/**
+ * Class $name
+ *
+ * @package App\Models
+ */
 class {$name} extends Model
 {
     protected static \$table = "{$table}";
@@ -349,14 +361,14 @@ EOF;
      */
     private function createController($name, $option = "false")
     {
-        $container = '.' . controllers_path();
+        $container = controllers_path();
         $name = preg_replace('/controller/i', 'Controller', ucfirst($name));
         $append = <<<EOF
 
     /**
      * Controller Index
      *
-     * @return view
+     * @return mixed
      **/
     public function index()
     {
@@ -390,7 +402,7 @@ EOF;
     /**
      * Create a resource
      *
-     * @return view
+     * @return mixed
      * */
     public function create()
     {
@@ -401,7 +413,7 @@ EOF;
     /**
      * Store the resource
      *
-     * @return view
+     * @return mixed
      * */
     public function store()
     {
@@ -413,7 +425,7 @@ EOF;
      * Edit a resource
      *
      * @param \$id
-     * @return view
+     * @return mixed
      */
     public function edit(\$id)
     {
@@ -486,7 +498,7 @@ EOF;
      */
     private function createMigration($name, $table)
     {
-        $container = '.' . migrations_path();
+        $container = migrations_path();
         $name = preg_replace('/migration/i', 'Migration', ucfirst($name));
         $data = <<<EOF
 <?php namespace App\Migrations;
@@ -514,7 +526,7 @@ class {$name} extends Migration
     /**
      * Install the migration
      *
-     * @return void
+     * @return boolean
      */
     public function up()
     {
@@ -525,7 +537,7 @@ class {$name} extends Migration
     /**
      * Drop the table
      *
-     * @return void
+     * @return boolean
      */
     public function down()
     {
@@ -560,21 +572,24 @@ EOF;
      */
     private function createRequest($name)
     {
-        $container = '.' . requests_path();
+        $container = requests_path();
         $name = preg_replace('/request/i', 'Request', ucfirst($name));
         $data = <<<EOF
 <?php namespace App\Requests;
 
 use Kernel\Requests\HTTPRequest;
 
+/**
+ * Class $name
+ *
+ * @package App\Requests
+ */
 class {$name} extends HTTPRequest
 {
-
     /**
      * Rules to be followed by request
      */
     protected \$rules = [];
-
 }
 EOF;
 
@@ -596,10 +611,10 @@ EOF;
      */
     private function createSeeder($name, $model)
     {
-        if (!file_exists('.' . models_path() . "$model.php")):
+        if (!file_exists(models_path() . "$model.php")):
             return die("Model '$model' does not exist\n");
         endif;
-        $container = '.' . seeders_path();
+        $container = seeders_path();
         $name = preg_replace('/seeder/i', 'Seeder', ucfirst($name));
         $model = ucfirst($model);
         $data = <<<EOF
@@ -648,19 +663,25 @@ EOF;
      */
     private function migrate($action)
     {
-        $directory = "." . migrations_path();
-        $container = new DirectoryIterator($directory);
-        $message = ($action == 'down') ? "database rolled back.\n" : "database successfully migrated.\n";
+        $directory = migrations_path();
 
-        foreach ($container as $handle) {
-            if (is_file("{$directory}/{$handle->getFilename()}") && $handle->getFilename() !== '.htaccess') {
-                $migration = self::FixNamespace(MIGRATIONS_PATH, $handle->getBasename('.php'));
-                $migration = new $migration();
-                $migration->$action();
+        try {
+            $container = new DirectoryIterator($directory);
+            $message = ($action == 'down') ? "database rolled back.\n" : "database successfully migrated.\n";
+
+            foreach ($container as $handle) {
+                if (is_file("{$directory}/{$handle->getFilename()}") && $handle->getFilename() !== '.htaccess') {
+                    $migration = self::FixNamespace(MIGRATIONS_PATH, $handle->getBasename('.php'));
+                    $migration = new $migration();
+                    $migration->$action();
+                }
             }
-        }
 
-        return die($message);
+            return die($message);
+        }
+        catch (Exception $e) {
+            return die($e->getMessage());
+        }
     }
 
 
@@ -671,20 +692,26 @@ EOF;
      */
     private function backup()
     {
-        $container = '.' . models_path();
-        $iterator = new DirectoryIterator($container);
+        $container = models_path();
 
-        foreach ($iterator as $handle):
-            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess'):
-                continue;
-            endif;
+        try {
+            $iterator = new DirectoryIterator($container);
 
-            $model = self::FixNamespace(MODELS_PATH, $handle->getBasename('.php'));
-            $model = new $model();
-            $model->backup();
-        endforeach;
+            foreach ($iterator as $handle):
+                if (!is_file($container . $handle->getFilename())):
+                    continue;
+                endif;
 
-        return die("Database tables backed up.\n");
+                $model = self::FixNamespace(MODELS_PATH, $handle->getBasename('.php'));
+                $model = new $model();
+                $model->backup();
+            endforeach;
+
+            return die("Database tables backed up.\n");
+        }
+        catch (Exception $e) {
+            return die($e->getMessage());
+        }
     }
 
 
@@ -695,19 +722,25 @@ EOF;
      */
     private function restore()
     {
-        $container = '.' . models_path();
-        $iterator = new DirectoryIterator($container);
+        $container = models_path();
 
-        foreach ($iterator as $handle):
-            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess'):
-                continue;
-            endif;
-            $model = self::FixNamespace(MODELS_PATH, $handle->getBasename('.php'));
-            $model = new $model();
-            $model->restore();
-        endforeach;
+        try {
+            $iterator = new DirectoryIterator($container);
 
-        return die("Database restored.\n");
+            foreach ($iterator as $handle):
+                if (!is_file($container . $handle->getFilename())):
+                    continue;
+                endif;
+                $model = self::FixNamespace(MODELS_PATH, $handle->getBasename('.php'));
+                $model = new $model();
+                $model->restore();
+            endforeach;
+
+            return die("Database restored.\n");
+        }
+        catch (Exception $e) {
+            return die ($e->getMessage());
+        }
     }
 
 
@@ -718,19 +751,25 @@ EOF;
      */
     private function seed()
     {
-        $container = '.' . seeders_path();
-        $iterator = new DirectoryIterator($container);
+        $container = seeders_path();
 
-        foreach ($iterator as $handle):
-            if (!is_file($container . $handle->getFilename()) || $handle->getFilename() == '.htaccess'):
-                continue;
-            endif;
+        try {
+            $iterator = new DirectoryIterator($container);
 
-            $seeder = self::FixNamespace(SEEDERS_PATH, $handle->getBasename('.php'));
-            new $seeder();
-        endforeach;
+            foreach ($iterator as $handle):
+                if (!is_file($container . $handle->getFilename())):
+                    continue;
+                endif;
 
-        return die("Seeding completed.\n");
+                $seeder = self::FixNamespace(SEEDERS_PATH, $handle->getBasename('.php'));
+                new $seeder();
+            endforeach;
+
+            return die("Seeding completed.\n");
+        }
+        catch (Exception $e) {
+            return die($e->getMessage());
+        }
     }
 
 
@@ -743,7 +782,7 @@ EOF;
      */
     private function tableMigration($className, $action)
     {
-        $filePath = '.' . migrations_path() . $className;
+        $filePath = migrations_path() . $className;
 
         if (file_exists($filePath . ".php")):
             $class = self::FixNamespace(MIGRATIONS_PATH, $className);
@@ -771,7 +810,7 @@ EOF;
      */
     private function tableDump($className)
     {
-        $filePath = '.' . migrations_path() . $className;
+        $filePath = migrations_path() . $className;
 
         if (file_exists($filePath . ".php")):
             $class = self::FixNamespace(MIGRATIONS_PATH, $className);
