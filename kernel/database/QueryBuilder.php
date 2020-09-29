@@ -1589,6 +1589,6 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
 
         $table = isset(static::$table) ? static::$table : self::$table;
 
-        return ("{$selection} FROM " . $table . " {$where} {$joins} {$order} {$limit}");
+        return ("{$selection} FROM " . $table . " {$joins} {$where} {$order} {$limit}");
     }
 }
