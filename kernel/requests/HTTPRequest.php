@@ -50,7 +50,7 @@ class HTTPRequest implements HTTPRequestInterface
     /**
      * Storage for request method
      */
-    public $request = null;
+    public $request = [];
 
     /**
      * Storage for field errors
