@@ -92,10 +92,6 @@ interface QueryBuilderInterface
 
     public static function exists();
 
-    public static function lastRow();
-
-    public static function firstRow();
-
     public static function max($field);
 
     public static function min($field);
@@ -180,7 +176,14 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      * Holds result set from find() and first()
      * methods.
      */
-    public $original = array();
+    public $data = array();
+
+
+    /**
+     * Will store query errors
+     */
+    protected static $errors = array();
+
 
 
     /**
@@ -194,7 +197,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
     public function __construct($data = null)
     {
         if (!is_null($data)) {
-            $this->original = $data;
+            $this->data = $data;
             self::$result = $data;
         }
 
@@ -212,7 +215,12 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public function __invoke()
     {
-        return (self::$result);
+        try {
+            return (self::$result);
+        }
+        catch (Error $e){
+            return print $e->getMessage();
+        }
     }
 
 
@@ -320,8 +328,8 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public function __get($property)
     {
-        if (property_exists($this->original, $property)):
-            return $this->original->$property;
+        if (property_exists($this->data, $property)):
+            return $this->data->$property;
         else:
             return (null);
         endif;
@@ -560,12 +568,18 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
             $fields .= ("{$keys[$i]},");
         endfor;
 
-        $params = trim($params, ',');
-        $fields = trim($fields, ',');
-        $query = "INSERT INTO " . static::$table . "({$fields}) VALUES({$params});";
-        $stmt = self::instance()->prepare($query);
-
-        return $stmt->execute($values);
+        try {
+            $params = trim($params, ',');
+            $fields = trim($fields, ',');
+            $query  = "INSERT INTO " . static::$table . "({$fields}) VALUES({$params});";
+            $stmt   = self::instance()->prepare($query);
+            $stmt->execute($values);
+            return $stmt->rowCount() > 0 ? true : false;
+        }
+        catch (PDOException $e) {
+            self::$errors = $e->errorInfo;
+            return false;
+        }
     }
 
 
@@ -603,26 +617,33 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
     public function save()
     {
         try {
-            if (!empty($this->fields)) {
+            if (empty($this->fields)) {
+                return false;
+            } else {
                 if (isset(static::$primary_key)) {
                     $primary_key = static::$primary_key;
                 } else {
                     $primary_key = self::$primary_key;
                 }
-
-                if (self::update($this->fields, $this->original->$primary_key)) {
-                    foreach ($this->fields as $field => $value) {
-                        if (property_exists($this->original, $field)) {
-                            $this->original->$field = self::find($this->original->$primary_key)->pull($field);
+                if (isset($this->data->$primary_key)) {
+                    if (self::update($this->fields, $this->data->$primary_key)) {
+                        foreach ($this->fields as $field => $value) {
+                            if (property_exists($this->data, $field)) {
+                                $this->data->$field = self::find($this->data->$primary_key)->pull($field);
+                            }
                         }
+                        $this->fields = [];
+                        return true;
+                    } else {
+                        return false;
                     }
-                    $this->fields = [];
-                    return true;
-                } else {
+                }
+                else {
+                    self::$errors = array(
+                        'Cannot find a primary key in result set. Make sure to include a Primary Key in your SELECT'
+                    );
                     return false;
                 }
-            } else {
-                return false;
             }
         } catch (PDOException $e) {
             return print $e->getMessage();
@@ -641,6 +662,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
     public static function update($valuePairs = [], $id = null)
     {
         if (empty($valuePairs)) {
+            self::$errors = array("update() requires 'key' and 'value' pairs.");
             return false;
         } else {
             if (isset(static::$primary_key)) {
@@ -651,24 +673,29 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
 
             if (array_key_exists($primary_key, self::$result)) {
                 $id = self::$result->$primary_key;
-            } else {
+            }
+            else {
                 if (is_null($id)) {
-                    return trigger_error("update() requires a primary key for the second argument if result set is null.", E_USER_WARNING);
+                    self::$errors = array("update() requires a primary key as a second argument if result set has no primary key.");
+                    return false;
                 }
             }
 
-            $keys = array_keys($valuePairs);
+            $keys   = array_keys($valuePairs);
             $values = array_values($valuePairs);
+            $table  = empty(self::$table) ? static::$table : self::$table;
             $params = null;
-
-            foreach ($keys as $key) {
-                $params .= ($key . "=?,");
-            }
-
+            foreach ($keys as $key) { $params .= ($key . "=?,"); }
             $params = trim($params, ',');
-            $stmt = self::instance()->prepare("UPDATE " . self::$table . " SET {$params} WHERE {$primary_key}={$id}");
 
-            return $stmt->execute($values);
+            try {
+                $stmt = self::instance()->prepare("UPDATE $table SET {$params} WHERE {$primary_key}={$id}");
+                return $stmt->execute($values);
+            }
+            catch (PDOException $e) {
+                self::$errors = $e->errorInfo;
+                return false;
+            }
         }
     }
 
@@ -693,29 +720,40 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
             $primary_key = self::$primary_key;
         }
 
-        if (is_null($id) && empty(self::$result)) {
-            return trigger_error("delete() requires existing object or a primary key.");
-        } else {
+        if (is_null($id) && empty(self::$result) && empty(self::$query)) {
+            self::$errors = array("delete() requires existing result set or supply a primary key.");
+            return false;
+        }
+        else {
             if (!empty(self::$query)) {
-                self::$query['select'] = 'DELETE';
-                $stmt = self::instance()->prepare(self::parseQuery());
-                $result = $stmt->execute(array_values(self::$values));
-                self::$query = [];
-                self::$values = [];
-                return ($result);
+                try {
+                    self::$query['select'] = 'DELETE';
+                    $stmt = self::instance()->prepare(self::parseQuery());
+                    $stmt->execute(array_values(self::$values));
+                    self::$query   = [];
+                    self::$values  = [];
+                    return $stmt->rowCount() > 0 ? true : false;
+                }
+                catch (PDOException $e) {
+                    self::$errors = $e->errorInfo;
+                    return false;
+                }
             } else {
-                $id = (!is_null($id)) ? $id : self::$result->$primary_key;
+                try {
+                    $id = (!is_null($id)) ? $id : self::$result->$primary_key;
+                    if (isset(self::$result->$primary_key)) {
+                        $id = self::$result->$primary_key;
+                    }
+                    $stmt = self::instance()->prepare("DELETE FROM " . static::$table . " WHERE {$primary_key} = :$primary_key");
+                    $stmt->execute([":$primary_key" => $id]);
+                    return $stmt->rowCount() > 0 ? true : false;
+                }
+                catch (PDOException $e) {
+                    self::$errors = $e->errorInfo;
+                    return false;
+                }
             }
         }
-        if (count(func_get_args()) > 1) {
-            foreach (func_get_args() as $arg) {
-                $stmt = self::instance()->exec("DELETE FROM " . static::$table . " WHERE {$primary_key}={$arg};");
-            }
-        } else {
-            $stmt = self::instance()->exec("DELETE FROM " . static::$table . " WHERE {$primary_key}={$id};");
-        }
-        return ($stmt);
-
     }
 
 
@@ -974,10 +1012,6 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function find($id)
     {
-        if (!is_numeric($id)) {
-            return trigger_error("find(\$id) requires numeric argument, " . gettype($id) . " was given.", E_USER_ERROR);
-        }
-
         self::$table = static::$table;
         self::$primary_key = static::$primary_key;
 
@@ -990,7 +1024,6 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
         $stmt = self::instance()->prepare("SELECT * FROM " . static::$table . " WHERE {$primary_key}=? LIMIT 1");
         $stmt->execute([$id]);
         $result = $stmt->fetch(PDO::FETCH_OBJ);
-
         if ($result) {
             self::$result = $result;
             return new self($result);
@@ -1009,28 +1042,12 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function findOrFail($id)
     {
-        if (!is_numeric($id)) {
+        $result = self::find($id);
+        if (!$result) {
             return page_error(404);
-        } else {
-            self::$table = static::$table;
-            self::$primary_key = static::$primary_key;
-
-            if (isset(static::$primary_key)) {
-                $primary_key = static::$primary_key;
-            } else {
-                $primary_key = self::$primary_key;
-            }
-
-            $stmt = self::instance()->prepare("SELECT * FROM " . static::$table . " WHERE {$primary_key}=? LIMIT 1");
-            $stmt->execute([$id]);
-            $result = $stmt->fetch(PDO::FETCH_OBJ);
-
-            if ($result != false) {
-                self::$result = $result;
-                return new self($result);
-            } else {
-                return page_error(404);
-            }
+        }
+        else {
+            return $result;
         }
     }
 
@@ -1044,37 +1061,38 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function pull($column)
     {
-        try {
+        if (!empty(self::$result)) {
+            $result = self::$result;
+        }
+        else {
             $stmt = self::instance()->prepare(self::parseQuery());
             $stmt->execute(array_values(self::$values));
             self::$values = [];
             self::$query = [];
             $result = $stmt->fetch(PDO::FETCH_OBJ);
+        }
 
-            if (!$result) {
-                return (false);
-            } else {
-                if (count(func_get_args()) > 1) {
-                    $object = new \ArrayObject();
+        if (!$result) {
+            return null;
+        } else {
+            if (count(func_get_args()) > 1) {
+                $object = new \ArrayObject();
 
-                    foreach (func_get_args() as $arg) {
-                        if (property_exists($result, $arg)) {
-                            $object->append($result->$arg);
-                        } else {
-                            continue;
-                        }
-                    }
-                    return ($object);
-                } else {
-                    if (property_exists($result, $column)) {
-                        return ($result->$column);
+                foreach (func_get_args() as $arg) {
+                    if (property_exists($result, $arg)) {
+                        $object->append($result->$arg);
                     } else {
-                        return (null);
+                        continue;
                     }
                 }
+                return ($object);
+            } else {
+                if (property_exists($result, $column)) {
+                    return ($result->$column);
+                } else {
+                    return (null);
+                }
             }
-        } catch (PDOException $e) {
-            return print $e->getMessage();
         }
     }
 
@@ -1090,73 +1108,13 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
         try {
             $stmt = self::instance()->prepare(self::parseQuery());
             $stmt->execute(array_values(self::$values));
-
-            return ($stmt->rowCount() == 0) ? false : true;
+            return ($stmt->rowCount() > 0) ? true : false;
         } catch (PDOException $e) {
-            return print $e->getMessage();
+            self::$errors = $e->errorInfo;
+            return false;
         }
     }
 
-
-    /**
-     * Return that last row on the database
-     *
-     * @return QueryBuilder
-     */
-    public static function lastRow()
-    {
-        try {
-            self::$table = static::$table;
-            if (isset(static::$primary_key)) {
-                $primary_key = static::$primary_key;
-            } else {
-                $primary_key = self::$primary_key;
-            }
-
-            $stmt = self::instance()->prepare("SELECT * FROM " . static::$table . " ORDER BY {$primary_key} DESC LIMIT 1");
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_OBJ);
-
-            if ($result) {
-                return new self($result);
-            } else {
-                return (null);
-            }
-        } catch (PDOException $e) {
-            return print $e->getMessage();
-        }
-    }
-
-
-    /**
-     * Return that first row on the database
-     *
-     * @return mixed
-     */
-    public static function firstRow()
-    {
-        try {
-            self::$table = static::$table;
-            self::$primary_key = static::$primary_key;
-
-            if (isset(static::$primary_key)) {
-                $primary_key = static::$primary_key;
-            } else {
-                $primary_key = self::$primary_key;
-            }
-            $stmt = self::instance()->prepare("SELECT * FROM " . static::$table . " ORDER BY {$primary_key} ASC LIMIT 1");
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_OBJ);
-
-            if ($result) {
-                return new self($result);
-            } else {
-                return (null);
-            }
-        } catch (PDOException $e) {
-            return print $e->getMessage();
-        }
-    }
 
 
     /**
@@ -1337,19 +1295,32 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
             self::$table = static::$table;
             self::$primary_key = static::$primary_key;
             $stmt = self::instance()->prepare(self::parseQuery());
-            $stmt->execute(array_values(self::$values));
-            self::$values = [];
-            self::$query = [];
-            $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-            if ($result) {
-                return new self($result);
-            } else {
-                return (null);
+            try {
+                $stmt->execute(array_values(self::$values));
+                self::$values = [];
+                self::$query = [];
+                $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+                if ($result) {
+                    return new self($result);
+                }
+                else {
+                    return null;
+                }
+            }
+            catch (PDOException $e) {
+                self::$errors = $e->errorInfo;
+                return false;
             }
         } catch (PDOException $e) {
             return print $e->getMessage();
         }
+    }
+
+    public static function errors()
+    {
+        return self::$errors;
     }
 
 
