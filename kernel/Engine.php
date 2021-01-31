@@ -166,13 +166,12 @@ class Engine
                                     return call_user_func_array($route['closure'], $raw_parameters);
                                 }
 
-                                self::$controller = $route['controller'];
-                                self::$method = $route['method'];
-                                self::$parameters = $raw_parameters;
-                                self::$subdirectory = $route['subdirectory'];
-                                self::$namespace = $route['namespace'];
+                                self::$method         = $route['method'];
+                                self::$controller     = $route['controller'];
+                                self::$namespace      = $route['namespace'];
+                                self::$parameters     = $raw_parameters;
+                                self::$subdirectory   = $route['subdirectory'];
                                 self::$request_method = $route['request_method'];
-
                                 return self::dispatch();
                             else:
                                 $match_parameters_to_rules = function ($parameter_types, $raw_parameters) {
@@ -205,11 +204,11 @@ class Engine
                                         return call_user_func_array($route['closure'], $raw_parameters);
                                     endif;
 
-                                    self::$controller = $route['controller'];
-                                    self::$method = $route['method'];
-                                    self::$parameters = $raw_parameters;
-                                    self::$subdirectory = $route['subdirectory'];
-                                    self::$namespace = $route['namespace'];
+                                    self::$controller     = $route['controller'];
+                                    self::$method         = $route['method'];
+                                    self::$parameters     = $raw_parameters;
+                                    self::$subdirectory   = $route['subdirectory'];
+                                    self::$namespace      = $route['namespace'];
                                     self::$request_method = $route['request_method'];
 
                                     return self::dispatch();
