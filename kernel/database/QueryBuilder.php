@@ -671,7 +671,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
                 $primary_key = self::$primary_key;
             }
 
-            if (array_key_exists($primary_key, self::$result)) {
+            if (property_exists(self::$result, $primary_key)) {
                 $id = self::$result->$primary_key;
             }
             else {
