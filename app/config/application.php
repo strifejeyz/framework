@@ -22,7 +22,7 @@ define('DEFAULT_CONTROLLER', 'HomeController');
 /**
  * For the purpose of redirects
  **/
-define('BASE_URL', 'http://framework/');
+define('BASE_URL', 'http://framework.cc/');
 
 
 /**
@@ -37,6 +37,15 @@ define('CACHED_VIEWS', FALSE);
  * Here you can define your default method
  **/
 define('DEFAULT_METHOD', 'index');
+
+
+
+/**
+ * Set whether to display errors or not.
+ * refer to https://www.php.net/manual/en/function.error-reporting.php
+ **/
+define('DISPLAY_ERRORS', 0);
+
 
 
 /**
