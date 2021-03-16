@@ -95,6 +95,8 @@ class Engine
         session_start();
         $originalUrl = self::parseURL();
 
+        error_reporting(DISPLAY_ERRORS);
+
         if (MAINTENANCE_MODE == TRUE):
             return self::error(503);
         endif;

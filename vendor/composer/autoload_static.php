@@ -9,20 +9,35 @@ class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
     public static $files = array (
         '3eac8a9ce007dee7165fbccb8e4c63f7' => __DIR__ . '/../..' . '/kernel/helpers.php',
         '555082641dfed149832ebe1b57ef25e3' => __DIR__ . '/../..' . '/app/routes.php',
-        '63fa2066443e0bea4c25c52cd29fb025' => __DIR__ . '/../..' . '/config/database.php',
-        '7ed5f8beb43243ac61b542c40bd39cda' => __DIR__ . '/../..' . '/config/application.php',
+        '93a2720ba34bc3a28d031a16127b0649' => __DIR__ . '/../..' . '/app/config/database.php',
+        'fb7fa572155ee1eb2edd9170bbd298b2' => __DIR__ . '/../..' . '/app/config/application.php',
+    );
+
+    public static $prefixLengthsPsr4 = array (
+        'P' => 
+        array (
+            'PHPMailer\\PHPMailer\\' => 20,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
     );
 
     public static $classMap = array (
         'App\\Migrations\\TokensTableMigration' => __DIR__ . '/../..' . '/app/migrations/TokensTableMigration.php',
         'App\\Migrations\\UsersTableMigration' => __DIR__ . '/../..' . '/app/migrations/UsersTableMigration.php',
+        'App\\Models\\Accounts' => __DIR__ . '/../..' . '/app/models/Accounts.php',
         'App\\Models\\Tokens' => __DIR__ . '/../..' . '/app/models/Tokens.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/models/User.php',
         'App\\Requests\\LoginRequest' => __DIR__ . '/../..' . '/app/requests/LoginRequest.php',
         'App\\Requests\\ResetPasswordRequest' => __DIR__ . '/../..' . '/app/requests/ResetPasswordRequest.php',
-        'App\\Seeders\\UserSeeder' => __DIR__ . '/../..' . '/app/seeders/UserSeeder.php',
         'App\\Seeders\\UsersTableSeeder' => __DIR__ . '/../..' . '/app/seeders/UsersTableSeeder.php',
         'Auth' => __DIR__ . '/../..' . '/kernel/security/Auth.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Cookie' => __DIR__ . '/../..' . '/kernel/security/Cookie.php',
         'Form' => __DIR__ . '/../..' . '/kernel/Form.php',
         'Kernel\\Database\\Connection' => __DIR__ . '/../..' . '/kernel/database/Connection.php',
@@ -52,6 +67,8 @@ class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit713e105862dfd52d71a5066e67b91d37::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit713e105862dfd52d71a5066e67b91d37::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit713e105862dfd52d71a5066e67b91d37::$classMap;
 
         }, null, ClassLoader::class);

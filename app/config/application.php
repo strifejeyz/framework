@@ -39,13 +39,11 @@ define('CACHED_VIEWS', FALSE);
 define('DEFAULT_METHOD', 'index');
 
 
-
 /**
  * Set whether to display errors or not.
  * refer to https://www.php.net/manual/en/function.error-reporting.php
  **/
 define('DISPLAY_ERRORS', 0);
-
 
 
 /**
