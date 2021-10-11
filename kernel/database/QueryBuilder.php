@@ -558,7 +558,8 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function insert($valuePairs = [])
     {
-        $keys = array_keys($valuePairs);
+        $valuePairs = is_object($valuePairs) ? get_object_vars($valuePairs) : $valuePairs;
+        $keys   = array_keys($valuePairs);
         $values = array_values($valuePairs);
         $params = "";
         $fields = "";
@@ -640,7 +641,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
                 }
                 else {
                     self::$errors = array(
-                        'Cannot find a primary key in result set. Make sure to include a Primary Key in your SELECT'
+                        "Cannot find a primary key '$primary_key' in result set. Make sure to include a Primary Key in your SELECT"
                     );
                     return false;
                 }
@@ -661,6 +662,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
      */
     public static function update($valuePairs = [], $id = null)
     {
+        $valuePairs = is_object($valuePairs) ? get_object_vars($valuePairs) : $valuePairs;
         if (empty($valuePairs)) {
             self::$errors = array("update() requires 'key' and 'value' pairs.");
             return false;
@@ -671,7 +673,7 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
                 $primary_key = self::$primary_key;
             }
 
-            if (property_exists(self::$result, $primary_key)) {
+            if (!empty(self::$result) AND property_exists(self::$result, $primary_key)) {
                 $id = self::$result->$primary_key;
             }
             else {
