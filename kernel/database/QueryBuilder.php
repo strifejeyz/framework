@@ -66,7 +66,7 @@ interface QueryBuilderInterface
 
     public static function insertExcept($valuePairs = [], $exception = []);
 
-    public static function update($valuePairs = [], $id);
+    public static function update($valuePairs = [], $id = null);
 
     public static function delete();
 
