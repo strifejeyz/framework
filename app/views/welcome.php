@@ -7,6 +7,9 @@
     <title>Dashboard</title>
 </head>
 <body>
-<h1>You have arrived to Dashboard!</h1>
+<div style="display:flex;justify-content:space-between">
+    <h1 style="margin:0">You have arrived to Dashboard!</h1>
+    <div><a href="/logout">Logout</a></div>
+</div>
 </body>
 </html>
