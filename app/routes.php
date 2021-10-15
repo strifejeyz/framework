@@ -7,7 +7,7 @@
  * get('MyTestRoute -> /test', 'TestController@index()')
  */
 
-get('welcome -> /welcome', '/cms/WelcomeController@index');
+get('/welcome', 'WelcomeController@index');
 
 
 /**

@@ -205,8 +205,11 @@ abstract class View
      * @param $template
      * @return self::render
      */
-    public static function get($template)
+    public static function get($template, $vars = null)
     {
+        if (!is_null($vars)) {
+            extract($vars);
+        }
         $root_dir = str_replace('\\', '/', __DIR__);
         $root_dir = str_replace('kernel', '', $root_dir);
         $root_dir = rtrim($root_dir, '/');

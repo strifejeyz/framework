@@ -1,8 +1,8 @@
 <?php /** @noinspection PhpUnused */
 
+use Kernel\Mail;
 use App\Models\User;
 use App\Models\Tokens;
-use App\Models\Security;
 use Kernel\Security\Hash;
 use Kernel\Security\Token;
 use Kernel\Database\Database;
@@ -12,11 +12,16 @@ use Kernel\Requests\HTTPRequest;
 use App\Requests\ResetPasswordRequest;
 
 /**
- * This is a highly customizable login and
+ * This is a fully customizable login and
  * password reset template, feel free.....
  **/
 class AuthController
 {
+    /**
+     * If login is successful, redirect here
+     */
+    private $redirect_route = '/welcome';
+
 
     /**
      * Show Login View
@@ -31,24 +36,19 @@ class AuthController
     /**
      * Login a user
      *
-     * @return mixed
+     * @return string
      */
     public function attempt()
     {
         $request = new LoginRequest;
-
-        if ($request->validate()) 
-        {
-            $user = User::where('username', $request->get('username'))
-                ->where('password', Hash::encode($request->get('password')))
-                ->where('active', 'yes')->first();
-
+        if ($request->validate()) {
+            $user = User::where('username', $request->get('username'))->where('password', Hash::encode($request->get('password')))->where('active', 'yes')->first();
             if (!empty($user)) {
                 $checkToken = new Database;
                 $checkToken = $checkToken->row("SELECT * FROM tokens WHERE user_id=? AND failed_login > 4 LIMIT 1", [$user->id]);
 
                 if (!empty($checkToken)) {
-                    setFlash('flash', '<div class="alert alert-danger">Your account has been disabled.</div>');
+                    $this->setFlash('flash','Your account has been disabled.');
                     return redirect('/login');
                 } else {
                     $user->remember_token = Token::create();
@@ -59,11 +59,10 @@ class AuthController
                     if (intended()) {
                         return redirect(intended());
                     } else {
-                        return redirect(route('welcome'));
+                        return redirect($this->redirect_route);
                     }
                 }
             }
-
             else {
                 $isExistingUser = User::where('username', $request->get('username'))->first();
                 if (!empty($isExistingUser)) {
@@ -82,17 +81,17 @@ class AuthController
                         }
                     } else {
                         Tokens::insert([
-                            'user_id' => $isExistingUser->id,
+                            'user_id'        => $isExistingUser->id,
                             'reset_attempts' => 0,
-                            'created' => time(),
-                            'updated' => time(),
-                            'failed_login' => 1
+                            'created'        => time(),
+                            'updated'        => time(),
+                            'failed_login'   => 1
                         ]);
-                        setFlash('flash', '<div class="alert alert-warning">username or password is incorrect.</div>');
+                        $this->setFlash('flash','username or password is incorrect.');
                         return redirect('/login');
                     }
                 } else {
-                    setFlash('flash', '<div class="alert alert-warning">username or password is incorrect.</div>');
+                    $this->setFlash('flash','username or password is incorrect.');
                     return redirect('/login');
                 }
             }
@@ -117,13 +116,13 @@ class AuthController
     /**
      * Password reset attempt
      *
-     * @return Route
+     * @return string
      */
     public function sendEmail()
     {
         $request = new HTTPRequest;
         $user = User::where('email', $request->get('email', true))->first();
-        $url = BASE_URL . '/password-reset';
+        $url  = BASE_URL . 'password-reset';
 
         if (!empty($user)) {
             $userToken = Tokens::whereUser_Id($user->id)->first();
@@ -138,12 +137,11 @@ class AuthController
                     'reset_token' => $createdToken,
                     'token_expiration' => time() + 1800
                 ]);
-
-                $this->mailPassword($user->email, "http://strife.local/password-reset/{$createdToken}");
+                $this->mailPassword($user->email, "$url/$createdToken");
             }
             else {
                 if ($userToken->reset_attempts >= 5) {
-                    setflash("message", "<div class='alert alert-success'>Your access have been disabled for excessive attempts, please contact system administrator.</div>");
+                    $this->setFlash('message','Your access have been disabled for excessive attempts, please contact system administrator.');
                 }
                 else {
                     $userToken->updated = time();
@@ -151,16 +149,15 @@ class AuthController
                     $userToken->reset_token = $createdToken;
                     $userToken->token_expiration = time() + 3600;
                     $userToken->save();
-
                     $this->mailPassword($user->email, "$url/$createdToken");
-                    setflash("message", "<div class='alert alert-success'>If this is the right email, we will send a link to reset your password.</div>");
+                    $this->setFlash('message','If this is the right email, we will send a link to reset your password.');
                 }
             }
 
             return redirect('/forgot-password');
         }
         else {
-            setflash("message", "<div class='alert alert-danger'>We cannot process your request this time, please try again later.</div>");
+            $this->setFlash('message','We cannot process your request this time, please try again later.');
             return redirect('/forgot-password');
         }
     }
@@ -173,16 +170,23 @@ class AuthController
      * @param $url
      * @return void
      */
-    private function mailPassword($receiver, $url)
+    private function mailPassword($recipient, $url)
     {
-        $email = $receiver;
-        $subject = "Password Reset Link";
-        $message = "Here's the password reset link for you: $url";
-        $headers = 'From: webmaster@strife.dev' . "\r\n" .
-            'Reply-To: webmaster@example.com' . "\r\n" .
-            'X-Mailer: PHP/' . phpversion();
+        $mail = new Mail();
+        $mail->body("Here's the password reset link for you: $url");
+        $mail->from("mail@dummy.test","Strife Framework");
+        $mail->subject('Password Reset Link');
+        $mail->to($recipient);
+        $mail->send();
+    }
 
-        mail($email, $subject, $message, $headers);
+
+    /**
+     * Set a Message flash
+     */
+    private function setFlash($name,$message)
+    {
+        setflash($name, "<div class='alert alert-success'>$message</div>");
     }
 
 

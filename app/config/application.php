@@ -9,20 +9,34 @@
  * Define the name for your app here, this will be used for
  * template titles.
  */
-define('APP_NAME', 'Strife App');
+const APP_NAME = 'Strife App';
+
+
+/**
+ * Enable cache
+ **/
+const SMART_CACHE = FALSE;
+
+
+
+/**
+ * Specify cache expiration in milliseconds
+ **/
+const CACHE_EXPIRATION = 3600;
+
 
 
 /**
  * Here you can define your default Controller
  * class, when you visit '/' this will be called.
  **/
-define('DEFAULT_CONTROLLER', 'HomeController');
+const DEFAULT_CONTROLLER = 'HomeController';
 
 
 /**
  * For the purpose of redirects
  **/
-define('BASE_URL', 'http://framework.cc/');
+const BASE_URL = 'http://framework.cc/';
 
 
 /**
@@ -30,20 +44,20 @@ define('BASE_URL', 'http://framework.cc/');
  * automatically cache your pages
  * or to turn it off.
  **/
-define('CACHED_VIEWS', FALSE);
+const CACHED_VIEWS = FALSE;
 
 
 /**
  * Here you can define your default method
  **/
-define('DEFAULT_METHOD', 'index');
+const DEFAULT_METHOD = 'index';
 
 
 /**
  * Set whether to display errors or not.
  * refer to https://www.php.net/manual/en/function.error-reporting.php
  **/
-define('DISPLAY_ERRORS', 0);
+const DISPLAY_ERRORS = E_ALL;
 
 
 /**
@@ -52,7 +66,7 @@ define('DISPLAY_ERRORS', 0);
  * render('/auth/login.php')
  * you can render('/auth/login')
  */
-define('TEMPLATE_TYPE', '.php');
+const TEMPLATE_TYPE = '.php';
 
 
 /**
@@ -60,13 +74,13 @@ define('TEMPLATE_TYPE', '.php');
  * password stored on database.
  * generate a new one at least before production
  */
-define('APPLICATION_KEY', 'yyeg6ba6r736u2vui8ixsk116eki2zfl63bq0insqs4f7qroi2');
+const APPLICATION_KEY = 'yyeg6ba6r736u2vui8ixsk116eki2zfl63bq0insqs4f7qroi2';
 
 
 /**
  * You can quickly switch to Maintenance mode.
  */
-define('MAINTENANCE_MODE', FALSE);
+const MAINTENANCE_MODE = FALSE;
 
 
 /**
@@ -82,14 +96,14 @@ session_save_path('./storage/sessions');
  * (Just in case you wanna move things around)
  **/
 
-define('CONTROLLERS_PATH', '/app/controllers/');
-define('MIGRATIONS_PATH',  '/app/migrations/');
-define('REQUESTS_PATH',    '/app/requests/');
-define('SEEDERS_PATH',     '/app/seeders/');
-define('MODELS_PATH',      '/app/models/');
-define('CONFIG_PATH',      '/app/config/');
-define('VIEWS_PATH',       '/app/views/');
-define('STORAGE_PATH',     '/storage/');
-define('ASSETS_PATH',      '/assets/');
-define('VENDOR_PATH',      '/vendor/');
-define('APP_PATH',         '/app/');
+const CONTROLLERS_PATH  = '/app/controllers/';
+const MIGRATIONS_PATH   = '/app/migrations/';
+const REQUESTS_PATH     = '/app/requests/';
+const SEEDERS_PATH      = '/app/seeders/';
+const MODELS_PATH       = '/app/models/';
+const CONFIG_PATH       = '/app/config/';
+const VIEWS_PATH        = '/app/views/';
+const STORAGE_PATH      = '/storage/';
+const ASSETS_PATH       = '/assets/';
+const VENDOR_PATH       = '/vendor/';
+const APP_PATH          = '/app/';

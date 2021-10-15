@@ -68,6 +68,13 @@ class Engine
      * @var string
      */
     private static $namespace = null;
+    /**
+     * Holds the route name of the currently
+     * processed route.
+     *
+     * @var string
+     */
+    private static $route_name = null;
 
 
     /**
@@ -78,8 +85,8 @@ class Engine
      * @return resource
      * @var $originalURL (contains raw URL)
      * @var $route_list (has all route listings from config/routes.php)
-     * @var parameter_count (counts params per route item e.g. /:str/:int = 2)
-     * @var parameter_types (array of rules from a route item e.g. :str,:int)
+     * @var $parameter_count (counts params per route item e.g. /:str/:int = 2)
+     * @var $parameter_types (array of rules from a route item e.g. :str,:int)
      * @var $route_base_url (base url e.g. /foo/bar w/ params sliced)
      * @var $raw_base_url (base url from originalUrl w/o params)
      * @var $raw_parameters (has all the parameters from originalUrl)
@@ -94,17 +101,15 @@ class Engine
     {
         session_start();
         $originalUrl = self::parseURL();
-
         error_reporting(DISPLAY_ERRORS);
 
-        if (MAINTENANCE_MODE == TRUE):
+        if (MAINTENANCE_MODE == TRUE) {
             return self::error(503);
-        endif;
+        }
 
         if (empty($originalUrl)) {
             return self::dispatch();
         } else {
-
             foreach (array_values(self::$routes) as $route) {
                 $route_list = explode('/', trim($route['url'], '/'));
                 $parameter_count = $route['parameter_count'];
@@ -168,14 +173,17 @@ class Engine
                                     return call_user_func_array($route['closure'], $raw_parameters);
                                 }
 
+                                self::$route_name     = $route['name'];
                                 self::$method         = $route['method'];
                                 self::$controller     = $route['controller'];
                                 self::$namespace      = $route['namespace'];
                                 self::$parameters     = $raw_parameters;
                                 self::$subdirectory   = $route['subdirectory'];
                                 self::$request_method = $route['request_method'];
+
                                 return self::dispatch();
                             else:
+
                                 $match_parameters_to_rules = function ($parameter_types, $raw_parameters) {
                                     $rules_match_counter = 0;
                                     foreach ($parameter_types as $index => $type) {
@@ -206,6 +214,7 @@ class Engine
                                         return call_user_func_array($route['closure'], $raw_parameters);
                                     endif;
 
+                                    self::$route_name     = $route['name'];
                                     self::$controller     = $route['controller'];
                                     self::$method         = $route['method'];
                                     self::$parameters     = $raw_parameters;
@@ -226,7 +235,7 @@ class Engine
                     continue;
                 }
             }
-            return self::error(404);
+            return $_SERVER['REQUEST_METHOD'] == "POST" ? header("HTTP/1.0 404 Not Found") : self::error(404);
         }
     }
 
@@ -283,6 +292,7 @@ class Engine
             $name = $url;
         endif;
 
+        self::$routes[$name]['name'] = $name;
         self::$routes[$name]['url'] = $url;
         self::$routes[$name]['parameter_types'] = array();
         self::$routes[$name]['request_method'] = $request_method;
@@ -291,11 +301,11 @@ class Engine
         $parameter_types = array();
         $paramScan = explode('/', trim($url, '/'));
 
-        foreach ($paramScan as $datatype):
-            if ($datatype == ':int' || $datatype == ':str' || $datatype == ':any'):
+        foreach ($paramScan as $datatype) {
+            if ($datatype == ':int' || $datatype == ':str' || $datatype == ':any') {
                 $parameter_types[] = $datatype;
-            endif;
-        endforeach;
+            }
+        }
 
         if (empty($parameter_types)):
             self::$routes[$name]['parameter_count'] = 0;
@@ -348,7 +358,30 @@ class Engine
         require_once ('.' . CONTROLLERS_PATH . self::$subdirectory . $controller . '.php');
 
         if (method_exists(new $controller, $method)) {
-            return (call_user_func_array([new $controller(), $method], self::$parameters));
+            if (SMART_CACHE) {
+                $cache_name = md5(self::$route_name) . ".cache";
+                $cache_path = "{$_SERVER['DOCUMENT_ROOT']}/storage/cache/$cache_name";
+
+                if (self::cache_exists($cache_name)) {
+                    if (self::is_cache_expired($cache_path)) {
+                        ob_start();
+                        print (call_user_func_array([new $controller(), $method], self::$parameters));
+                        $output_buffer = ob_get_clean();
+                        file_put_contents($cache_path, $output_buffer);
+                        return print $output_buffer;
+                    } else {
+                        return print self::get_cache_file($cache_name);
+                    }
+                } else {
+                    ob_start();
+                    print (call_user_func_array([new $controller(), $method], self::$parameters));
+                    $output_buffer = ob_get_clean();
+                    file_put_contents($cache_path, $output_buffer);
+                    return print $output_buffer;
+                }
+            } else {
+                return print (call_user_func_array([new $controller(), $method], self::$parameters));
+            }
         } else {
             return Errors::trigger(app_path() . 'routes.php', "Method '$method' does not exist in '$controller' class.", 1);
         }
@@ -368,6 +401,43 @@ class Engine
     public static function post($url, $action, $request_method = 'POST', $namespace = null)
     {
         return self::assign($url, $action, $request_method, $namespace);
+    }
+
+
+    /**
+     * Check if a cache file exists
+     *
+     * @param $cache_name
+     * @return array
+     */
+    public static function cache_exists($cache_name)
+    {
+        return file_exists("{$_SERVER['DOCUMENT_ROOT']}/storage/cache/$cache_name");
+    }
+
+
+    /**
+     * Check if a cache file is expired
+     *
+     * @param $cache_name
+     * @return array
+     */
+    public static function is_cache_expired($cache_path)
+    {
+        $time_passed = time() - filemtime($cache_path);
+        return $time_passed > CACHE_EXPIRATION ? true : false;
+    }
+
+
+    /**
+     * Check if a cache file exists
+     *
+     * @param $cache_name
+     * @return array
+     */
+    public static function get_cache_file($cache_name)
+    {
+        return file_get_contents("{$_SERVER['DOCUMENT_ROOT']}/storage/cache/$cache_name");
     }
 
 

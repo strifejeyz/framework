@@ -10,6 +10,6 @@ class WelcomeController extends Auth
     {
         $user = Session::user();
 
-        return render('backend/welcome', compact('user'));
+        return render('welcome', compact('user'));
     }
 }

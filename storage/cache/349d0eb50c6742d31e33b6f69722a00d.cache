@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Yamato UI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://bootswatch.com/5/quartz/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/yamato.css">
+</head>
+<body>
+
+<div class="yamato-ui">
+    <div class="sidebar">
+        <div class="yamato-title">Yamato UI</div>
+
+        <div class="menu">
+            <div class="menu-label" @click="menus.menu_1=!menus.menu_1">
+                <div class="label-content"><i class="fa fa-trash-o"></i> CLEAN UP</div>
+            </div>
+            <div class="menu-wrap" v-if="menus.menu_1">
+                <div class="menu-item" title="clear sessions directory">Clear Sessions</div>
+                <div class="menu-item" title="clear logs directory">Clear Logs</div>
+                <div class="menu-item" title="clear backups directory">Clear Backups</div>
+                <div class="menu-item" title="clear cached pages">Clear Cache</div>
+                <div class="menu-item" title="clear all backups,logs,sessions">Clear All</div>
+            </div>
+
+            <div class="menu-divider"></div>
+            <div class="menu-label" @click="menus.menu_2=!menus.menu_2">
+                <div class="label-content"><i class="fa fa-cogs"></i> GENERATORS</div>
+            </div>
+            <div class="menu-wrap" v-if="menus.menu_2">
+                <div class="menu-item" title="create a model class">Create a Model</div>
+                <div class="menu-item" title="create a controller class">Create a Controller</div>
+                <div class="menu-item" title="create a migration class">Create a Migration</div>
+                <div class="menu-item" title="create a request class">Create a Request</div>
+                <div class="menu-item" title="create a database seeder class">Create a Seeder</div>
+                <div class="menu-item" title="create an application key">Create an App Key</div>
+            </div>
+
+
+            <div class="menu-divider"></div>
+            <div class="menu-label" @click="menus.menu_3=!menus.menu_3">
+                <div class="label-content"><i class="fa fa-database"></i> DATABASE</div>
+            </div>
+            <div class="menu-wrap" v-if="menus.menu_3">
+                <div class="menu-item" title="install all migrations">Migrate</div>
+                <div class="menu-item" title="rollback all migrations">Rollback</div>
+                <div class="menu-item" title="migrate a specific table using model class">Migrate a Table</div>
+                <div class="menu-item" title="rollback a specific table using model class">Rollback a Table</div>
+                <div class="menu-item" title="view data types of a table">Table Datatype</div>
+                <div class="menu-item" title="backup table data into JSON file">DB Backup to JSON</div>
+                <div class="menu-item" title="restore last made backup from JSON file">Restore from Backup</div>
+                <div class="menu-item" title="perform database seeding">Database Seeding</div>
+            </div>
+
+            <div class="menu-divider"></div>
+            <div class="menu-label" @click="menus.menu_4=!menus.menu_4">
+                <div class="label-content"><i class="fa fa-lock"></i> SECURITY</div>
+            </div>
+            <div class="menu-wrap" v-if="menus.menu_4">
+                <div class="menu-item" title="returns the hash of a given string">Hash</div>
+                <div class="menu-item" title="verify whether data matches the hashed value">Verify Hash</div>
+                <div class="menu-item" title="encrypt a string with levels specified">Encrypt</div>
+                <div class="menu-item" title="decrypt with same level set to string">Decrypt</div>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad aliquam aperiam at, consequuntur delectus eaque eos explicabo fugit laboriosam omnis placeat sed velit! Aliquam laudantium magni molestias vero vitae?
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '.yamato-ui',
+        data:() => ({
+            menus: {
+                menu_1: true,
+                menu_2: false,
+                menu_3: false,
+                menu_4: false,
+            }
+        }),
+    })
+</script>
+</body>
+</html>1

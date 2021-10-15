@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+    <title>Home Page &mdash; Strife App</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="icon" href="favicon.ico" type="image/ico">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<ul>
+    <li>Patsy</li>
+    <li>Dimitri</li>
+    <li>Ulices</li>
+    <li>Nelle</li>
+    <li>Priscilla</li>
+    <li>Samanta</li>
+    <li>Donato</li>
+    <li>Wilbert</li>
+    <li>Terrance</li>
+    <li>Spencer</li>
+    <li>Myah</li>
+    <li>Liana</li>
+    <li>Kaci</li>
+    <li>Adolfo</li>
+    <li>Eino</li>
+    <li>Mauricio</li>
+    <li>Heaven</li>
+    <li>Dwight</li>
+    <li>Lesly</li>
+    <li>Aubrey</li>
+    <li>Chaz</li>
+    <li>Daron</li>
+    <li>Priscilla</li>
+    <li>Cesar</li>
+    <li>Serena</li>
+    <li>Litzy</li>
+    <li>Lawson</li>
+    <li>Cali</li>
+    <li>Willie</li>
+    <li>Giovanna</li>
+    <li>Lola</li>
+    <li>Maryjane</li>
+    <li>Buddy</li>
+    <li>Melany</li>
+    <li>Maud</li>
+    <li>Larry</li>
+    <li>Crystal</li>
+    <li>Lucas</li>
+    <li>Jace</li>
+    <li>Kenton</li>
+    <li>Maxine</li>
+    <li>Jamal</li>
+    <li>Deonte</li>
+    <li>Melody</li>
+    <li>Jodie</li>
+    <li>Ronaldo</li>
+    <li>Malvina</li>
+    <li>Kaelyn</li>
+    <li>Dayton</li>
+    <li>Arjun</li>
+    <li>Dell</li>
+    <li>Maximilian</li>
+    <li>Maureen</li>
+    <li>Angus</li>
+    <li>Marcellus</li>
+    <li>Marion</li>
+    <li>Ernest</li>
+    <li>Nasir</li>
+    <li>Nicolas</li>
+    <li>Jonatan</li>
+    <li>Ralph</li>
+    <li>Korbin</li>
+    <li>Vance</li>
+    <li>Kari</li>
+    <li>Vicenta</li>
+    <li>Celine</li>
+    <li>Clovis</li>
+    <li>Brook</li>
+    <li>Gudrun</li>
+    <li>Rae</li>
+    <li>Dustin</li>
+    <li>Mckenzie</li>
+    <li>Donald</li>
+    <li>Loyal</li>
+    <li>Johnny</li>
+    <li>Hanna</li>
+    <li>Emmalee</li>
+    <li>Therese</li>
+    <li>Marquise</li>
+    <li>Elody</li>
+    <li>Leonardo</li>
+    <li>Suzanne</li>
+    <li>Constance</li>
+    <li>Carlo</li>
+    <li>Luther</li>
+    <li>Princess</li>
+    <li>Madyson</li>
+    <li>Jeanie</li>
+    <li>Fatima</li>
+    <li>Ramona</li>
+    <li>Mathilde</li>
+    <li>Ceasar</li>
+    <li>Georgianna</li>
+    <li>Javier</li>
+    <li>Kimberly</li>
+    <li>Arnold</li>
+    <li>Isabelle</li>
+    <li>Joanny</li>
+    <li>Harry</li>
+    <li>Mackenzie</li>
+</ul>
+
+<div class="strife">
+    <p class="logo">S</p>
+    <p class="title">Strife Framework <sup>PHP 8.0</sup></p>
+    <p class="sub-title">A Fast and Lightweight PHP MVC Framework.</p>
+</div>
+
+</body>
+</html>
