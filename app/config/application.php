@@ -18,6 +18,12 @@ const APP_NAME = 'Strife App';
 const SMART_CACHE = FALSE;
 
 
+/**
+ * Cached views will skip the find-replace
+ * process therefore, faster processing time.
+ **/
+const CACHED_VIEWS = FALSE;
+
 
 /**
  * Specify cache expiration in milliseconds
@@ -25,12 +31,16 @@ const SMART_CACHE = FALSE;
 const CACHE_EXPIRATION = 3600;
 
 
-
 /**
- * Here you can define your default Controller
- * class, when you visit '/' this will be called.
+ * Homepage default controller class.
  **/
 const DEFAULT_CONTROLLER = 'HomeController';
+
+
+/**
+ * homepage default method
+ **/
+const DEFAULT_METHOD = 'index';
 
 
 /**
@@ -40,22 +50,8 @@ const BASE_URL = 'http://framework.cc/';
 
 
 /**
- * Here, you can set the value to
- * automatically cache your pages
- * or to turn it off.
- **/
-const CACHED_VIEWS = FALSE;
-
-
-/**
- * Here you can define your default method
- **/
-const DEFAULT_METHOD = 'index';
-
-
-/**
  * Set whether to display errors or not.
- * refer to https://www.php.net/manual/en/function.error-reporting.php
+ * https://www.php.net/manual/en/function.error-reporting.php
  **/
 const DISPLAY_ERRORS = E_ALL;
 
@@ -82,13 +78,6 @@ const APPLICATION_KEY = 'yyeg6ba6r736u2vui8ixsk116eki2zfl63bq0insqs4f7qroi2';
  */
 const MAINTENANCE_MODE = FALSE;
 
-
-/**
- * Directory where to save session files instead of server's
- * default dir
- * just omit if you want to use default dir.
- */
-session_save_path('./storage/sessions');
 
 
 /**
