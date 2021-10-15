@@ -29,6 +29,7 @@ return array(
     'Kernel\\FileHandler' => $baseDir . '/kernel/FileHandler.php',
     'Kernel\\Format' => $baseDir . '/kernel/Format.php',
     'Kernel\\Log' => $baseDir . '/kernel/Log.php',
+    'Kernel\\Mail' => $baseDir . '/kernel/Mail.php',
     'Kernel\\Requests\\FileRequest' => $baseDir . '/kernel/requests/FileRequest.php',
     'Kernel\\Requests\\FileRequestInterface' => $baseDir . '/kernel/requests/FileRequest.php',
     'Kernel\\Requests\\HTTPRequest' => $baseDir . '/kernel/requests/HTTPRequest.php',

@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     '3eac8a9ce007dee7165fbccb8e4c63f7' => $baseDir . '/kernel/helpers.php',
     '555082641dfed149832ebe1b57ef25e3' => $baseDir . '/app/routes.php',
+    'f747b96d5601398afa1b401b31adb998' => $baseDir . '/app/config/mail.php',
     '93a2720ba34bc3a28d031a16127b0649' => $baseDir . '/app/config/database.php',
     'fb7fa572155ee1eb2edd9170bbd298b2' => $baseDir . '/app/config/application.php',
 );

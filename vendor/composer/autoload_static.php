@@ -9,6 +9,7 @@ class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
     public static $files = array (
         '3eac8a9ce007dee7165fbccb8e4c63f7' => __DIR__ . '/../..' . '/kernel/helpers.php',
         '555082641dfed149832ebe1b57ef25e3' => __DIR__ . '/../..' . '/app/routes.php',
+        'f747b96d5601398afa1b401b31adb998' => __DIR__ . '/../..' . '/app/config/mail.php',
         '93a2720ba34bc3a28d031a16127b0649' => __DIR__ . '/../..' . '/app/config/database.php',
         'fb7fa572155ee1eb2edd9170bbd298b2' => __DIR__ . '/../..' . '/app/config/application.php',
     );
@@ -51,6 +52,7 @@ class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
         'Kernel\\FileHandler' => __DIR__ . '/../..' . '/kernel/FileHandler.php',
         'Kernel\\Format' => __DIR__ . '/../..' . '/kernel/Format.php',
         'Kernel\\Log' => __DIR__ . '/../..' . '/kernel/Log.php',
+        'Kernel\\Mail' => __DIR__ . '/../..' . '/kernel/Mail.php',
         'Kernel\\Requests\\FileRequest' => __DIR__ . '/../..' . '/kernel/requests/FileRequest.php',
         'Kernel\\Requests\\FileRequestInterface' => __DIR__ . '/../..' . '/kernel/requests/FileRequest.php',
         'Kernel\\Requests\\HTTPRequest' => __DIR__ . '/../..' . '/kernel/requests/HTTPRequest.php',
