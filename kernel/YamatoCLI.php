@@ -48,11 +48,10 @@ final class YamatoCLI
 --------------------	--------------------    -----------------------------
 
 {CLEANUP}
-  clear:sessions                                clear sessions directory
   clear:logs                                    clear logs directory
   clear:backups                                 clear backups directory
   clear:cache                                   clear cached pages
-  clear:all                                     clear all backups,logs,sessions
+  clear:all                                     clear all backups,logs
   
 {GENERATORS}
   create:model          [name] [table=null]     create a model class
@@ -107,13 +106,7 @@ EOF;
             case 'clear:all':
                 $this->clear('backups');
                 $this->clear('logs');
-                $this->clear('sessions');
-                return die("backups,logs,sessions,cache were cleared.\n");
-                break;
-
-            case 'clear:sessions':
-                $this->clear('sessions');
-                return die("sessions directory cleared.\n");
+                return die("backups,logs,cache were cleared.\n");
                 break;
 
             case 'clear:logs':
