@@ -4,7 +4,7 @@ class TestController
 {
     /**
      * Controller Index
-     * @return view
+     * @return string
      **/
     public function index()
     {
