@@ -55,7 +55,7 @@ const FILE_BASED_ROUTING = true;
 /**
  * With a Controller Post-fix, you only need to call
  * the controller's name like so:
- * - class: UsersController route: /users/fetch
+ * - class:UsersController method:fetch, url: /users/fetch
  *
  * '/users' will be automatically translated as UsersController
  * e.g. /home/index/param1/param2
