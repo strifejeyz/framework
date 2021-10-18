@@ -7,29 +7,29 @@
 /**
  * SMTP username
  */
-define("SMTP_USERNAME", 'strifejeyz@gmail.com');
+const SMTP_USERNAME = 'dummy@gmail.com';
 
 
 /**
  * SMTP password(usually, your email password)
  */
-define("SMTP_PASSWORD", '010000040120');
+const SMTP_PASSWORD = 'password';
 
 
 /**
  * SMTP Host
  * may be different per mail client
  */
-define("SMTP_HOST", 'smtp.gmail.com');
+const SMTP_HOST = 'smtp.gmail.com';
 
 
 /**
  * SMTP Port
  */
-define("SMTP_PORT", 587);
+const SMTP_PORT = 587;
 
 
 /**
  * Use HTML email
  */
-define("SMTP_USE_HTML", true);
+const SMTP_USE_HTML = true;
