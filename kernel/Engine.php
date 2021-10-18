@@ -266,7 +266,7 @@ class Engine
         $url_parameters = array();
 
         if (count($url_paths) == 1) {
-            $method = "index";
+            $method = DEFAULT_METHOD;
         }
         if (count($url_paths) >= 2) {
             $method = $url_paths[1];
