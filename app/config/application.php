@@ -44,6 +44,29 @@ const DEFAULT_METHOD = 'index';
 
 
 /**
+ * Use File-based routing along with declared routes
+ * e.g. /home/index/param1/param2
+ *
+ * NOTE: Namespaces for file-based routes are not allowed.
+ */
+const FILE_BASED_ROUTING = true;
+
+
+/**
+ * With a Controller Post-fix, you only need to call
+ * the controller's name like so:
+ * - class: UsersController route: /users/fetch
+ *
+ * '/users' will be automatically translated as UsersController
+ * e.g. /home/index/param1/param2
+ *
+ * NOTE: You must name your class in Pascal Case as unix systems
+ * treat filenames different than windows.
+ */
+const CONTROLLER_POST_FIX = 'Controller';
+
+
+/**
  * For the purpose of redirects
  **/
 const BASE_URL = 'http://framework.cc/';
