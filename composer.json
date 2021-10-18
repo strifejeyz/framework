@@ -15,7 +15,7 @@
     "OOP"
   ],
   "license": "MIT",
-  "version": "1.4.2",
+  "version": "1.5",
   "type": "project",
   "minimum-stability": "stable",
   "require": {
