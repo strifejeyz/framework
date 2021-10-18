@@ -38,36 +38,42 @@ class Engine
      * @var string
      */
     private static $controller = null;
+
     /**
      * default method
      *
      * @var string
      */
     private static $method = null;
+
     /**
      * container for parameters.
      *
      * @var array
      */
     private static $parameters = array();
+
     /**
      * in case of controllers in subdirectories
      *
      * @var string
      */
     private static $subdirectory = null;
+
     /**
      * in case controllers are using namespace
      *
      * @var string
      */
     private static $request_method = null;
+
     /**
      * in case controllers are using namespace
      *
      * @var string
      */
     private static $namespace = null;
+
     /**
      * Holds the route name of the currently
      * processed route.
@@ -75,6 +81,13 @@ class Engine
      * @var string
      */
     private static $route_name = null;
+
+    /**
+     * Original path thrown by .htaccess
+     *
+     * @var string
+     */
+    private static $original_path = null;
 
 
     /**
@@ -104,7 +117,7 @@ class Engine
         error_reporting(DISPLAY_ERRORS);
 
         if (MAINTENANCE_MODE == TRUE) {
-            return self::error(503);
+            return page_error(503);
         }
 
         if (empty($originalUrl)) {
@@ -119,48 +132,45 @@ class Engine
                         continue;
                     }
                 }
-
                 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     if ($route['request_method'] == 'POST') {
                         continue;
                     }
                 }
-
                 if (count($route_list) == count($originalUrl)) {
                     $parameter_types = $route['parameter_types'];
-                    $route_base_url = array_slice($route_list, 0, count($route_list) - $parameter_count);
-                    $raw_base_url = array_slice($originalUrl, 0, count($originalUrl) - $parameter_count);
-                    $raw_parameters = array_slice($originalUrl, count($originalUrl) - $parameter_count);
+                    $route_base_url  = array_slice($route_list, 0,  count($route_list)  - $parameter_count);
+                    $raw_base_url    = array_slice($originalUrl, 0, count($originalUrl) - $parameter_count);
+                    $raw_parameters  = array_slice($originalUrl,    count($originalUrl) - $parameter_count);
 
                     if (count($raw_base_url) == count($route_base_url)) {
                         $validate_base_url = function ($raw_base_url, $route_base_url) {
                             $url_match_counter = 0;
 
-                            for ($counter = 0; $counter < count($raw_base_url); $counter++):
-                                if (self::$strict == true):
-                                    if ($raw_base_url[$counter] == $route_base_url[$counter]):
+                            for ($counter = 0; $counter < count($raw_base_url); $counter++) {
+                                if (self::$strict == true) {
+                                    if ($raw_base_url[$counter] == $route_base_url[$counter]) {
                                         $url_match_counter++;
                                         continue;
-                                    else:
+                                    } else {
                                         $url_match_counter = 0;
                                         break;
-                                    endif;
-                                else:
-                                    if (preg_match("/^{$raw_base_url[$counter]}$/i", $route_base_url[$counter])):
+                                    }
+                                } else {
+                                    if (preg_match("/^{$raw_base_url[$counter]}$/i", $route_base_url[$counter])) {
                                         $url_match_counter++;
                                         continue;
-                                    else:
+                                    } else {
                                         $url_match_counter = 0;
                                         break;
-                                    endif;
-                                endif;
-                            endfor;
-
-                            if ($url_match_counter == count($raw_base_url)):
+                                    }
+                                }
+                            }
+                            if ($url_match_counter == count($raw_base_url)) {
                                 return true;
-                            else:
+                            } else {
                                 return false;
-                            endif;
+                            }
                         };
                         $match_base_url_result = call_user_func($validate_base_url, $raw_base_url, $route_base_url);
 
@@ -168,11 +178,10 @@ class Engine
                             continue;
                         }
                         else {
-                            if (empty($raw_parameters)):
+                            if (empty($raw_parameters)) {
                                 if (isset($route['closure'])) {
                                     return call_user_func_array($route['closure'], $raw_parameters);
                                 }
-
                                 self::$route_name     = $route['name'];
                                 self::$method         = $route['method'];
                                 self::$controller     = $route['controller'];
@@ -180,10 +189,8 @@ class Engine
                                 self::$parameters     = $raw_parameters;
                                 self::$subdirectory   = $route['subdirectory'];
                                 self::$request_method = $route['request_method'];
-
                                 return self::dispatch();
-                            else:
-
+                            } else {
                                 $match_parameters_to_rules = function ($parameter_types, $raw_parameters) {
                                     $rules_match_counter = 0;
                                     foreach ($parameter_types as $index => $type) {
@@ -206,14 +213,12 @@ class Engine
                                         return false;
                                     }
                                 };
-
                                 $match_rules_result = call_user_func($match_parameters_to_rules, $parameter_types, $raw_parameters);
 
-                                if ($match_rules_result == true):
-                                    if (isset($route['closure'])):
+                                if ($match_rules_result == true) {
+                                    if (isset($route['closure'])) {
                                         return call_user_func_array($route['closure'], $raw_parameters);
-                                    endif;
-
+                                    }
                                     self::$route_name     = $route['name'];
                                     self::$controller     = $route['controller'];
                                     self::$method         = $route['method'];
@@ -221,12 +226,11 @@ class Engine
                                     self::$subdirectory   = $route['subdirectory'];
                                     self::$namespace      = $route['namespace'];
                                     self::$request_method = $route['request_method'];
-
                                     return self::dispatch();
-                                else:
+                                } else {
                                     continue;
-                                endif;
-                            endif;
+                                }
+                            }
                         }
                     } else {
                         continue;
@@ -235,9 +239,64 @@ class Engine
                     continue;
                 }
             }
-            return $_SERVER['REQUEST_METHOD'] == "POST" ? header("HTTP/1.0 404 Not Found") : self::error(404);
+            if (FILE_BASED_ROUTING) {
+                return $this->FileBaseRouter();
+            } else {
+                return $this->DefaultErrorPage();
+            }
         }
     }
+
+
+    /**
+     * This will be a fallback rule if declared routes didn't match any.
+     * You must strictly name your contollers Pascal Case as well as if you
+     * have the CONTROLLER_POST_FIX set to something, your class should too.
+     * e.g. CONTROLLER_POST_FIX = 'Controller', your class should be TestController.php
+     *
+     * If url is only /test, we assume that class has a method called index()
+     *
+     * @return resource
+     */
+    private function FileBaseRouter()
+    {
+        $url_paths = explode('/',trim(self::$original_path,'/'));
+        $controller_base_name = ucfirst(filter_var($url_paths[0], FILTER_SANITIZE_URL)).CONTROLLER_POST_FIX;
+        $controller_full_path = ltrim(CONTROLLERS_PATH,'/') . "$controller_base_name.php";
+        $url_parameters = array();
+
+        if (count($url_paths) == 1) {
+            $method = "index";
+        }
+        if (count($url_paths) >= 2) {
+            $method = $url_paths[1];
+        }
+        if (count($url_paths) > 2) {
+            $url_parameters = array_splice($url_paths,2);
+        }
+
+        if (file_exists($controller_full_path)) {
+            require_once($controller_full_path);
+            if (method_exists(new $controller_base_name, $method)) {
+                call_user_func_array([new $controller_base_name, $method], $url_parameters);
+            } else {
+                return $this->DefaultErrorPage();
+            }
+        } else {
+            return $this->DefaultErrorPage();
+        }
+    }
+
+
+
+    /**
+     * Throws a default error page.
+     */
+    private function DefaultErrorPage()
+    {
+        return $_SERVER['REQUEST_METHOD'] == "POST" ? header("HTTP/1.0 404 Not Found") : page_error(404);
+    }
+    
 
 
     /**
@@ -247,18 +306,17 @@ class Engine
      */
     private static function parseURL()
     {
-        if (isset($_GET['url'])):
-            $url = filter_var($_GET['url'], FILTER_SANITIZE_URL);
+        $url = array();
+        if (isset($_GET['_url'])) {
+            $url = filter_var($_GET['_url'], FILTER_SANITIZE_URL);
             $url = preg_replace('/\[/', '\[', $url);
             $url = preg_replace('/\]/', '\]', $url);
             $url = preg_replace('/\(/', '\(', $url);
             $url = preg_replace('/\)/', '\)', $url);
             $url = explode('/', trim($url, '/'));
-            unset($_GET['url']);
-        else:
-            $url = array();
-        endif;
-
+            self::$original_path = $_GET['_url'];
+            unset($_GET['_url']);
+        }
         return ($url);
     }
 
@@ -450,18 +508,6 @@ class Engine
     public static function paths()
     {
         return (self::$routes);
-    }
-
-
-    /**
-     * If non of the routes matched on the URL, return a 404 page.
-     *
-     * @param $n
-     * @return mixed
-     */
-    private static function error($n)
-    {
-        return page_error($n);
     }
 
 
