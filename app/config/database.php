@@ -27,4 +27,4 @@ Connection::parameters('conn1',[
 /**
  * Begin Transaction with database
  */
-Connection::initialize('conn1');
+#Connection::initialize('conn1');
