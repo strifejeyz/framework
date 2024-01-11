@@ -31,7 +31,6 @@ class ComposerStaticInit713e105862dfd52d71a5066e67b91d37
     public static $classMap = array (
         'App\\Migrations\\TokensTableMigration' => __DIR__ . '/../..' . '/app/migrations/TokensTableMigration.php',
         'App\\Migrations\\UsersTableMigration' => __DIR__ . '/../..' . '/app/migrations/UsersTableMigration.php',
-        'App\\Models\\Accounts' => __DIR__ . '/../..' . '/app/models/Accounts.php',
         'App\\Models\\Tokens' => __DIR__ . '/../..' . '/app/models/Tokens.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/models/User.php',
         'App\\Requests\\LoginRequest' => __DIR__ . '/../..' . '/app/requests/LoginRequest.php',
