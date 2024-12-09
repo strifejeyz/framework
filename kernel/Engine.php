@@ -275,6 +275,8 @@ class Engine
             $url_parameters = array_splice($url_paths,2);
         }
 
+        $method = str_replace('-', '_', $method);
+
         if (file_exists($controller_full_path)) {
             require_once($controller_full_path);
             if (method_exists(new $controller_base_name, $method)) {
