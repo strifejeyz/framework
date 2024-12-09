@@ -66,47 +66,10 @@ class HTTPRequest implements HTTPRequestInterface
     /**
      * Catches request method, and filter
      * each values
-     *
-     * @param $method
      */
-    public function __construct($method = "post")
+    public function __construct()
     {
-        if ($method == "post") {
-            if (array_key_exists('__FORM_ORIGIN__', $_POST)):
-                $this->origin_uri = $_POST['__FORM_ORIGIN__'];
-                unset($_POST['__FORM_ORIGIN__']);
-            endif;
-
-            if (array_key_exists('__FORM_TOKEN__', $_POST)):
-                $token = $_POST['__FORM_TOKEN__'];
-                unset($_POST['__FORM_TOKEN__']);
-
-                if (!Token::verify($token)):
-                    $auth = new Auth();
-                    return $auth->restartSession();
-                endif;
-            endif;
-
-            $this->request = filter_var_array($_POST, FILTER_SANITIZE_STRIPPED);
-
-        } else {
-            if (array_key_exists('__FORM_ORIGIN__', $_GET)):
-                $this->origin_uri = $_GET['__FORM_ORIGIN__'];
-                unset($_GET['__FORM_ORIGIN__']);
-            endif;
-
-            if (array_key_exists('__FORM_TOKEN__', $_GET)):
-                $token = $_GET['__FORM_TOKEN__'];
-                unset($_GET['__FORM_TOKEN__']);
-
-                if (!Token::verify($token)):
-                    $auth = new Auth();
-                    return $auth->restartSession();
-                endif;
-            endif;
-
-            $this->request = filter_var_array($_GET, FILTER_SANITIZE_STRIPPED);
-        }
+        $this->request = $_POST;
     }
 
 
@@ -263,7 +226,7 @@ class HTTPRequest implements HTTPRequestInterface
      */
     public function sanitize($string)
     {
-        return filter_var($string, FILTER_SANITIZE_STRING);
+        return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
     }
 
 
