@@ -1,7 +1,7 @@
 <?php
 
 /**
- * List of route paths
+ * List of route paths. If file_based_routing is enabled, this file will be ignored.
  *
  * Here's an example of a simple route:
  * get('MyTestRoute -> /test', 'TestController@index()')
