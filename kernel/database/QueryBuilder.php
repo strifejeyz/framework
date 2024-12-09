@@ -7,7 +7,7 @@ namespace Kernel\Database;
  * provides handy set of methods for interacting with the
  * database and fully implements active record management
  *
- * Author:  Jeyz Strife
+ * Author:  Jesse Strife
  * website: https://github.com/strifejeyz/framework
  * Date:    11/10/15
  */
@@ -782,11 +782,15 @@ class QueryBuilder extends Connection implements QueryBuilderInterface, QueryBui
 
         $selection = "";
 
-        if (count(func_get_args()) > 1) {
+        if (is_array($columns)) {
+            $selection = implode(", ", $columns);
+        }
+        else if (count(func_get_args()) > 1) {
             foreach (func_get_args() as $arg) {
                 $selection .= $arg . ",";
             }
-        } else {
+        }
+        else {
             $selection = $columns;
         }
 
