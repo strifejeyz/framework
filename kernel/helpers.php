@@ -29,6 +29,20 @@ if (!function_exists('dump')) {
 }
 
 
+if (!function_exists('get_full_url')) {
+    /**
+     * Returns the full URL including the protocol and hostname.
+     *
+     * @return string
+     */
+    function get_full_url()
+    {
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+        return $protocol . $_SERVER['HTTP_HOST'];
+    }
+}
+
+
 if (!function_exists('to_megabytes')) {
     /**
      * Convert bytes to megabytes
@@ -879,3 +893,13 @@ if (!function_exists('startswith')) {
         }
     }
 }
+
+if (!function_exists('full_hostname')) {
+    function full_hostname() {
+        $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+        $protocol = $isHttps ? 'https://' : 'http://';
+        $host = $_SERVER['HTTP_HOST'];
+        return $protocol . $host;
+    }
+}
+
