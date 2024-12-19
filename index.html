@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content="description" name="Strife Framework">
+    <meta content="author" name="Jeyz(Jesse) Strife">
+    <meta property="og:description"
+          content="A Fast and Lightweight PHP MVC Framework."/>
+    <meta property="og:image" content="http://strifeframework.cf/img/fb-scrape.jpg"/>
+    <meta property="og:url" content="http://strifeframework.cf"/>
+    <meta property="og:type" content="website"/>
+    <title>Strife Framework</title>
+    <link rel="stylesheet" href="https://bootswatch.com/3/cyborg/bootstrap.min.css">
+    <link rel="stylesheet" href="slick/slick.css"/>
+    <link rel="stylesheet" href="slick/slick-theme.css"/>
+    <link rel="stylesheet" href="css/framework.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="navigation">
+        <ul class="list-inline">
+            <li><a href="/">Strife Framework</a></li>
+            <li><a href="https://github.com/strifejeyz/framework">Documentation</a></li>
+            <li class="dropdown">
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" aria-expanded="true">Download
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="https://github.com/strifejeyz/framework/releases/tag/v1.5-stable">v1.5</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="heading">
+        <p class="title">Strife Framework</p>
+        <p class="title-sm"><i>A Fast and Lightweight PHP MVC Framework.</i></p>
+    </div>
+
+    <div class="slider">
+
+        <div class="demo-code">
+            <p class="slider-title">Smart, Handy & Neat URLs</p>
+            <div class="console">
+                <ul class="dots">
+                    <li class="red"></li>
+                    <li class="yellow"></li>
+                    <li class="green"></li>
+                </ul>
+                <div>
+                    <pre>&lt;?php
+
+<span class="cmt">// Using Controller</span>
+<span class="kw">get</span>(<span class="str">'user-list -> /orders/<span class="var">:int</span>/<span
+                                class="var">:any</span>'</span>, '<span class="cls">OrderController</span>@<span
+                                class="kw">index</span>');
+
+<span class="cmt">// Using Closure</span>
+<span class="kw">get</span>(<span class="str">'foo-bar -> /foo/bar/<span class="var">:str</span>'</span>, <span
+                                class="kw">function</span> (<span class="var">$baz</span>) {
+    <span class="kw">echo</span> <span class="var">$baz</span>;
+});
+
+<span class="cmt">// HTTP requests</span>
+<span class="kw">post</span>(<span class="str">'foo-bar -> /foo/bar'</span>, <span class="kw">function</span> () {
+    <span class="kw">dump</span>(<span class="var">$_POST</span>);
+});
+
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-code">
+            <p class="slider-title">Query Builder & ORM</p>
+            <div class="console">
+                <ul class="dots">
+                    <li class="red"></li>
+                    <li class="yellow"></li>
+                    <li class="green"></li>
+                </ul>
+                <div>
+                    <pre>&lt;?php
+
+<span class="text-success"><span class="kw">use</span> App\Models\Order;</span>
+
+<span class="kw">class</span> <span class="cls">OrderController</span> {
+
+    <span class="kw">public</span> <span class="kw">function</span></span>(<span class="var">$id</span>, <span
+                                class="var">$date</span>){
+        <span class="var">$order</span> = <span class="cls">Order</span>::<span class="kw">where</span>(<span
+                                class="str">'id'</span>, <span class="var">$id</span>)
+            -><span class="kw">where</span>(<span class="str">order_date</span>, <span class="var">$date</span>)
+            -><span class="kw">order</span>(<span class="str">'order_date', 'desc'</span>)
+            -><span class="kw">limit</span>(10)
+            -><span class="kw">get</span>();
+
+        <span class="kw">render</span>(<span class="str">'list-order'</span>, <span class="kw">compact</span>(<span
+                                class="str">'order'</span>));
+    }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="command-prompt">
+            <p class="slider-title">Command Line Interface</p>
+            <div class="console">
+                <ul class="dots">
+                    <li class="red"></li>
+                    <li class="yellow"></li>
+                    <li class="green"></li>
+                </ul>
+                <div class="command">
+                    strife@strife:/opt/lampp/htdocs/myapp $ <b>php yamato</b>
+                    <br>
+
+                    <pre>
+           ..      ..   ..     ..    -#      ..
+ ,#   x#  - ,#=  ##;;##+,+#   -..x# ++#++ .#+,-#X
+  ##  #    ,.##  #.  =#   #+   ,,-#  ,#   #+    #.
+   #-#+  #X  +#  #   =#   #+ -#.  #. -#   #=    #.
+    ##   #X.,##  #.  +#   #x =#..x#. .#-. .#+,-#x
+   ;#     ,,.    .    .   .    ;,      ;,   ,;;
+  +X    11/10/2015 - 02/07/2020
+
+ Yamato is a Command Line Interface(CLI) tool that is
+ made to interact with the Strife Framework.</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-code">
+            <p class="slider-title">Template Engine</p>
+            <div class="console">
+                <ul class="dots">
+                    <li class="red"></li>
+                    <li class="yellow"></li>
+                    <li class="green"></li>
+                </ul>
+                <div>
+<pre class="line-numbers">
+<span class="var">@</span><span class="kw">extend</span>(<span class="str">'layouts/app'</span>)
+
+    <span class="cmt">&lt;!--String Interpolation--&gt;</span>
+
+    Hi, <span class="cls">{{<span class="var">$user</span>-><span class="kw">first_name</span></span><span class="cls">}}</span>!
+
+
+    <span class="cmt">&lt;!--Loop--&gt;</span>
+
+    <span class="cls">{</span><span class="kw">for</span>(<span class="var">$i = 1; $i < 10; $i++</span>)<span
+        class="cls">}</span>
+        <span class="cls">{{</span><span class="var">$i</span><span class="cls">}}</span>
+    <span class="cls">{</span><span class="kw">endfor</span><span class="cls">}</span>
+
+    <span class="cmt">&lt;!--And many more!--&gt;</span>
+
+<span class="var">@</span><span class="kw">stop</span>()
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="workspace container">
+    <div class="feature">
+        <p class="feature-title">Strife: Blazingly Fast Framework</p>
+        <div class="feature-content">
+            <div class="row">
+                <div class="col-md-5" style="display:flex;align-items:center">
+                    <img src="img/speedo.png" alt="Speed Image" class="speedo img-responsive">
+                </div>
+                <div class="col-md-7">
+                    <br>
+                    <ul class="feature-list">
+                        <li>Template Caching: Achieve dramatic speed with efficient template caching mechanisms.</li>
+                        <li>Compact Footprint: Strife maintains a small application size, weighing in at just ~500KB.</li>
+                        <li>Independent: Built without reliance on 3rd-party APIs or libraries.</li>
+                        <li>Optimized Performance: Features improved garbage collection for smoother execution.</li>
+                        <li>Simple and Intuitive: Experience super straightforward coding, designed to keep development stress-free.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+
+<div class="workspace container">
+    <div class="feature">
+        <p class="feature-title text-left">Database Management Made Easy</p>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="feature-panel">
+                    <div class="feature-panel-title">Migration</div>
+                    <div class="feature-panel-content">
+                        Build your database effortlessly using the migration manager.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="feature-panel">
+                    <div class="feature-panel-title">Seeding</div>
+                    <div class="feature-panel-content">
+                        Populate your database using backups for quick setup.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-panel">
+                    <div class="feature-panel-title">Backup & Restore</div>
+                    <div class="feature-panel-content">
+                        Securely back up and restore your database using the CLI.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+                <div class="feature-panel">
+                    <div class="feature-panel-title">Multi-Database</div>
+                    <div class="feature-panel-content">
+                        Seamlessly switch between multiple databases as needed.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="workspace container">
+    <div class="feature">
+        <p class="feature-title text-left">Form Builder / Interpolation / Auto-validation</p>
+        <p class="feature-title-sm">
+            The three essential functionalities in this framework work together to enhance security and streamline development:
+        </p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-panel">
+                    <div class="feature-panel-title">Form Builder/Binding</div>
+                    <div class="feature-panel-content">
+                        Form Builder uses Auto-interpolation
+                        of values using form binding.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-panel">
+                    <div class="feature-panel-title">Form Security</div>
+                    <div class="feature-panel-content">
+                        Prevent CSRF, XSS, and Session Hijacking: Integrated mechanisms protect your application against common vulnerabilities.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-panel">
+                    <div class="feature-panel-title">Auto-validation</div>
+                    <div class="feature-panel-content">
+                        With the help of HTTP Request Handlers, you can create
+                        Form Rules.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="workspace container">
+    <div class="feature">
+        <p class="feature-title text-left">Composer Packages</p>
+        <div class="feature-content">
+            <p class="feature-title-sm">
+                Strife Framework works perfect with Composer. You can still enjoy hundreds of thousands of
+                available packages out in the wild!
+
+            <div class="command-prompt">
+                <div class="console">
+                    <ul class="dots">
+                        <li class="red"></li>
+                        <li class="yellow"></li>
+                        <li class="green"></li>
+                    </ul>
+                    <div class="command">
+                        strife@strife:/opt/lampp/htdocs/myapp $ <b>php composer</b>
+                        <br>
+
+                        <pre>
+
+   ______
+  / ____/___  ____ ___  ____  ____  ________  _____
+ / /   / __ \/ __ `__ \/ __ \/ __ \/ ___/ _ \/ ___/
+/ /___/ /_/ / / / / / / /_/ / /_/ (__  )  __/ /
+\____/\____/_/ /_/ /_/ .___/\____/____/\___/_/
+                    /_/
+
+
+Composer version 1.9.3 2020-02-04 12:58:49
+</pre>
+                    </div>
+                </div>
+            </div>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer-title">Strife Framework</div>
+    <ul class="footer-links list-inline">
+        <li><a href="https://github.com/strifejeyz/framework">Github</a></li>
+        <li><a href="https://github.com/strifejeyz/framework">Documentation</a></li>
+        <li><a href="https://github.com/strifejeyz/framework">API Reference</a></li>
+    </ul>
+    <div class="footer-copyright">
+        &copy; 2020 Jesse Strife. All rights reserved.
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="slick/slick.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.slider').slick({
+            // slidesToShow: 1,
+            // slidesToScroll: 1,
+            // cssEase: 'linear'
+
+            autoplay: true,
+            autoplaySpeed: 3000,
+            dots: true,
+            infinite: true,
+            speed: 500,
+            fade: true,
+            cssEase: 'linear'
+        });
+    });
+
+    (function () {
+        let pre = document.querySelectorAll('.demo-code pre'),
+            pl = pre.length;
+        for (let i = 0; i < pl; i++) {
+            pre[i].innerHTML = '<span class="line-number"></span>' + pre[i].innerHTML + '<span class="cl"></span>';
+            let num = pre[i].innerHTML.split(/\n/).length;
+            for (let j = 0; j < num; j++) {
+                let line_num = pre[i].getElementsByTagName('span')[0];
+                line_num.innerHTML += '<span>' + (j + 1) + '</span>';
+            }
+        }
+    })();
+</script>
+</body>
+</html>

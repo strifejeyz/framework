@@ -1,0 +1,377 @@
+body {
+    background: #121212;
+    background: url('../img/bg.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow-x: hidden;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+.navigation {
+    text-align: center;
+}
+
+.navigation ul > li > a {
+    display: inline-table;
+    padding: 15px 15px;
+    color: #00c2f6;
+    border-radius: 10px;
+    text-decoration: none;
+    text-shadow: 0 3px 3px #000;
+}
+
+.navigation ul ul {
+    padding: 10px 0;
+    border-radius: 0;
+    background: #151515e0;
+    border: 1px solid #181818
+}
+
+.navigation ul ul li a {
+    padding: 5px 20px;
+    width: 100%;
+}
+
+.navigation ul ul li a:hover {
+    background: #141414;
+    border-radius: 0;
+}
+
+
+/*========================*/
+/*        Heading         */
+/*========================*/
+
+.heading {
+    padding: 10px 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.heading .title {
+    font-size: 55px;
+    color: #02c2d7;
+    margin: 0;
+    font-family: 'Open Sans Condensed', sans-serif;
+    text-shadow: 0 3px 5px #000
+}
+
+
+.heading .title-sm {
+    font-size: 20px;
+    color: #565656;
+    margin: 0
+}
+
+
+
+.slider .slider-title {
+    font-size: 30px;
+    text-align: center;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: #00c2f6;
+    margin-top: 20px;
+    text-shadow: 0 3px 5px #000
+}
+
+
+.workspace {
+    margin-top: 50px
+}
+
+
+
+/*========================*/
+/*   Scrollbar Resets     */
+/*========================*/
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: #131313;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px #00000063;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #151515;
+    -webkit-box-shadow: inset 0 0 3px #2d2d2d;
+}
+
+
+
+
+/*========================*/
+/*    CONSOLE WINDOW      */
+/*========================*/
+
+.console {
+    width: 100%;
+    background: #00000063;
+    margin: 10px 0;
+    padding: 0;
+    border: 3px solid #242424;
+    border-radius: 7px;
+    box-shadow: 0 3px 5px #000000;
+    height: 350px;
+    font-size: 16px;
+}
+
+.console .dots {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    background: #242424;
+}
+
+.console .dots li {
+    width: 16px;
+    height: 16px;
+    margin-top: 5px;
+    margin-left: 5px;
+    background: #ffffff;
+    display: inline-table;
+    border-radius: 100%;
+}
+
+.console .dots li.red {
+    background: #ff2c26
+}
+
+.console .dots li.yellow {
+    background: #ffac00
+}
+
+.console .dots li.green {
+    background: #22bc80
+}
+
+.console .command {
+    padding: 20px;
+    color: #097609;
+    font-family: monospace;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.console .command b {
+    margin-left: -2px;
+    color: #22c022;
+}
+
+.console pre {
+    color: #2f8912;
+    background: none;
+    border: none;
+    font-size: 16px
+}
+
+
+
+/*========================*/
+/*        DEMO CODE       */
+/*========================*/
+
+.demo-code pre {
+    margin: 0 0 1em;
+    padding: .5em 1em;
+    border-radius: 7px;
+    color: #fff;
+    max-height: 310px;
+    font: normal normal 18px/18px Monospace, "Courier New", Courier;
+}
+
+.demo-code pre code,
+.demo-code pre .line-number {
+    font: normal normal 12px/18px Monospace, "Courier New", Courier;
+    color: white;
+    display: block;
+
+}
+
+.demo-code pre .line-number {
+    float: left;
+    margin: 0 1em 0 -1em;
+    border-right: 1px solid;
+    text-align: right;
+    color: #6b2c2c;
+    font-size: 18px !important;
+}
+
+.demo-code pre code {
+    font-size: 16px;
+}
+
+.demo-code pre .line-number span {
+    display: block;
+    padding: 0 .5em 0 1em;
+}
+
+.demo-code pre .cl {
+    display: block;
+    clear: both;
+}
+
+
+.demo-code .str {
+    color: #27710f
+}
+
+
+.demo-code .kw {
+    color: #0079ff
+}
+
+
+.demo-code .var {
+    color: #ff265e;
+    font-weight: bold
+}
+
+
+.demo-code .cls {
+    color: #d3e500
+}
+
+.demo-code .cmt {
+    color: #3a3a3a
+}
+
+
+
+/*========================*/
+/*         FEATURES       */
+/*========================*/
+
+.feature .feature-title {
+    font-size: 50px;
+    text-align: center;
+    font-family: 'Open Sans Condensed', sans-serif;
+    margin-top: 20px;
+    color: #00c2f6;
+}
+
+.feature .feature-title-sm {
+    font-size: 18px;
+    text-align: center;
+    font-family: 'Open Sans Condensed', sans-serif;
+    padding: 0;
+    color: #238fb0;
+    position: relative;
+    top: -15px;
+}
+
+.feature .feature-list {
+    margin-top: 70px;
+}
+
+.feature .feature-list li {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 25px;
+    color: #ff4b53;
+}
+
+
+
+.feature .feature-panel {
+    width: 100%;
+    background: #0000008f;
+    min-height: 200px;
+    display: block;
+    vertical-align: middle;
+    border-top: 5px solid #1f1f1f;
+    border-left: 1px solid #151515;
+    margin-bottom: 30px;
+    box-shadow: 0 3px 7px #000;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.feature .feature-panel .feature-panel-title {
+    text-align: center;
+    font-size: 30px;
+    padding: 30px;
+    color: #bd282e
+}
+
+
+.feature .feature-panel .feature-panel-content {
+    text-align: center;
+    font-size: 20px;
+    padding: 0 25px;
+}
+
+
+
+/*========================*/
+/*         FOOTER         */
+/*========================*/
+
+
+.footer {
+    width: 100%;
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.footer .footer-title {
+    font-size: 20px;
+}
+
+
+
+
+
+
+/*========================*/
+/*     MEDIA QUERIES      */
+/*========================*/
+
+@media(max-width: 768px) {
+    .navigation ul > li > a {
+        padding: 10px 10px;
+    }
+    .heading { 
+        padding: 0;
+        margin: 0;
+    }
+    .heading .title {
+        font-size: 28px;
+    }
+    .heading .title-sm {
+        font-size: 16px;
+    }
+    .workspace {
+        margin: 0;
+    }
+    .slider .slider-title {
+        font-size: 20px;
+    }
+
+    .console,
+    .console pre {
+        font-size: 14px;
+        padding: 0 !important;
+    }
+
+    .feature .feature-title {
+        font-size: 28px;
+    }
+
+    .feature .feature-list {
+        margin: 0;;
+    }
+    .feature .feature-list li {
+        font-size: 16px;
+    }
+    .speedo {
+        margin-left: auto;
+        margin-right: auto;
+        width: 200px;
+    }
+}

@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    Options +FollowSymLinks
+    RewriteEngine On
+
+    # if you didn't setup a virtual host,
+    # you should put your project dir here.
+    # e.g. localhost/myapp then write /myapp
+    RewriteBase /
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.+)$ index.php?_url=$1 [QSA,L]
+</IfModule>
